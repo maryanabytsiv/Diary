@@ -1,33 +1,29 @@
-/**
- * 
- */
+
 package com.softserve.tc.diary;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+
 /**
  * @author Andrii Shupta
  *
  */
-public class ConnectManager {
-	public static Connection getConnection() {
-        String jdbcUrl = "jdbc:postgresql://localhost:3310/ok";
-        String user = "root";
-        String password = "password";
-        Connection conn = null;
-
-        try {
-            Class.forName("com.postgres.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            conn = DriverManager.getConnection(jdbcUrl, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return conn;
+public final class ConnectManager {
+	public static final BasicDataSource dataSource = new BasicDataSource();
+	static{
+		dataSource.setDriverClassName("com.postgres.Driver");
+		dataSource.setUrl("jdbc:postgresql://localhost:3310/test");
+        dataSource.setUsername("postgre");
+        dataSource.setPassword("password"); 
+	}
+	private ConnectManager(){
+		//
+	}
+	
+	public static Connection getConnection() throws SQLException{
+       return dataSource.getConnection();
     }
 }

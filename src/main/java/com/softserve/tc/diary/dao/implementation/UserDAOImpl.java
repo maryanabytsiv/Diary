@@ -10,21 +10,7 @@ import com.softserve.tc.diary.entity.User;
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 
 	public void create(User object) {
-//		 public User createUser(String userId, String firstName, String lastName)
-//		throws DAOException {
-//	        try {
-//	            PreparedStatement ps = getConnection().prepareStatement(SQL_INSERT);
-//	            ps.setString(1, userId);
-//	            ps.setString(2, firstName);
-//	            ps.setString(3, lastName);
-//	            ps.executeUpdate();
-//	            ps.close();
-//	            return new User(userId, firstName, lastName);
-//	        } catch (SQLException e) {
-//	            throw new DAOException(e.getMessage());
-//	        }
-//	}
-//		
+
 	}
 
 	public User readByKey(int id) {
@@ -73,11 +59,6 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 	}
 
 	public Map<String, String> getAllEmailsByNickNames(List<String> nickNames) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<User> getByDateOfBirth(String dateOfBirth) {
 		// TODO Auto-generated method stub
 		return null;
 	}
