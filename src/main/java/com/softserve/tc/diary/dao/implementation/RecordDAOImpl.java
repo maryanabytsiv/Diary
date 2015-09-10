@@ -26,6 +26,36 @@ public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void create(Record object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Record readByKey(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void update(Record object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Record object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Record> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }
