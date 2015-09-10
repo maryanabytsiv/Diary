@@ -9,7 +9,7 @@ import com.softserve.tc.diary.entity.User;
 public interface UserDAO extends BaseDAO<User>{
 
 	//Teodor
-	//by nick_name, all female, all male (count),
+	//by nick_name, all female, all male (count)
 	//from what city there is much users
 	
 	User getByNickName(String nickName);
@@ -19,9 +19,10 @@ public interface UserDAO extends BaseDAO<User>{
 	
 	
 	//Maryana
-	//by date of birth,  AVG(date of birth),
-	 //get emails 
-	List<User> getByDAteOfBirth(String dateOfBirth);
+	//by date of birth
+	//AVG(date of birth)
+	//get emails 
+	List<User> getByDateOfBirth(String dateOfBirth);
 	int getAvarageAgeOfUsers();
 	Map<String, String> getAllEmailsByNickNames(List<String> nickNames);
 }
