@@ -8,36 +8,6 @@ import com.softserve.tc.diary.entity.Tag;
 
 public class TagDAOImpl extends BaseDAOImpl<Tag> implements TagDAO {
 
-	@Override
-	public void create(Tag object) {
-		// TODO Auto-generated method stub
-		super.create(object);
-	}
-
-	@Override
-	public Tag readByKey(int id) {
-		// TODO Auto-generated method stub
-		return super.readByKey(id);
-	}
-
-	@Override
-	public void update(Tag object) {
-		// TODO Auto-generated method stub
-		super.update(object);
-	}
-
-	@Override
-	public void delete(Tag object) {
-		// TODO Auto-generated method stub
-		super.delete(object);
-	}
-
-	@Override
-	public List<Tag> getAll() {
-		// TODO Auto-generated method stub
-		return super.getAll();
-	}
-
 	public int getTagIdByTagMessage(String TagMessage) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -62,5 +32,37 @@ public class TagDAOImpl extends BaseDAOImpl<Tag> implements TagDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void create(Tag object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Tag readByKey(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void update(Tag object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Tag object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Tag> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 }
