@@ -70,7 +70,7 @@ public class BaseDAOTest {
 	@Test
 	public void testCreate() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User(1, "honey", "Khrystyna", "Bulych", "1", "kh@gmail.com", "111", Sex.FEMALE, "2015-01-01", "", "2");
+		//User user = new User(1, "honey", "Khrystyna", "Bulych", "1", "kh@gmail.com", "111", Sex.FEMALE, "2015-01-01", "", "2");
 
 		userDAO.create(user);
         assertNotNull(user);
