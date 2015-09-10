@@ -15,9 +15,12 @@ public class User {
 	private String role;
 	
 
+<<<<<<< HEAD
+=======
 	public User() {
 
 	}
+>>>>>>> 5c59985bad7b0d7e3415b32f949c58633434c1ae
 	
 	public User(int u_id, String nick_name, String first_name, String second_name, String address, String e_mail,
 			String password, Sex sex, String date_of_birth, String avatar, String role) {

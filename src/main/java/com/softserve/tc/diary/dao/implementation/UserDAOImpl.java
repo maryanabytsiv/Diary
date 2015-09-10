@@ -10,8 +10,7 @@ import com.softserve.tc.diary.entity.User;
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 
 	public void create(User object) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public User readByKey(int id) {

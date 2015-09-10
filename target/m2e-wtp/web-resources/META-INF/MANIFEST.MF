@@ -1,5 +1,4 @@
 Manifest-Version: 1.0
-Built-By: Pavel
-Build-Jdk: 1.8.0_51
+Built-By: UserMaryana
+Build-Jdk: 1.8.0_31
 Created-By: Maven Integration for Eclipse
-
