@@ -1,9 +1,9 @@
-DROP TABLE tag_record;
-DROP TABLE record_list;
-DROP TABLE user_card;
-DROP TABLE address;
-DROP TABLE role;
-DROP TABLE tag;
+DROP TABLE IF EXISTS tag_record;
+DROP TABLE IF EXISTS record_list;
+DROP TABLE IF EXISTS user_card;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS tag;
 
 CREATE TABLE role (
     role_id int PRIMARY KEY,
