@@ -39,16 +39,21 @@ CREATE TABLE user_card (
 );
 
 insert into user_card values(1, 'BigBunny', 'Oleg', 'Pavliv', 2, 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, 2);
+insert into user_card values(2, 'Sonic', 'Ira', 'Dub', 1, 'dfhfght@gmail.com', 'vfjukiuu', 'F', '1990-03-08', null, 1);
+insert into user_card values(3, 'TreeTree', 'Sergey', 'Gontar', 3, 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'M', '1989-02-20', null, 2);
 
 CREATE TABLE record_list (
     u_u_id int  PRIMARY KEY,
     user_u_u_id int references user_card(u_id),
     "timestamp" timestamp without time zone NOT NULL,
     text text NOT NULL,
-    supplement character varying(50) NOT NULL,
-    visibility character(1) NOT NULL,
-    rec_id character varying(10) NOT NULL
+    supplement character varying(50),
+    visibility character(10) NOT NULL
+ 
 );
+insert into record_list values(1,1,'2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'public');
+insert into record_list values(2,3,'2015-05-20 12:00:56','skjdhugfkdxufge',null,'private');
+insert into record_list values(3,1,'2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'public');
 
 
 CREATE TABLE tag (
@@ -56,11 +61,20 @@ CREATE TABLE tag (
     tag character varying(20) NOT NULL
 );
 
+insert into tag values(1, 'cars');
+insert into tag values(2, 'family');
+insert into tag values(3, 'Love');
+insert into tag values(4, 'murderrrrrr');
+
 CREATE TABLE tag_record (
     u_u_id int PRIMARY KEY,
     record_uuid int references record_list(u_u_id) NOT NULL,
     tag_uuid int references tag(u_u_id) NOT NULL
 );
+
+insert into tag_record values(1, 1, 2);
+insert into tag_record values(2, 3, 1);
+insert into tag_record values(3, 2, 3);
 
 
 
