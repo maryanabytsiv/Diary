@@ -33,7 +33,7 @@ public class TestUserDAO {
 		String scriptSQL;
 		String result = "";
 		try {
-			br = new BufferedReader(new FileReader("G:\\Projects\\Diary\\PostgreSQL_DB\\DiaryTest.sql"));
+			br = new BufferedReader(new FileReader("./PostgreSQL_DB/DiaryTest.sql"));
 			while ((scriptSQL = br.readLine()) != null) {
 				result += scriptSQL + "\n";
 
@@ -52,7 +52,7 @@ public class TestUserDAO {
 
 		try {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			PreparedStatement ps = conn.prepareStatement(result);
+			ps = conn.prepareStatement(result);
 			ps.execute();
 			// ResultSet myRs = ps.executeQuery("select * from city");
 			// while (myRs.next()){
@@ -67,6 +67,11 @@ public class TestUserDAO {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+				+ "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+				+ "DROP TABLE IF EXISTS tag;");
+		ps.execute();
+		ps.close();
 	}
 
 	@Test
@@ -98,8 +103,8 @@ public class TestUserDAO {
 		// }
 
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User(5, "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null,
-				null, "User"));
+		userDAO.create(new User(5, "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null, null,
+				"User"));
 		User user = null;
 		try {
 
