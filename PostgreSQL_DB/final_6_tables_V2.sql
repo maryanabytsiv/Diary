@@ -48,7 +48,7 @@ ALTER TABLE address OWNER TO postgres;
 -- Name: records; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE records (
+CREATE TABLE record (
     u_u_id character varying(10) NOT NULL,
     user_u_u_id character varying(10) NOT NULL,
     "timestamp" timestamp without time zone NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE records (
 );
 
 
-ALTER TABLE records OWNER TO postgres;
+ALTER TABLE record OWNER TO postgres;
 
 --
 -- Name: role; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -90,13 +90,13 @@ ALTER TABLE tag_record OWNER TO postgres;
 -- Name: tags; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE tags (
+CREATE TABLE tag (
     u_u_id character varying(10) NOT NULL,
     tag character varying(20) NOT NULL
 );
 
 
-ALTER TABLE tags OWNER TO postgres;
+ALTER TABLE tag OWNER TO postgres;
 
 --
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -136,7 +136,7 @@ tyor452589	Poland              	Krakiw              	PshePshePshe.st     	45
 -- Data for Name: records; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY records (u_u_id, user_u_u_id, "timestamp", text, supplement, visibility, rec_id) FROM stdin;
+COPY record (u_u_id, user_u_u_id, "timestamp", text, supplement, visibility, rec_id) FROM stdin;
 \.
 
 
@@ -160,7 +160,7 @@ COPY tag_record (u_u_id, record_uuid, tag_uuid) FROM stdin;
 -- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY tags (u_u_id, tag) FROM stdin;
+COPY tag (u_u_id, tag) FROM stdin;
 \.
 
 
@@ -192,7 +192,7 @@ ALTER TABLE ONLY address
 -- Name: pk_rec_uuid; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
-ALTER TABLE ONLY records
+ALTER TABLE ONLY record
     ADD CONSTRAINT pk_rec_uuid PRIMARY KEY (u_u_id);
 
 
@@ -216,7 +216,7 @@ ALTER TABLE ONLY "user"
 -- Name: pk_u_u_id; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
-ALTER TABLE ONLY tags
+ALTER TABLE ONLY tag
     ADD CONSTRAINT pk_u_u_id PRIMARY KEY (u_u_id);
 
 
@@ -256,7 +256,7 @@ ALTER TABLE ONLY tag_record
 -- Name: fk_user_u_u_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY records
+ALTER TABLE ONLY record
     ADD CONSTRAINT fk_user_u_u_id FOREIGN KEY (user_u_u_id) REFERENCES "user"(u_id);
 
 
