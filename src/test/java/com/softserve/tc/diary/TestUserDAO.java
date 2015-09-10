@@ -1,6 +1,6 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,19 +8,27 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
+import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.User;
 
 public class TestUserDAO {
 	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
 	public static final String USER = "root";
 	public static final String PASSWORD = "root";
 	private static Connection conn;
+	private static PreparedStatement ps;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+
 		BufferedReader br = null;
 		String scriptSQL;
 		String result = "";
@@ -63,23 +71,68 @@ public class TestUserDAO {
 
 	@Test
 	public void testCreateUser() {
-		//PreparedStatement ps = conn.prepareStatement("");
-		
-//		UserDAOImpl userDAO = new UserDAOImpl();
-//		//User user = new User(1, "honey", "Khrystyna", "Bulych", "1", "kh@gmail.com", "111", Sex.FEMALE, "2015-01-01", "", "2");
-//
-//		userDAO.create(user);
-//        assertNotNull(user);
-//        assertEquals(1, user.getU_id());
-//        assertEquals("honey", user.getNick_name());
-//        assertEquals("Khrystyna", user.getFirst_name());
-//        assertEquals("Bulych", user.getSecond_name());
-//        assertEquals("1", user.getAddress_id());
-//        assertEquals("111", user.getPassword());
-//        assertEquals(Sex.FEMALE, user.getSex());
-//        assertEquals("2015-01-01", user.getDate_of_birth());
-//        assertEquals("", user.getAvatar());
-//        assertEquals("2", user.getRole_id());
+
+		// try {
+		// ps = conn.prepareStatement("insert into user_card
+		// values(?,?,?,?,?,?,?,?,?,?,?);");
+		// ps.setInt(1, 4);
+		// ps.setString(2, "honey");
+		// ps.setString(3, "Khrystyna");
+		// ps.setString(4, "Bulych");
+		// ps.setInt(5, 1);
+		// ps.setString(6, "hjgfjhgfhj@mail.com");
+		// ps.setString(7, "dkjrhgkltr");
+		// ps.setString(8, "F");
+		// ps.setNull(9, 0);
+		// ps.setNull(10, 0);
+		// ps.setInt(11,1);
+		// ps.execute();
+		//
+		// //insert into user_card values(1, 'BigBunny', 'Oleg', 'Pavliv', 2,
+		// 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, 2);
+		//
+		// ps.close();
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		UserDAOImpl userDAO = new UserDAOImpl();
+		userDAO.create(new User(5, "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null,
+				null, "User"));
+		User user = null;
+		try {
+
+			ps = conn.prepareStatement("select * from user_card where u_id=5");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
+						rs.getString(6), rs.getString(7), Sex.FEMALE, rs.getString(9), rs.getString(10), "admin");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// UserDAOImpl userDAO = new UserDAOImpl();
+		// //User user = new User(1, "honey", "Khrystyna", "Bulych", "1",
+		// "kh@gmail.com", "111", Sex.FEMALE, "2015-01-01", "", "2");
+		//
+		// userDAO.create(user);
+
+		assertNotNull(user);
+		assertEquals(5, user.getU_id());
+		assertEquals("hary12", user.getNick_name().trim());
+		assertEquals("Andriy", user.getFirst_name().trim());
+		assertEquals("Mural", user.getSecond_name().trim());
+		assertEquals("bg@gmail.com", user.getE_mail().trim());
+		// assertEquals("1", user.getAddress_id());
+		assertEquals("64561", user.getPassword().trim());
+		// assertEquals(Sex.FEMALE, user.getSex());
+		assertEquals(null, user.getDate_of_birth());
+		assertEquals(null, user.getAvatar());
+		assertEquals("admin", user.getRole_id().trim());
 	}
 
 	@Test

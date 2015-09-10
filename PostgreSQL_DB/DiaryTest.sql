@@ -29,11 +29,11 @@ CREATE TABLE user_card (
     first_name character(20) NOT NULL,
     second_name character(20) NOT NULL,
 	
-    address_id int references address(id) NOT NULL,
+    address_id int references address(id),
     e_mail character(30) NOT NULL,
     password character varying(20) NOT NULL,
     sex character(1) NOT NULL,
-    date_of_birth date NOT NULL,
+    date_of_birth date ,
     avatar character varying(50) ,
     role int references role(role_id) NOT NULL
 );

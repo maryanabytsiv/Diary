@@ -6,28 +6,13 @@ import com.softserve.tc.diary.dao.BaseDAO;
 
 public abstract class BaseDAOImpl<T> implements BaseDAO<T>{
 
-	public void create(T object) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void create(T object);
 
-	public T readByKey(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract T readByKey(int id) ;
 
-	public void update(T object) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void update(T object) ;
 
-	public void delete(T object) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void delete(T object) ;
 
-	public List<T> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract List<T> getAll() ;
 }

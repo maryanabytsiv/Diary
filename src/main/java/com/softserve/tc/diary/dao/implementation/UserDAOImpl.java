@@ -1,5 +1,9 @@
 package com.softserve.tc.diary.dao.implementation;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,9 +12,41 @@ import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
-
+	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
+	public static final String USER = "root";
+	public static final String PASSWORD = "root";
+	private static Connection conn;
+	private static PreparedStatement ps;
+	
+	private static void getConnection(){
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void create(User object) {
-
+		getConnection();
+		try {
+			ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,?,?,?);");
+			ps.setInt(1, object.getU_id());
+			ps.setString(2, object.getNick_name());
+			ps.setString(3, object.getFirst_name());
+			ps.setString(4, object.getSecond_name());
+			ps.setInt(5, 1);  
+			ps.setString(6, object.getE_mail());
+			ps.setString(7, object.getPassword());
+			ps.setString(8, "F");
+			ps.setNull(9, 0);
+			ps.setNull(10, 0);
+			ps.setInt(11,2);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public User readByKey(int id) {
@@ -67,5 +103,6 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	
 }
