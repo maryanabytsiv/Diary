@@ -10,4 +10,5 @@ public interface TagDAO extends BaseDAO<Tag>{
 	List<Tag> getListTagsByPrefix(String prefix);
 	List<Tag> getListTagsBySuffix(String suffix);
 	List<Record> getListRecordsByTag();
+	List<Record> getListRecordsByListOfTags(List<Tag> list);
 }
