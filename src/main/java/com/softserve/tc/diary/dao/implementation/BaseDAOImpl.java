@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.softserve.tc.diary.dao.BaseDAO;
 
-public class BaseDAOImpl<T> implements BaseDAO<T>{
+public abstract class BaseDAOImpl<T> implements BaseDAO<T>{
 
 	public void create(T object) {
 		// TODO Auto-generated method stub

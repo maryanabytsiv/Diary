@@ -63,4 +63,9 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 		return null;
 	}
 
+	public List<User> getByDateOfBirth(String dateOfBirth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

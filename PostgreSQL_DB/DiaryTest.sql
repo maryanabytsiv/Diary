@@ -9,6 +9,8 @@ CREATE TABLE role (
     role_id int PRIMARY KEY,
     name character(20) NOT NULL
 );
+insert into role values(1, 'Admin') ;
+insert into role values(2, 'User') ;
 
 CREATE TABLE  address (
     id int PRIMARY KEY,
@@ -17,7 +19,9 @@ CREATE TABLE  address (
     street character(20) NOT NULL,
     build_number int NOT NULL
 );
-insert into address values(1, 'fff', 'dffgf', 'hjhj', 3) ;
+insert into address values(1, 'Ukraine', 'Lviv', 'centre', 3) ;
+insert into address values(2, 'USA', 'NC', 'timesquare', 5) ;
+insert into address values(3, 'Poland', 'Warshav', 'Bog', 55) ;
 
 CREATE TABLE user_card (
     u_id int PRIMARY KEY,
@@ -25,15 +29,16 @@ CREATE TABLE user_card (
     first_name character(20) NOT NULL,
     second_name character(20) NOT NULL,
 	
-    address_id int references address(id),
+    address_id int references address(id) NOT NULL,
     e_mail character(30) NOT NULL,
     password character varying(20) NOT NULL,
-    sex bit(1) NOT NULL,
+    sex character(1) NOT NULL,
     date_of_birth date NOT NULL,
-    avatar character varying(50) NOT NULL,
-    role int references role(role_id)
+    avatar character varying(50) ,
+    role int references role(role_id) NOT NULL
 );
 
+insert into user_card values(1, 'BigBunny', 'Oleg', 'Pavliv', 2, 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, 2);
 
 CREATE TABLE record_list (
     u_u_id int  PRIMARY KEY,
@@ -41,7 +46,7 @@ CREATE TABLE record_list (
     "timestamp" timestamp without time zone NOT NULL,
     text text NOT NULL,
     supplement character varying(50) NOT NULL,
-    visibility bit(1) NOT NULL,
+    visibility character(1) NOT NULL,
     rec_id character varying(10) NOT NULL
 );
 
@@ -53,8 +58,8 @@ CREATE TABLE tag (
 
 CREATE TABLE tag_record (
     u_u_id int PRIMARY KEY,
-    record_uuid int references record_list(u_u_id),
-    tag_uuid int references tag(u_u_id)
+    record_uuid int references record_list(u_u_id) NOT NULL,
+    tag_uuid int references tag(u_u_id) NOT NULL
 );
 
 
