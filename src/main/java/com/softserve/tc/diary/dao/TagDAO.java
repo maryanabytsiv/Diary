@@ -7,8 +7,13 @@ import com.softserve.tc.diary.entity.Tag;
 public interface TagDAO extends BaseDAO<Tag>{
 
 	int getTagIdByTagMessage(String TagMessage);
+	
 	List<Tag> getListTagsByPrefix(String prefix);
+	
 	List<Tag> getListTagsBySuffix(String suffix);
+	
 	List<Record> getListRecordsByTag();
+	
 	List<Record> getListRecordsByListOfTags(List<Tag> list);
+	
 }
