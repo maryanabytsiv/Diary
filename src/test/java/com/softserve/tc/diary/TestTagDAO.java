@@ -55,46 +55,45 @@ public class TestTagDAO {
 		ps = conn.prepareStatement(result);
 		ps.execute();
 	}
-	
+
 	@Before
 	public void beforeTest() {
-		String baseValues = "insert into tag (uuid, tag_message) values('testkey1','#Hell');"+ '\n'
-							+ "insert into tag (uuid, tag_message) values('testkey2','#Hello');" + '\n'
-							+ "insert into tag (uuid, tag_message) values('testkey3','#HelloWorld');" + '\n'
-							+ "insert into tag (uuid, tag_message) values('testkey4','#HellGuy');" + '\n'
-							+ "insert into tag (uuid, tag_message) values('testkey5','#HellGuy');" + '\n'
-							+ "insert into tag (uuid, tag_message) values('testkey6','#HelpMe');";
+		String query = "insert into tag (uuid, tag_message) values('testkey1','#Hell');"+ '\n'
+					+ "insert into tag (uuid, tag_message) values('testkey2','#Hello');" + '\n'
+					+ "insert into tag (uuid, tag_message) values('testkey3','#HelloWorld');" + '\n'
+					+ "insert into tag (uuid, tag_message) values('testkey4','#HellGuy');" + '\n'
+					+ "insert into tag (uuid, tag_message) values('testkey5','#HellGuy');" + '\n'
+					+ "insert into tag (uuid, tag_message) values('testkey6','#HelpMe');";
 		try {
-			ps = conn.prepareStatement(baseValues);
+			ps = conn.prepareStatement(query);
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@After
 	public void afterTest() {
-		String del = "delete from tag;";
+		String query = "delete from tag;";
 		try {
-			ps = conn.prepareStatement(del);
+			ps = conn.prepareStatement(query);
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testCreateTag() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		Tag tagException = new Tag("#HelloWorld");
 		Tag workingTag = new Tag("#HelloWorldWide");
-		//tagDAO.create(tagException);
+		// tagDAO.create(tagException);
 		tagDAO.create(workingTag);
 		try {
-			String query1 = "SELECT tag_message FROM tag "
-								+ "WHERE tag_message Like '#HelloWorldWide';";
-//			String query2 = "SELECT tag_message FROM tag "
-//								+ "WHERE tag_message Like '#HelloWorld';";
+			String query1 = "SELECT tag_message FROM tag " + "WHERE tag_message Like '#HelloWorldWide';";
+			// String query2 = "SELECT tag_message FROM tag "
+			// + "WHERE tag_message Like '#HelloWorld';";
 			ps = conn.prepareStatement(query1);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -103,11 +102,11 @@ public class TestTagDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertNotNull(workingTag);
 		assertEquals("#HelloWorldWide", workingTag.getTagMessage());
-		
-	//	assertEquals("#HelloWorld", tagException.getTagMessage());
+
+		// assertEquals("#HelloWorld", tagException.getTagMessage());
 	}
 
 	@Test
@@ -115,10 +114,32 @@ public class TestTagDAO {
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		String prefix = "#Hello";
 		List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
-		System.out.println(list.size());
 		assertEquals(2, list.size());
-		
-		
+	}
+
+	@Test
+	public void testGetListTagsBySuffix() {
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		String suffix = "Hello";
+		List<Tag> list = tagDAO.getListTagsBySuffix(suffix);
+		assertEquals(2, list.size());
+	}
+
+	@Test
+	public void testDeleteTag() {
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		List<Tag> listBeforeDel = tagDAO.getAll();
+		tagDAO.delete(listBeforeDel.get(2));
+		List<Tag> listAfterDel = tagDAO.getAll();
+		assertEquals(listBeforeDel.size() - 1, listAfterDel.size());
+
+	}
+
+	@Test
+	public void testGetAll() {
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		List<Tag> list = tagDAO.getAll();
+		assertEquals(6, list.size());
 	}
 
 }
