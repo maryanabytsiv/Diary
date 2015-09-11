@@ -195,6 +195,7 @@ public class TestUserDAO {
 	public void testGetByDateOfBirth() {
 		
 		UserDAOImpl userDAO = new UserDAOImpl();
+
 		User user = new User(8, "dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
@@ -203,12 +204,11 @@ public class TestUserDAO {
 				"User");
 		userDAO.create(user);
 		
-		userDAO.create(user);
 		user = new User(9, "dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
 		
-		userDAO.readByKey(user.getU_id());
+//		userDAO.getByDateOfBirth(dateOfBirth)
 		
 		assertNotNull(userDAO.readByKey(7));
 		
