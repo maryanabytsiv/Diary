@@ -2,20 +2,16 @@ package com.softserve.tc.diary.entity;
 
 public class Tag {
 	
-	private int u_u_id;
+	private String uuid;
 	private String tag;
 	
-	public Tag(int u_u_id, String tag) {
-		this.u_u_id = u_u_id;
+	public Tag(String uuid, String tag) {
+		this.uuid = uuid;
 		this.tag = tag;
 	}
 	
-	public int getU_u_id() {
-		return u_u_id;
-	}
-	
-	public void setU_u_id(int u_u_id) {
-		this.u_u_id = u_u_id;
+	public String getUuid() {
+		return uuid;
 	}
 	
 	public String getTag() {
@@ -28,7 +24,7 @@ public class Tag {
 
 	@Override
 	public String toString() {
-		return "Tag [u_u_id=" + u_u_id + ", tag=" + tag + "]";
+		return "Tag [u_u_id= " + uuid + ", tag=" + tag + "]";
 	}
 	
 	

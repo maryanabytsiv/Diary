@@ -57,7 +57,7 @@ public class TestTagDAO {
 	}
 
 	@Test
-	public void TestCreateTag() {
+	public void testCreateTag() {
 
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		Tag tag = new Tag(6, "#HelloWorld");
@@ -78,6 +78,16 @@ public class TestTagDAO {
 		assertEquals(6, tag.getU_u_id());
 		assertEquals("#HelloWorld", tag.getTag());
 
+	}
+	
+	@Test
+	public void testReadByKey() {
+		
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		
+		Tag tag = tagDAO.readByKey(key);
+		
+		
 	}
 	
 }
