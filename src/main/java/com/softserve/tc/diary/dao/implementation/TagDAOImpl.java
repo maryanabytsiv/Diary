@@ -27,7 +27,7 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	private static void closeConnection() {
 		try {
 			ConnectManager.closeConnectionToTestDB();
@@ -35,7 +35,7 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getGeneratedId() {
 		UUID idOne = UUID.randomUUID();
 		return idOne.toString();
@@ -51,29 +51,30 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			closeConnection();
 		}
 	}
 
 	public List<Tag> getListTagsByPrefix(String prefix) {
+		getConnection();
 		List<Tag> list = new ArrayList<Tag>();
 		try {
-			ps = conn.prepareStatement("SELECT tag_message FROM tag "
-					+ "WHERE tag_message LIKE '"+prefix+"%';");
+			ps = conn.prepareStatement("SELECT tag_message FROM tag " + "WHERE tag_message LIKE '" + prefix + "%';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				list.add(new Tag(rs.getString(2)));
+				list.add(new Tag(rs.getString(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return list;
 	}
 
 	public List<Tag> getListTagsBySuffix(String suffix) {
-			
+
 		return null;
 	}
 
@@ -83,33 +84,33 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 	}
 
 	public List<Record> getListRecordsByListOfTags(List<Tag> list) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public Tag readByKey(String id) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public void update(Tag object) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void delete(Tag object) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public List<Tag> getAll() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
-	
+
 	public static void main(String[] args) {
 		TagDAOImpl obj = new TagDAOImpl();
-		obj.create(new Tag("#Hello"));
+		obj.create(new Tag("#Hello1"));
+		List<Tag> list = obj.getListTagsByPrefix("#Hello1");
+		System.out.println(list.size());
 	}
-	
+
 }

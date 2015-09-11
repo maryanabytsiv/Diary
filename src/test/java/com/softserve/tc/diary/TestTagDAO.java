@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -112,7 +114,9 @@ public class TestTagDAO {
 	public void testGetListTagsByPrefix() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		String prefix = "#Hello";
-		
+		List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
+		System.out.println(list.size());
+		assertEquals(2, list.size());
 		
 		
 	}
