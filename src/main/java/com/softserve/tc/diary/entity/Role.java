@@ -8,9 +8,8 @@ public class Role {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Role(int id, String name) {
+	public Role(String name) {
 		super();
-		this.id = id;
 		this.name = name;
 	}
 

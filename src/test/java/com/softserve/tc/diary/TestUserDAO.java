@@ -145,7 +145,7 @@ public class TestUserDAO {
 	public void testReadByKeyInt() {
 		
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User(7, "delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+		User user = new User("delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
 		userDAO.readByKey(user.getU_id());
@@ -163,7 +163,7 @@ public class TestUserDAO {
 	public void testDeleteUser() {
 
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User(6, "delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+		User user = new User("delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
 		userDAO.delete(user);

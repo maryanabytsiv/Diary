@@ -13,8 +13,7 @@ public class Address {
     }
 
 	
-    public Address(int id, String country, String city, String street, int build_number) {
-        this.id = id;
+    public Address(String country, String city, String street, int build_number) {
         this.country = country;
         this.city = city;
         this.street = street;

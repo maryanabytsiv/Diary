@@ -13,10 +13,9 @@ public class Record {
 			// TODO Auto-generated constructor stub
 		}
 		
-		public Record(int u_u_id, String user_name, String timestamp, String text,
+		public Record(String user_name, String timestamp, String text,
 				String supplement, boolean visibility) {
 			super();
-			this.u_u_id = u_u_id;
 			this.user_name = user_name;
 			this.timestamp = timestamp;
 			this.text = text;
