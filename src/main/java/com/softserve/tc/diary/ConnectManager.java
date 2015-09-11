@@ -14,13 +14,13 @@ public final class ConnectManager {
 	public static final BasicDataSource dataSourceTestDB = new BasicDataSource();
 
 	static {
-		dataSource.setDriverClassName("com.postgres.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/diary");
+		dataSource.setDriverClassName("org.postgresql.Driver");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/Diary");
 		dataSource.setUsername("root");
 		dataSource.setPassword("root");
 
-		dataSourceTestDB.setDriverClassName("com.postgres.Driver");
-		dataSourceTestDB.setUrl("jdbc:postgresql://localhost:5432/diarytest");
+		dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
+		dataSourceTestDB.setUrl("jdbc:postgresql://localhost:5432/DiaryTest");
 		dataSourceTestDB.setUsername("root");
 		dataSourceTestDB.setPassword("root");
 	}
