@@ -54,11 +54,6 @@ public class TestUserDAO {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			ps = conn.prepareStatement(result);
 			ps.execute();
-			// ResultSet myRs = ps.executeQuery("select * from city");
-			// while (myRs.next()){
-			// System.out.println(myRs.getString(1) + " , "
-			// + myRs.getString("country_id") + " , " +
-			// myRs.getString("city_name"));}
 			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,43 +72,25 @@ public class TestUserDAO {
 
 	@Test
 	public void testCreateUser() {
-
-		// try {
-		// ps = conn.prepareStatement("insert into user_card
-		// values(?,?,?,?,?,?,?,?,?,?,?);");
-		// ps.setInt(1, 4);
-		// ps.setString(2, "honey");
-		// ps.setString(3, "Khrystyna");
-		// ps.setString(4, "Bulych");
-		// ps.setInt(5, 1);
-		// ps.setString(6, "hjgfjhgfhj@mail.com");
-		// ps.setString(7, "dkjrhgkltr");
-		// ps.setString(8, "F");
-		// ps.setNull(9, 0);
-		// ps.setNull(10, 0);
-		// ps.setInt(11,1);
-		// ps.execute();
-		//
-		// //insert into user_card values(1, 'BigBunny', 'Oleg', 'Pavliv', 2,
-		// 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, 2);
-		//
-		// ps.close();
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
 		UserDAOImpl userDAO = new UserDAOImpl();
 		userDAO.create(new User( "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null, null,
 				"User"));
-		User user = null;
+		User user = new User();
 		try {
 
 			ps = conn.prepareStatement("select * from user_card where nick_name ='hary12';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				user = new User( rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
-						rs.getString(6), rs.getString(7), Sex.MALE, rs.getString(9), rs.getString(10), "admin");
+				user.setNick_name(rs.getString("nick_name"));
+				user.setFirst_name(rs.getString("first_name"));
+				user.setSecond_name(rs.getString("second_name"));
+				user.setAddress(rs.getString("address_id"));
+				user.setE_mail(rs.getString("e_mail"));
+				user.setPassword(rs.getString("password"));
+				user.setSex(null);
+				user.setDate_of_birth(null);
+				user.setAvatar(rs.getString("avatar"));
+				user.setRole(rs.getString("role"));
 			}
 
 		} catch (SQLException e) {
@@ -121,24 +98,19 @@ public class TestUserDAO {
 			e.printStackTrace();
 		}
 
-		// UserDAOImpl userDAO = new UserDAOImpl();
-		// //User user = new User(1, "honey", "Khrystyna", "Bulych", "1",
-		// "kh@gmail.com", "111", Sex.FEMALE, "2015-01-01", "", "2");
-		//
-		// userDAO.create(user);
-
+	
 		assertNotNull(user);
 		//assertEquals(5, user.getU_id());
-		assertEquals("hary12", user.getNick_name().trim());
-		assertEquals("Andriy", user.getFirst_name().trim());
-		assertEquals("Mural", user.getSecond_name().trim());
-		assertEquals("bg@gmail.com", user.getE_mail().trim());
-		// assertEquals("1", user.getAddress_id());
-		assertEquals("64561", user.getPassword().trim());
+		assertEquals("hary12", user.getNick_name());
+		assertEquals("Andriy", user.getFirst_name());
+		assertEquals("Mural", user.getSecond_name());
+		assertEquals("bg@gmail.com", user.getE_mail());
+		assertEquals("1", user.getAddress());
+		assertEquals("64561", user.getPassword());
 		// assertEquals(Sex.FEMALE, user.getSex());
 		assertEquals(null, user.getDate_of_birth());
 		assertEquals(null, user.getAvatar());
-		assertEquals("admin", user.getRole_id().trim());
+		assertEquals("user", user.getRole());
 	}
 
 	@Test
@@ -148,7 +120,7 @@ public class TestUserDAO {
 		User user = new User("read", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
-		userDAO.readByKey(user.getU_id());
+		userDAO.readByKey(user.getUuid());
 		
 		assertNotNull(userDAO.readByKey(7));
 		
@@ -167,7 +139,7 @@ public class TestUserDAO {
 				"User");
 		userDAO.create(user);
 		userDAO.delete(user);
-		assertNull(userDAO.readByKey(6));
+		assertNull(userDAO.getByNickName("delete"));
 
 	}
 
@@ -194,23 +166,23 @@ public class TestUserDAO {
 	@Test
 	public void testGetByDateOfBirth() {
 		
-		UserDAOImpl userDAO = new UserDAOImpl();
-
-		User user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-				"User");
-		userDAO.create(user);
-		
-		user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-				"User");
-		userDAO.create(user);
-		
-		user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-				"User");
-		userDAO.create(user);
-		
-//		userDAO.getByDateOfBirth(dateOfBirth)
-		
-		assertNotNull(userDAO.readByKey(7));
+//		UserDAOImpl userDAO = new UserDAOImpl();
+//
+//		User user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+//				"User");
+//		userDAO.create(user);
+//		
+//		user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+//				"User");
+//		userDAO.create(user);
+//		
+//		user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+//				"User");
+//		userDAO.create(user);
+//		
+////		userDAO.getByDateOfBirth(dateOfBirth)
+//		
+//		assertNotNull(userDAO.readByKey(7));
 		
 	}
 

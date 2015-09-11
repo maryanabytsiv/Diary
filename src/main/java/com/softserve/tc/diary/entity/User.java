@@ -2,7 +2,7 @@ package com.softserve.tc.diary.entity;
 
 public class User {
 	
-	private int u_id;
+	private String uuid;
 	private String nick_name;
 	private String first_name;
 	private String second_name;
@@ -22,7 +22,6 @@ public class User {
 	
 	public User( String nick_name, String first_name, String second_name, String address, String e_mail,
 			String password, Sex sex, String date_of_birth, String avatar, String role) {
-		//this.u_id = u_id;
 		this.nick_name = nick_name;
 		this.first_name = first_name;
 		this.second_name = second_name;
@@ -35,12 +34,12 @@ public class User {
 		this.role = role;
 	}
 
-	public int getU_id() {
-		return u_id;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setU_id(int u_id) {
-		this.u_id = u_id;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getNick_name() {
@@ -67,12 +66,12 @@ public class User {
 		this.second_name = second_name;
 	}
 
-	public String getAddress_id() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress_id(String address_id) {
-		this.address = address_id;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getE_mail() {
@@ -115,19 +114,19 @@ public class User {
 		this.avatar = avatar;
 	}
 
-	public String getRole_id() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole_id(String role_id) {
-		this.role = role_id;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override
 	public String toString() {
-		return "User [u_id=" + u_id + ", nick_name=" + nick_name + ", first_name=" + first_name + ", second_name="
+		return "User [uuid=" + uuid + ", nick_name=" + nick_name + ", first_name=" + first_name + ", second_name="
 				+ second_name + ", address =" + address + ", e_mail=" + e_mail + ", password=" + password
-				+ ", sex=" + sex + ", date_of_birth=" + date_of_birth + ", avatar=" + avatar + ", role_id=" + role
+				+ ", sex=" + sex + ", date_of_birth=" + date_of_birth + ", avatar=" + avatar + ", role=" + role
 				+ "]";
 	}
 	
