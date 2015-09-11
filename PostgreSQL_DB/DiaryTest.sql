@@ -45,7 +45,7 @@ CREATE TABLE record_list (
 
 CREATE TABLE tag (
     uuid varchar(40) PRIMARY KEY,
-    tag varchar(1000)
+    tag_message varchar(1000)
 );
 
 CREATE TABLE tag_record (
