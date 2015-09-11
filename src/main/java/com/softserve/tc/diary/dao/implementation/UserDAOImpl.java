@@ -108,7 +108,7 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 			ps.setString(1, dateOfBirth);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				listOfUsers.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
+				listOfUsers.add(new User(rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
 						rs.getString(6), rs.getString(7), Sex.FEMALE, rs.getString(9), rs.getString(10), "admin"));
 			}
 		} catch (SQLException e) {
