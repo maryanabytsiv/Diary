@@ -5,7 +5,7 @@ import java.util.List;
 public interface BaseDAO<T> {
 	
 	void create(T object);
-	T readByKey(int id);
+	T readByKey(String id);
 	void update(T object);
 	void delete (T object);
 	List<T> getAll();

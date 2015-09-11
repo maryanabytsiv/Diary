@@ -6,13 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
+import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Tag;
 
-public class TagDAOImpl extends BaseDAOImpl<Tag> implements TagDAO {
-	
+public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
+
 	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
 	public static final String USER = "root";
 	public static final String PASSWORD = "root";
@@ -26,41 +28,22 @@ public class TagDAOImpl extends BaseDAOImpl<Tag> implements TagDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getGeneratedId() {
+		UUID idOne = UUID.randomUUID();
+		return idOne.toString();
+	}
 
-	@Override
 	public void create(Tag object) {
 		getConnection();
 		try {
 			ps = conn.prepareStatement("insert into tag values(?,?);");
-			ps.setInt(1, object.getU_u_id());
+			ps.setString(1, object.getUuid());
 			ps.setString(2, object.getTag());
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-	}
-
-	@Override
-	public Tag readByKey(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Tag object) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void delete(Tag object) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public List<Tag> getAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public int getTagIdByTagMessage(String TagMessage) {
@@ -87,10 +70,25 @@ public class TagDAOImpl extends BaseDAOImpl<Tag> implements TagDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//	public static void main(String[] args) {
-//		TagDAOImpl t = new TagDAOImpl();
-//		t.create(new Tag(1,"gg"));
-//	}
-	
+
+	public Tag readByKey(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void update(Tag object) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void delete(Tag object) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<Tag> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -94,10 +94,9 @@ public class TestAddressDAO {
         }
 
         assertNotNull(address);
-        //assertEquals(5, address.getId());
-        assertEquals("Ukraine", address.getCountry().trim());
-        assertEquals("IF", address.getCity().trim());
-        assertEquals("street", address.getStreet().trim());
+        assertEquals("Ukraine", address.getCountry());
+        assertEquals("IF", address.getCity());
+        assertEquals("street", address.getStreet());
         assertEquals(12, address.getBuild_number());
     }
 
@@ -106,26 +105,26 @@ public class TestAddressDAO {
         
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address add =new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
-        add.setId(2);
+        add.setId("2");
         addressDAO.update(add);
         Address address = null;
         try {
             
             ps = conn.prepareStatement("select * from address where id=?");
-            ps.setInt(1, add.getId());
+            ps.setString(1, add.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
-                address.setId(rs.getInt(1));
+                address.setId(rs.getString(1));
             }
             
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        assertEquals(add.getCountry().trim(), address.getCountry().trim());
-        assertEquals(add.getCity().trim(), address.getCity().trim());
-        assertEquals(add.getStreet().trim(), address.getStreet().trim());
+        assertEquals(add.getCountry(), address.getCountry());
+        assertEquals(add.getCity(), address.getCity());
+        assertEquals(add.getStreet(), address.getStreet());
         assertEquals(add.getBuild_number(), address.getBuild_number());
         
     }
