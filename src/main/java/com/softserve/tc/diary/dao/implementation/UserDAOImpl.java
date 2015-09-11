@@ -41,13 +41,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps.setString(2, object.getNick_name());
 			ps.setString(3, object.getFirst_name());
 			ps.setString(4, object.getSecond_name());
-			ps.setInt(5, 1);
+			ps.setString(5, object.getAddress());
 			ps.setString(6, object.getE_mail());
 			ps.setString(7, object.getPassword());
 			ps.setString(8, "F");
 			ps.setNull(9, 0);
 			ps.setNull(10, 0);
-			ps.setInt(11, 2);
+			ps.setString(11, object.getRole());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -60,7 +60,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		getConnection();
 		User user = null;
 		try {
-			ps = conn.prepareStatement("select * from user_card where u_id=?");
+			ps = conn.prepareStatement("select * from user_card where uid=?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
