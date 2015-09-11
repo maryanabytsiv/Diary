@@ -35,7 +35,7 @@ CREATE TABLE user_card (
 
 CREATE TABLE record_list (
     uuid varchar(40) PRIMARY KEY,
-    user_uuid int references user_card(u_id),
+    user_uuid int references user_card(uid),
     created_time timestamp without time zone,
     text text,
     supplement varchar(50),
