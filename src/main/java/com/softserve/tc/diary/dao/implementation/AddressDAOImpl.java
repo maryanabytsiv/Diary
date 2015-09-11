@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,8 +113,18 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
     }
 
     public List<Address> getAll() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Address> list = new ArrayList<Address>();
+        try {
+            conn = ConnectManager.getConnectionToTestDB();
+            ps = conn.prepareStatement("select * from address");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public String getGeneratedId() {

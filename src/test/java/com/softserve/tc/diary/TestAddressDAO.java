@@ -2,6 +2,7 @@ package com.softserve.tc.diary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -58,10 +59,10 @@ public class TestAddressDAO {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-//        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-//                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
-//                + "DROP TABLE IF EXISTS tag;");
-//        ps.execute();
+        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+                + "DROP TABLE IF EXISTS tag;");
+        ps.execute();
         ps.close();
     }
 
@@ -137,4 +138,24 @@ public class TestAddressDAO {
         assertEquals(add.getBuild_number(), address.getBuild_number());
 
     }
+    
+    @Test
+    public void TestDeleteAddress() {
+        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
+        addressDAO.create(address);
+        addressDAO.delete(address);
+        assertNull(address.getId());
+    }
+    
+    @Test
+    public void TestGetAll() {
+        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
+        addressDAO.create(address);
+        int actual = addressDAO.getAll().size();
+        int expected = 2;
+        assertEquals(expected, actual);
+    }
+    
 }
