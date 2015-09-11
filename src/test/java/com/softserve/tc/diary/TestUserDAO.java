@@ -72,6 +72,7 @@ public class TestUserDAO {
 //				+ "DROP TABLE IF EXISTS tag;");
 //		ps.execute();
 		ps.close();
+		conn.close();
 	}
 
 	@Test
@@ -142,17 +143,34 @@ public class TestUserDAO {
 
 	@Test
 	public void testReadByKeyInt() {
-		fail("Not yet implemented");
+		
+		UserDAOImpl userDAO = new UserDAOImpl();
+		User user = new User(7, "delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+				"User");
+		userDAO.create(user);
+		userDAO.readByKey(user.getU_id());
+		
+		assertNotNull(userDAO.readByKey(7));
+		
 	}
 
 	@Test
 	public void testUpdateUser() {
-		fail("Not yet implemented");
+	
 	}
 
 	@Test
 	public void testDeleteUser() {
-		fail("Not yet implemented");
+
+		UserDAOImpl userDAO = new UserDAOImpl();
+		User user = new User(6, "delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+				"User");
+		userDAO.create(user);
+		userDAO.delete(user);
+		userDAO.readByKey(user.getU_id());
+
+		assertNotNull(userDAO.readByKey(6));
+
 	}
 
 	@Test
