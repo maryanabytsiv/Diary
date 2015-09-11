@@ -77,7 +77,7 @@ public class TestRecordDAO {
 		Record record = null;
 		try {
 
-			ps = conn.prepareStatement("select * from user_card where nick_name ='hary12';");
+			ps = conn.prepareStatement("select * from record_list where user_uuid ='Nikko';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),Visibility.PRIVATE);
@@ -88,17 +88,24 @@ public class TestRecordDAO {
 		}
 
 		assertNotNull(record);
-		//assertEquals(5, user.getU_id());
-		assertEquals("hary12", record.getNick_name().trim());
-		assertEquals("Andriy", user.getFirst_name().trim());
-		assertEquals("Mural", user.getSecond_name().trim());
-		assertEquals("bg@gmail.com", user.getE_mail().trim());
-		// assertEquals("1", user.getAddress_id());
-		assertEquals("64561", user.getPassword().trim());
-		// assertEquals(Sex.FEMALE, user.getSex());
-		assertEquals(null, user.getDate_of_birth());
-		assertEquals(null, user.getAvatar());
-		assertEquals("admin", user.getRole_id().trim());
+		//assertEquals(5, record.getUuid());
+		assertEquals("Nikko", record.getUser_name());
+		assertEquals("2015-12-12", record.getCreated_time());
+		assertEquals("#Hello, how are you??", record.getText());
+		assertEquals("http:/ntiguwgni/gtrwgtwg/gwt", record.getSupplement());
+		 //assertEquals(Visibility.PRIVATE, record.getVisibility());
+	}
+	
+	@Test
+	public void testReadByKeyInt() {
+		
+		RecordDAOImpl recordDAO = new RecordDAOImpl();
+		Record record = new Record( "Nikko", "2015-12-12", "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Visibility.PRIVATE );
+		recordDAO.create(record);
+		recordDAO.readByKey(record.getUuid());
+		
+		assertNotNull(recordDAO.readByKey(7));
+		
 	}
 
 }

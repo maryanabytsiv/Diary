@@ -33,7 +33,7 @@ public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
 	public void create(Record object) {
 		getConnection();
 		try {
-			ps = conn.prepareStatement("insert into record_list(user_u_u_id, created_time, text, supplement, visibility) values(?,?,?,?,?);");
+			ps = conn.prepareStatement("insert into record_list(user_uuid, created_time, text, supplement, visibility) values(?,?,?,?,?);");
 			ps.setString(1, object.getUser_name());
 			ps.setString(2, object.getCreated_time());
 			ps.setString(3, object.getText());
@@ -52,7 +52,7 @@ public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
 		getConnection();
 		Record record = null;
 		try {
-			ps = conn.prepareStatement("select * from record_list where u_u_id=?");
+			ps = conn.prepareStatement("select * from record_list where uuid=?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -73,8 +73,8 @@ public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
 	public void delete(Record object) {
 		getConnection();
 		try {
-			ps = conn.prepareStatement("delete from record_list where u_u_id=?");
-			ps.setInt(1, object.getU_u_id());
+			ps = conn.prepareStatement("delete from record_list where uuid=?");
+			ps.setInt(1, object.getUuid());
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();

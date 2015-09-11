@@ -7,12 +7,12 @@ DROP TABLE IF EXISTS tag;
 
 CREATE TABLE role (
     role_id varchar(40) PRIMARY KEY,
-    name varchar(20) NOT NULL
+    name varchar(30) NOT NULL
 );
 
 CREATE TABLE  address (
     id varchar(40) PRIMARY KEY,
-    country varchar(10),
+    country varchar(20),
     city varchar(20),
     street varchar(20),
     build_number int
@@ -24,18 +24,18 @@ CREATE TABLE user_card (
     first_name varchar(20),
     second_name varchar(20),
 	
-    address_id int references address(id),
+    address_id varchar(40) references address(id),
     e_mail varchar(30) NOT NULL,
     password varchar(20) NOT NULL,
     sex varchar(1),
     date_of_birth date,
-    avatar varchar(50),
-    role int references role(role_id) NOT NULL
+    avatar varchar(150),
+    role varchar(40) references role(role_id) NOT NULL
 );
 
 CREATE TABLE record_list (
     uuid varchar(40) PRIMARY KEY,
-    user_uuid int references user_card(uid),
+    user_uuid varchar(40) references user_card(uid),
     created_time timestamp without time zone,
     text text,
     supplement varchar(50),
@@ -45,15 +45,11 @@ CREATE TABLE record_list (
 
 CREATE TABLE tag (
     uuid varchar(40) PRIMARY KEY,
-    tag varchar(20)
+    tag varchar(1000)
 );
 
 CREATE TABLE tag_record (
     uuid varchar(40) PRIMARY KEY,
-    record_uuid int references record_list(uuid),
-    tag_uuid int references tag(uuid)
+    record_uuid varchar(40) references record_list(uuid),
+    tag_uuid varchar(40) references tag(uuid)
 );
-
-
-
-

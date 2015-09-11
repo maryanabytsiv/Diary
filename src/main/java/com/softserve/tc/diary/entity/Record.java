@@ -2,7 +2,7 @@ package com.softserve.tc.diary.entity;
 
 public class Record {
 		
-		private int u_u_id;
+		private int uuid;
 		private String user_name;
 		private String created_time;
 		private String text;
@@ -23,12 +23,12 @@ public class Record {
 			this.visibility = visibility;
 		}
 
-		public int getU_u_id() {
-			return u_u_id;
+		public int getUuid() {
+			return uuid;
 		}
 
-		public void setU_u_id(int u_u_id) {
-			this.u_u_id = u_u_id;
+		public void setUuid(int uuid) {
+			this.uuid = uuid;
 		}
 
 		public String getUser_name() {
@@ -73,7 +73,7 @@ public class Record {
 
 		@Override
 		public String toString() {
-			return "Record [u_u_id=" + u_u_id + ", user_name=" + user_name
+			return "Record [uuid=" + uuid + ", user_name=" + user_name
 					+ ", created_time=" + created_time + ", text=" + text
 					+ ", supplement=" + supplement + ", visibility=" + visibility
 					+ "]";
