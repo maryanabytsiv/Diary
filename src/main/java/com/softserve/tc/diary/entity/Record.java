@@ -2,7 +2,7 @@ package com.softserve.tc.diary.entity;
 
 public class Record {
 		
-		private int uuid;
+		private String uuid;
 		private String user_name;
 		private String created_time;
 		private String text;
@@ -23,11 +23,11 @@ public class Record {
 			this.visibility = visibility;
 		}
 
-		public int getUuid() {
+		public String getUuid() {
 			return uuid;
 		}
 
-		public void setUuid(int uuid) {
+		public void setUuid(String uuid) {
 			this.uuid = uuid;
 		}
 
