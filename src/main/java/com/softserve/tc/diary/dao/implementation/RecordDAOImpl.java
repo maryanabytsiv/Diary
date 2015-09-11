@@ -1,11 +1,86 @@
 package com.softserve.tc.diary.dao.implementation;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
+import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.User;
+import com.softserve.tc.diary.entity.Visibility;
 
 public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
+	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
+	public static final String USER = "root";
+	public static final String PASSWORD = "root";
+	private static Connection conn;
+	private static PreparedStatement ps;
+	
+	private static void getConnection(){
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void create(Record object) {
+		getConnection();
+		try {
+			ps = conn.prepareStatement("insert into record_list(user_u_u_id, created_time, text, supplement, visibility) values(?,?,?,?,?);");
+			ps.setString(1, object.getUser_name());
+			ps.setString(2, object.getCreated_time());
+			ps.setString(3, object.getText());
+			ps.setString(4, object.getSupplement());  
+			ps.setString(5, "pb");
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Record readByKey(int id) {
+		getConnection();
+		Record record = null;
+		try {
+			ps = conn.prepareStatement("select * from record_list where u_u_id=?");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), Visibility.PUBLIC);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return record;
+	}
+	
+	@Override
+	public void update(Record object) {
+		// TODO Auto-generated method stub	
+	}
+
+	@Override
+	public void delete(Record object) {
+		getConnection();
+		try {
+			ps = conn.prepareStatement("delete from record_list where u_u_id=?");
+			ps.setInt(1, object.getU_u_id());
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+
 
 	public List<Record> getRecordByName(String user_name) {
 		// TODO Auto-generated method stub
@@ -27,29 +102,6 @@ public class RecordDAOImpl extends BaseDAOImpl<Record> implements RecordDAO{
 		return null;
 	}
 
-	@Override
-	public void create(Record object) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Record readByKey(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Record object) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Record object) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public List<Record> getAll() {

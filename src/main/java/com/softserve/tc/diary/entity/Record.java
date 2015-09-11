@@ -4,20 +4,20 @@ public class Record {
 		
 		private int u_u_id;
 		private String user_name;
-		private String timestamp;
+		private String created_time;
 		private String text;
 		private String supplement;
-		private boolean visibility;
+		private Visibility visibility;
 		
 		public Record() {
 			// TODO Auto-generated constructor stub
 		}
 		
-		public Record(String user_name, String timestamp, String text,
-				String supplement, boolean visibility) {
+		public Record(String user_name, String created_time, String text,
+				String supplement, Visibility visibility) {
 			super();
 			this.user_name = user_name;
-			this.timestamp = timestamp;
+			this.created_time = created_time;
 			this.text = text;
 			this.supplement = supplement;
 			this.visibility = visibility;
@@ -39,12 +39,12 @@ public class Record {
 			this.user_name = user_name;
 		}
 
-		public String getTimestamp() {
-			return timestamp;
+		public String getCreated_time() {
+			return created_time;
 		}
 
-		public void setTimestamp(String timestamp) {
-			this.timestamp = timestamp;
+		public void setCreated_time(String created_time) {
+			this.created_time = created_time;
 		}
 
 		public String getText() {
@@ -63,18 +63,18 @@ public class Record {
 			this.supplement = supplement;
 		}
 
-		public boolean isVisibility() {
+		public Visibility getVisibility() {
 			return visibility;
 		}
 
-		public void setVisibility(boolean visibility) {
+		public void setVisibility(Visibility visibility) {
 			this.visibility = visibility;
 		}
 
 		@Override
 		public String toString() {
 			return "Record [u_u_id=" + u_u_id + ", user_name=" + user_name
-					+ ", timestamp=" + timestamp + ", text=" + text
+					+ ", created_time=" + created_time + ", text=" + text
 					+ ", supplement=" + supplement + ", visibility=" + visibility
 					+ "]";
 		}
