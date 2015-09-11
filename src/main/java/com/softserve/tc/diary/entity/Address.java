@@ -2,7 +2,7 @@ package com.softserve.tc.diary.entity;
 
 public class Address {
 
-    private int id;
+    private String id;
     private String country;
     private String city;
     private String street;
@@ -20,11 +20,11 @@ public class Address {
         this.build_number = build_number;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
