@@ -7,10 +7,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,9 +21,6 @@ import com.softserve.tc.diary.entity.Address;
 
 public class TestAddressDAO {
 
-    public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
-    public static final String USER = "root";
-    public static final String PASSWORD = "root";
     private static Connection conn;
     private static PreparedStatement ps;
 
@@ -52,7 +49,7 @@ public class TestAddressDAO {
         }
 
         try {
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement(result);
             ps.execute();
             ps.close();
@@ -71,7 +68,7 @@ public class TestAddressDAO {
     }
 
     @Test
-    public void testCreateUser() {
+    public void testCreateAddress() {
 
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address newAddress = new Address("Ukraine", "IF", "street", 12);
@@ -79,7 +76,8 @@ public class TestAddressDAO {
         Address address = null;
 
         try {
-            ps = conn.prepareStatement("select * from address where country = ? and city = ? and street = ? and build_number = ?");
+            ps = conn.prepareStatement(
+                    "select * from address where country = ? and city = ? and street = ? and build_number = ?");
             ps.setString(1, newAddress.getCountry());
             ps.setString(2, newAddress.getCity());
             ps.setString(3, newAddress.getStreet());
@@ -101,31 +99,37 @@ public class TestAddressDAO {
     }
 
     @Test
-    public void testUpdateUser() {
+    public void testUpdateAddress() {
+        
         
         AddressDAOImpl addressDAO = new AddressDAOImpl();
-        Address add =new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
-        add.setId("2");
+        
+        Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
+        add.setId(addressDAO.getGeneratedId());
         addressDAO.update(add);
         Address address = null;
         try {
-            
             ps = conn.prepareStatement("select * from address where id=?");
             ps.setString(1, add.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
-                address.setId(rs.getString(1));
+                address.setId(add.getId());
             }
-            
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        System.out.println("Add " + add.getId());
+        System.out.println("Add " + add.getCountry());
+        System.out.println("Add " + add.getCity());
+        System.out.println("Add " + add.getStreet());
+        System.out.println("Address " + address.getId());
         assertEquals(add.getCountry(), address.getCountry());
         assertEquals(add.getCity(), address.getCity());
         assertEquals(add.getStreet(), address.getStreet());
         assertEquals(add.getBuild_number(), address.getBuild_number());
-        
+
     }
 }
