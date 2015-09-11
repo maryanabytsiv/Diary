@@ -34,8 +34,8 @@ CREATE TABLE user_card (
 );
 
 CREATE TABLE record_list (
-    uuid varchar(40) PRIMARY KEY,
-    user_uuid varchar(40) references user_card(uid),
+    id_rec varchar(40) PRIMARY KEY,
+    user_id_rec varchar(40) references user_card(uid),
     created_time timestamp without time zone,
     text text,
     supplement varchar(50),
@@ -49,7 +49,7 @@ CREATE TABLE tag (
 );
 
 CREATE TABLE tag_record (
-    uuid varchar(40) PRIMARY KEY,
-    record_uuid varchar(40) references record_list(uuid),
+    uuid_tr varchar(40) PRIMARY KEY,
+    record_uuid varchar(40) references record_list(id_rec),
     tag_uuid varchar(40) references tag(uuid)
 );
