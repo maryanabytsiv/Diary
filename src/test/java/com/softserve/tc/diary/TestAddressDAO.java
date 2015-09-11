@@ -10,8 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,10 +58,10 @@ public class TestAddressDAO {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
-                + "DROP TABLE IF EXISTS tag;");
-        ps.execute();
+//        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+//                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+//                + "DROP TABLE IF EXISTS tag;");
+//        ps.execute();
         ps.close();
     }
 
@@ -106,6 +104,18 @@ public class TestAddressDAO {
         
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
         add.setId(addressDAO.getGeneratedId());
+        try {
+            ps = conn.prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
+            ps.setString(1, add.getId());
+            ps.setString(2, add.getCountry());
+            ps.setString(3, add.getCity());
+            ps.setString(4, add.getStreet());
+            ps.setInt(5, add.getBuild_number());
+            ps.execute();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         addressDAO.update(add);
         Address address = null;
         try {
@@ -114,18 +124,13 @@ public class TestAddressDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
-                address.setId(add.getId());
+                address.setId(rs.getString(1));
             }
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println("Add " + add.getId());
-        System.out.println("Add " + add.getCountry());
-        System.out.println("Add " + add.getCity());
-        System.out.println("Add " + add.getStreet());
-        System.out.println("Address " + address.getId());
         assertEquals(add.getCountry(), address.getCountry());
         assertEquals(add.getCity(), address.getCity());
         assertEquals(add.getStreet(), address.getStreet());

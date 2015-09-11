@@ -54,12 +54,9 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
         try {
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement(
-                    "update address set country = ?, city = ?, street = ?, build_number = ? where id = ?");
+                    "update address set country = ? where id = ?");
             ps.setString(1, object.getCountry());
-            ps.setString(2, object.getCity());
-            ps.setString(3, object.getStreet());
-            ps.setInt(4, object.getBuild_number());
-            ps.setString(5, object.getId());
+            ps.setString(2, object.getId());
             ps.execute();
             ps.close();
         } catch (SQLException e) {
