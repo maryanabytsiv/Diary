@@ -3,6 +3,7 @@ package com.softserve.tc.diary.dao.implementation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,20 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 	}
 
 	public User readByKey(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		getConnection();
+		User user = null;
+		try {
+			ps = conn.prepareStatement("select * from user_card where u_id=?");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
+						rs.getString(6), rs.getString(7), Sex.FEMALE, rs.getString(9), rs.getString(10), "admin");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public void update(User object) {
@@ -60,7 +73,6 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 	}
 
 	public void delete(User object) {
-		// TODO Auto-generated method stub
 		
 	}
 
