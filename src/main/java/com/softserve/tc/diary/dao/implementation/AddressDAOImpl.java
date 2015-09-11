@@ -30,15 +30,14 @@ public class AddressDAOImpl extends BaseDAOImpl<Address>implements AddressDAO {
 
         getConnection();
         try {
-            ps = conn.prepareStatement("insert into address values(?,?,?,?,?)");
-            ps.setInt(1, object.getId());
-            ps.setString(2, object.getCountry());
+            ps = conn.prepareStatement("insert into address(country, city, street, build_number) values(?,?,?,?)");
+            ps.setString(1, object.getCountry());
             ps.setString(2, object.getCity());
-            ps.setString(2, object.getStreet());
-            ps.setInt(5,object.getBuild_number());
+            ps.setString(3, object.getStreet());
+            ps.setInt(4, object.getBuild_number());
             ps.execute();
             ps.close();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (conn != null) {
@@ -57,7 +56,21 @@ public class AddressDAOImpl extends BaseDAOImpl<Address>implements AddressDAO {
     }
 
     public void update(Address object) {
-        // TODO Auto-generated method stub
+        getConnection();
+        try {
+            
+            ps = conn.prepareStatement(
+                    "update address set country = ?, city = ?, street = ?, build_number = ? where id = ?");
+            ps.setString(1, object.getCountry());
+            ps.setString(2, object.getCity());
+            ps.setString(3, object.getStreet());
+            ps.setInt(4, object.getBuild_number());
+            ps.setInt(5, object.getId());
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
