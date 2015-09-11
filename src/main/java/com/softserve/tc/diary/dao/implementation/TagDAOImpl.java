@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
@@ -15,15 +17,20 @@ import com.softserve.tc.diary.entity.Tag;
 
 public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 
-	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
-	public static final String USER = "root";
-	public static final String PASSWORD = "root";
 	private static Connection conn;
 	private static PreparedStatement ps;
 
 	private static void getConnection() {
 		try {
-			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			conn = ConnectManager.getConnectionToTestDB();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private static void closeConnection() {
+		try {
+			ConnectManager.closeConnectionToTestDB();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -34,30 +41,39 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 		return idOne.toString();
 	}
 
-	public void create(Tag object) {
+	public void create(Tag tagObject) {
 		getConnection();
+		TagDAOImpl obj = new TagDAOImpl();
 		try {
 			ps = conn.prepareStatement("insert into tag values(?,?);");
-			ps.setString(1, object.getUuid());
-			ps.setString(2, object.getTag());
+			ps.setString(1, obj.getGeneratedId());
+			ps.setString(2, tagObject.getTagMessage());
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public int getTagIdByTagMessage(String TagMessage) {
-		// TODO Auto-generated method stub
-		return 0;
+		finally {
+			closeConnection();
+		}
 	}
 
 	public List<Tag> getListTagsByPrefix(String prefix) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Tag> list = new ArrayList<Tag>();
+		try {
+			ps = conn.prepareStatement("SELECT tag_message FROM tag "
+					+ "WHERE tag_message LIKE '"+prefix+"%';");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(new Tag(rs.getString(2)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public List<Tag> getListTagsBySuffix(String suffix) {
-		// TODO Auto-generated method stub
+			
 		return null;
 	}
 
@@ -90,5 +106,10 @@ public class TagDAOImpl implements TagDAO, BaseDAO<Tag>, IdGenerator {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public static void main(String[] args) {
+		TagDAOImpl obj = new TagDAOImpl();
+		obj.create(new Tag("#Hello"));
+	}
+	
 }
