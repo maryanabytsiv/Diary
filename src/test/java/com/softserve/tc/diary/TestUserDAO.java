@@ -145,7 +145,7 @@ public class TestUserDAO {
 	public void testReadByKeyInt() {
 		
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User(7, "delete", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+		User user = new User(7, "read", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
 				"User");
 		userDAO.create(user);
 		userDAO.readByKey(user.getU_id());
@@ -167,9 +167,7 @@ public class TestUserDAO {
 				"User");
 		userDAO.create(user);
 		userDAO.delete(user);
-		userDAO.readByKey(user.getU_id());
-
-		assertNotNull(userDAO.readByKey(6));
+		assertNull(userDAO.readByKey(6));
 
 	}
 
@@ -194,8 +192,26 @@ public class TestUserDAO {
 	}
 
 	@Test
-	public void testGetByDAteOfBirth() {
-		fail("Not yet implemented");
+	public void testGetByDateOfBirth() {
+		
+		UserDAOImpl userDAO = new UserDAOImpl();
+		User user = new User(8, "dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+				"User");
+		userDAO.create(user);
+		
+		user = new User(9, "dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+				"User");
+		userDAO.create(user);
+		
+		userDAO.create(user);
+		user = new User(9, "dateOfBirth", "Natalya", "Bolyk", "Lviv", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
+				"User");
+		userDAO.create(user);
+		
+		userDAO.readByKey(user.getU_id());
+		
+		assertNotNull(userDAO.readByKey(7));
+		
 	}
 
 	@Test
