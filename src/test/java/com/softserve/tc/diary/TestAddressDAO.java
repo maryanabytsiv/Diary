@@ -63,10 +63,10 @@ public class TestAddressDAO {
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
-//        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-//                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
-//                + "DROP TABLE IF EXISTS tag;");
-//        ps.execute();
+        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+                + "DROP TABLE IF EXISTS tag;");
+        ps.execute();
         ps.close();
     }
 
