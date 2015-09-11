@@ -67,10 +67,10 @@ public class TestUserDAO {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-				+ "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
-				+ "DROP TABLE IF EXISTS tag;");
-		ps.execute();
+//		ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+//				+ "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+//				+ "DROP TABLE IF EXISTS tag;");
+//		ps.execute();
 		ps.close();
 	}
 
@@ -103,16 +103,16 @@ public class TestUserDAO {
 		// }
 
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User(5, "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null, null,
+		userDAO.create(new User( "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null, null,
 				"User"));
 		User user = null;
 		try {
 
-			ps = conn.prepareStatement("select * from user_card where u_id=5");
+			ps = conn.prepareStatement("select * from user_card where nick_name ='hary12';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
-						rs.getString(6), rs.getString(7), Sex.FEMALE, rs.getString(9), rs.getString(10), "admin");
+				user = new User( rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
+						rs.getString(6), rs.getString(7), Sex.MALE, rs.getString(9), rs.getString(10), "admin");
 			}
 
 		} catch (SQLException e) {
@@ -127,7 +127,7 @@ public class TestUserDAO {
 		// userDAO.create(user);
 
 		assertNotNull(user);
-		assertEquals(5, user.getU_id());
+		//assertEquals(5, user.getU_id());
 		assertEquals("hary12", user.getNick_name().trim());
 		assertEquals("Andriy", user.getFirst_name().trim());
 		assertEquals("Mural", user.getSecond_name().trim());

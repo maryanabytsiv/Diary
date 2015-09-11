@@ -1,19 +1,26 @@
-//package com.softserve.tc.diary;
-//
-//import java.io.BufferedReader;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.PreparedStatement;
-//
-//public class Main {
+package com.softserve.tc.diary;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
+import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.User;
+
+public class Main {
 //	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
 //	public static final String USER = "root";
 //	public static final String PASSWORD = "root";
 //	private static Connection conn;
-//
-//	public static void main(String[] args) {
+
+	public static void main(String[] args) {
+		UserDAOImpl user=new UserDAOImpl();
+		User newUser=new User("Nikko", "Thomas", "Shelby", "1", "mtungieugn@gmail", "sefhwufh", Sex.FEMALE, "1991-12-12", "frwnfef", "1");
+		user.create(newUser);
 //
 //		BufferedReader br = null;
 //		String result = "";
@@ -48,6 +55,6 @@
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-//	}
-//
-//}
+	}
+
+}
