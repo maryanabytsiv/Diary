@@ -20,9 +20,9 @@ public class User {
 	}
 
 	
-	public User(int u_id, String nick_name, String first_name, String second_name, String address, String e_mail,
+	public User( String nick_name, String first_name, String second_name, String address, String e_mail,
 			String password, Sex sex, String date_of_birth, String avatar, String role) {
-		this.u_id = u_id;
+		//this.u_id = u_id;
 		this.nick_name = nick_name;
 		this.first_name = first_name;
 		this.second_name = second_name;

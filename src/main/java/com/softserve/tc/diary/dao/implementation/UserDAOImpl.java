@@ -31,18 +31,18 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 	public void create(User object) {
 		getConnection();
 		try {
-			ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,?,?,?);");
-			ps.setInt(1, object.getU_id());
-			ps.setString(2, object.getNick_name());
-			ps.setString(3, object.getFirst_name());
-			ps.setString(4, object.getSecond_name());
-			ps.setInt(5, 1);  
-			ps.setString(6, object.getE_mail());
-			ps.setString(7, object.getPassword());
-			ps.setString(8, "F");
+			ps = conn.prepareStatement("insert into user_card(nick_name, first_name, second_name, address_id, e_mail, password, sex, date_of_birth, avatar, role) values(?,?,?,?,?,?,?,?,?,?);");
+			//ps.setInt(1, object.getU_id());
+			ps.setString(1, object.getNick_name());
+			ps.setString(2, object.getFirst_name());
+			ps.setString(3, object.getSecond_name());
+			ps.setInt(4, 1);  
+			ps.setString(5, object.getE_mail());
+			ps.setString(6, object.getPassword());
+			ps.setString(7, "F");
+			ps.setNull(8, 0);
 			ps.setNull(9, 0);
-			ps.setNull(10, 0);
-			ps.setInt(11,2);
+			ps.setInt(10,2);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -59,7 +59,7 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
+				user = new User( rs.getString(2), rs.getString(3), rs.getString(4), "Lviv",
 						rs.getString(6), rs.getString(7), Sex.FEMALE, rs.getString(9), rs.getString(10), "admin");
 			}
 		} catch (SQLException e) {

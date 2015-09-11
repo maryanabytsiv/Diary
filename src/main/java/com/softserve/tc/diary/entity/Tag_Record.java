@@ -11,8 +11,7 @@ public class Tag_Record {
 		
 	}
 	
-	public Tag_Record(int u_u_id, int record_tag, int tag_uuid) {
-		this.u_u_id = u_u_id;
+	public Tag_Record(int record_tag, int tag_uuid) {
 		this.record_tag = record_tag;
 		this.tag_uuid = tag_uuid;
 	}
