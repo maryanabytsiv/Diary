@@ -5,8 +5,7 @@ public class Tag {
 	private String uuid;
 	private String tag;
 	
-	public Tag(String uuid, String tag) {
-		this.uuid = uuid;
+	public Tag(String tag) {
 		this.tag = tag;
 	}
 	
@@ -14,11 +13,11 @@ public class Tag {
 		return uuid;
 	}
 	
-	public String getTag() {
+	public String getTagMessage() {
 		return tag;
 	}
 	
-	public void setTag(String tag) {
+	public void setTagMessage(String tag) {
 		this.tag = tag;
 	}
 

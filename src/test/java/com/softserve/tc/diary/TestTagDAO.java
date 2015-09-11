@@ -20,15 +20,16 @@ import com.softserve.tc.diary.entity.Tag;
 
 public class TestTagDAO {
 
-	public static final String URL = "jdbc:postgresql://localhost:5432/DiaryTest";
-	public static final String USER = "root";
-	public static final String PASSWORD = "root";
+	// public static final String URL =
+	// "jdbc:postgresql://localhost:5432/DiaryTest";
+	// public static final String USER = "root";
+	// public static final String PASSWORD = "root";
 	private static Connection conn;
 	private static PreparedStatement ps;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-
+		conn = ConnectManager.getConnectionToTestDB();
 		BufferedReader br = null;
 		String scriptSQL;
 		StringBuilder sbResult = new StringBuilder();
@@ -51,43 +52,39 @@ public class TestTagDAO {
 		}
 
 		String result = new String(sbResult);
-		conn = DriverManager.getConnection(URL, USER, PASSWORD);
 		ps = conn.prepareStatement(result);
 		ps.execute();
 	}
 
 	@Test
 	public void testCreateTag() {
-
 		TagDAOImpl tagDAO = new TagDAOImpl();
-		Tag tag = new Tag(6, "#HelloWorld");
+		Tag tag = new Tag("#HelloWorld");
 		tagDAO.create(tag);
 		tag = null;
 		try {
-			ps = conn.prepareStatement("SELECT * FROM tag WHERE u_u_id = 6");
+			ps = conn.prepareStatement("SELECT tag_message FROM tag " + 
+										"WHERE tag_message Like '#HelloWorld'");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				tag = new Tag(rs.getInt(1), rs.getString(2));
+				tag = new Tag(rs.getString("tag_message"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 
-		assertNotNull(tag);
-		assertEquals(6, tag.getU_u_id());
-		assertEquals("#HelloWorld", tag.getTag());
+		
+		assertEquals("#HelloWorld", tag.getTagMessage());
 
 	}
-	
+
 	@Test
 	public void testReadByKey() {
-		
+
 		TagDAOImpl tagDAO = new TagDAOImpl();
-		
-		Tag tag = tagDAO.readByKey(key);
-		
-		
+
+		// Tag tag = tagDAO.readByKey(key);
+
 	}
-	
+
 }
