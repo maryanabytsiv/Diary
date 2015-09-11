@@ -66,7 +66,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
             ps = conn.prepareStatement(
                     "update record_list set user_id_rec = ? where id_rec = ?");
             ps.setString(1, object.getUser_name());
-            ps.setString(2, object.getUuid());
+            ps.setString(2, object.getId_rec());
             ps.execute();
             ps.close();
         } catch (SQLException e) {
@@ -78,8 +78,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	public void delete(Record object) {
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("delete from record_list where uuid=?");
-			ps.setString(1, object.getUuid());
+			ps = conn.prepareStatement("delete from record_list where id_rec=?");
+			ps.setString(1, object.getId_rec());
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
