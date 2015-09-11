@@ -8,5 +8,4 @@ public interface RoleDAO extends BaseDAO<Role> {
 
 	List<Role> findByRole(String role);
 
-	// Add 2 methods
 }
