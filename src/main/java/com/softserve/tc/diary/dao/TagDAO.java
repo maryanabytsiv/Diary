@@ -10,7 +10,7 @@ public interface TagDAO extends BaseDAO<Tag>{
 	
 	List<Tag> getListTagsBySuffix(String suffix);
 	
-	List<Record> getListRecordsByTag();
+	List<Record> getListRecordsByTag(Tag object);
 	
 	List<Record> getListRecordsByListOfTags(List<Tag> list);
 	

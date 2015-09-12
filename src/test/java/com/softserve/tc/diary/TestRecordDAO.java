@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +18,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
+import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
+import com.softserve.tc.diary.entity.Tag;
 
 public class TestRecordDAO {
 
@@ -133,6 +136,13 @@ public class TestRecordDAO {
 		assertEquals("#Hello, how are you??", record.getText());
 		assertEquals("http:/ntiguwgni/gtrwgtwg/gwt", record.getSupplement());
 		 //assertEquals(Visibility.PRIVATE, record.getVisibility());
+	}
+	
+	@Test
+	public void testgetAll() {
+		RecordDAOImpl recordDAO = new RecordDAOImpl();
+		List<Record> list = recordDAO.getAll();
+		assertEquals(3, list.size());
 	}
 /*	
 	@Test
