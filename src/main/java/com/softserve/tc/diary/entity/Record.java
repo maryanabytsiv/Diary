@@ -72,7 +72,7 @@ public class Record {
 				return null;
 		}
 
-		public void setVisibility(status visibility) {
+		public void setVisibility(String visibility) {
 			if (visibility.equals("PRIVATE")) {
 				this.visibility = status.PRIVATE;
 			} else if (visibility.equals("PUBLIC")) {

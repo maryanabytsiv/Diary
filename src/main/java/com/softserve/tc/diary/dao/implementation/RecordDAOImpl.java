@@ -45,7 +45,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 		Record record = null;
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("select * from record_list where id_rec=?");
+			ps = conn.prepareStatement("select * from record_list where id_rec=?;");
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -81,7 +81,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	public void delete(Record object) {
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("delete from record_list where user_id_rec=?");
+			ps = conn.prepareStatement("delete from record_list where user_id_rec=?;");
 			ps.setString(1, object.getUser_name());
 			ps.execute();
 		} catch (SQLException e) {
@@ -90,9 +90,23 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 		
 	}
 
-	public List<Record> getRecordByName(String user_name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Record getRecordByName(String user_name) {
+		Record record = new Record();
+			try{
+			ps = conn.prepareStatement("select * from record_list where user_id_rec=?;");
+			ps.setString(1, user_name );
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				record.setUser_name(rs.getString("user_id_rec"));
+				record.setCreated_time(rs.getString("created_time"));
+				record.setText(rs.getString("text"));
+				record.setSupplement(rs.getString("supplement"));
+				record.setVisibility(rs.getString("visibility"));
+			}
+			}catch (SQLException error) {
+			error.printStackTrace();	
+			}
+		return record;
 	}
 
 	public List<Record> getRecordByDate(String date) {

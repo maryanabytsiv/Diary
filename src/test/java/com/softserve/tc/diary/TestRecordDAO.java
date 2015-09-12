@@ -109,7 +109,7 @@ public class TestRecordDAO {
 	
 	
 	@Test
-	public void testCreateRecord() {
+		public void testCreateRecord() {
 		
 		RecordDAOImpl RecordDAO = new RecordDAOImpl();
 		Record newRecord = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", status.PRIVATE );
@@ -187,7 +187,7 @@ public class TestRecordDAO {
         Record record = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
-        assertNull(record.getId_rec());
+        assertNull(recordDAO.getRecordByName("1"));
     }
 
 //	@Test
