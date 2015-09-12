@@ -63,11 +63,11 @@ public class TestUserDAO {
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-//		 ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-//		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
-//		 + "DROP TABLE IF EXISTS role;"
-//		 + "DROP TABLE IF EXISTS tag;");
-//		 ps.execute();
+		 ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
+		 + "DROP TABLE IF EXISTS role;"
+		 + "DROP TABLE IF EXISTS tag;");
+		 ps.execute();
 		ps.close();
 		conn.close();
 	}
@@ -116,7 +116,7 @@ public class TestUserDAO {
 	public void testCreateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
 		userDAO.create(
-				new User("hary12", "Andriy", "Mural", "1", "bg@gmail.com", "64561", Sex.FEMALE, null, "folder/folder/image.png", "2"));
+				new User("hary12", "Andriy", "Mural", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1995-03-02", "folder/folder/image.png", "2"));
 		User userActual = new User();
 		try {
 
@@ -130,7 +130,7 @@ public class TestUserDAO {
 				userActual.setE_mail(rs.getString("e_mail"));
 				userActual.setPassword(rs.getString("password"));
 				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(null);
+				userActual.setDate_of_birth(rs.getString("date_of_birth"));
 				userActual.setAvatar(rs.getString("avatar"));
 				userActual.setRole(rs.getString("role"));
 			}
@@ -147,23 +147,9 @@ public class TestUserDAO {
 		assertEquals("1", userActual.getAddress());
 		assertEquals("64561", userActual.getPassword());
 	    assertEquals("FEMALE", userActual.getSex());
-		assertEquals(null, userActual.getDate_of_birth());
+		assertEquals("1995-03-02", userActual.getDate_of_birth());
 		assertEquals("folder/folder/image.png", userActual.getAvatar());
 		assertEquals("2", userActual.getRole());
-	}
-
-	@Test
-	public void testReadByKeyInt() {
-		
-
-//		UserDAOImpl userDAO = new UserDAOImpl();
-//		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-//				"1");
-//		userDAO.create(user);
-//		userDAO.readByKey(user.getUuid());
-//
-//		assertNotNull(userDAO.readByKey(7));
-
 	}
 
 	@Test
@@ -171,11 +157,11 @@ public class TestUserDAO {
         	 
 		UserDAOImpl userDAO = new UserDAOImpl();
         
-		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, null, "some.jpeg",
+		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10", "some.jpeg",
 		"1");
 		user.setUuid(userDAO.getGeneratedId());
         try {
-            ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,?,?,?);");
+            ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
 			ps.setString(1, user.getUuid());
 			ps.setString(2, user.getNick_name());
 			ps.setString(3, user.getFirst_name());
@@ -184,7 +170,7 @@ public class TestUserDAO {
 			ps.setString(6, user.getE_mail());
 			ps.setString(7, user.getPassword());
 			ps.setString(8, user.getSex());
-			ps.setNull(9, 0);
+			ps.setString(9, user.getDate_of_birth());
 			ps.setString(10, user.getAvatar());
 			ps.setString(11, user.getRole());
 			ps.execute();
@@ -208,7 +194,7 @@ public class TestUserDAO {
 				userActual.setE_mail(rs.getString("e_mail"));
 				userActual.setPassword(rs.getString("password"));
 				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(null);
+				userActual.setDate_of_birth(rs.getString("date_of_birth"));
 				userActual.setAvatar(rs.getString("avatar"));
 				userActual.setRole(rs.getString("role"));
             }
@@ -225,7 +211,7 @@ public class TestUserDAO {
 		assertEquals("1", userActual.getAddress());
 		assertEquals("64561", userActual.getPassword());
 	    assertEquals("FEMALE", userActual.getSex());
-		assertEquals(null, userActual.getDate_of_birth());
+		assertEquals("1999-10-10", userActual.getDate_of_birth());
 		assertEquals("some.jpeg", userActual.getAvatar());
 		assertEquals("1", userActual.getRole());
 
@@ -239,7 +225,7 @@ public class TestUserDAO {
 				"1");
 		userDAO.create(user);
 		userDAO.delete(user);
-		assertNull(userDAO.getByNickName("delete"));
+		assertNull(userDAO.readByKey("delete"));
 
 	}
 
@@ -269,7 +255,7 @@ public class TestUserDAO {
 					userActual.setE_mail(rs.getString("e_mail"));
 					userActual.setPassword(rs.getString("password"));
 					userActual.setSex(rs.getString("Sex"));
-					userActual.setDate_of_birth(null);
+					userActual.setDate_of_birth(rs.getString("date_of_birth"));
 					userActual.setAvatar(rs.getString("avatar"));
 					userActual.setRole(rs.getString("role"));
 	            }
@@ -286,39 +272,19 @@ public class TestUserDAO {
 			assertEquals("3", userActual.getAddress());
 			assertEquals("flgkjhlkftjt", userActual.getPassword());
 		    assertEquals("MALE", userActual.getSex());
-			assertEquals(null, userActual.getDate_of_birth());
+			assertEquals("1989-02-20", userActual.getDate_of_birth());
 			assertEquals(null, userActual.getAvatar());
 			assertEquals("2", userActual.getRole());
 	}
 
 	@Test
 	public void testCountAllBySex() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
 	public void testGetByDateOfBirth() {
 
-		// UserDAOImpl userDAO = new UserDAOImpl();
-		//
-		// User user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv",
-		// "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-		// "User");
-		// userDAO.create(user);
-		//
-		// user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv",
-		// "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-		// "User");
-		// userDAO.create(user);
-		//
-		// user = new User("dateOfBirth", "Natalya", "Bolyk", "Lviv",
-		// "bg@gmail.com", "64561", Sex.FEMALE, null, null,
-		// "User");
-		// userDAO.create(user);
-		//
-		//// userDAO.getByDateOfBirth(dateOfBirth)
-		//
-		// assertNotNull(userDAO.readByKey(7));
 
 	}
 
