@@ -27,20 +27,20 @@ CREATE TABLE user_card (
     address_id varchar(40) references address(id),
     e_mail varchar(30) NOT NULL,
     password varchar(20) NOT NULL,
-    sex varchar(6),
+    sex varchar(1),
     date_of_birth date,
     avatar varchar(150),
     role varchar(40) references role(role_id) NOT NULL
 );
 
-CREATE TYPE status AS ENUM ('private', 'public');
+
 CREATE TABLE record_list (
     id_rec varchar(40) PRIMARY KEY,
     user_id_rec varchar(40) references user_card(uid),
     created_time timestamp without time zone,
     text text,
     supplement varchar(50),
-    visibility status NOT NULL 
+    visibility varchar(10) NOT NULL 
 );
 
 CREATE TABLE tag (
