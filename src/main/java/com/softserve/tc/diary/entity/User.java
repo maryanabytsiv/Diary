@@ -1,7 +1,7 @@
 package com.softserve.tc.diary.entity;
 
 public class User {
-	
+
 	private String uuid;
 	private String nick_name;
 	private String first_name;
@@ -9,19 +9,17 @@ public class User {
 	private String address;
 	private String e_mail;
 	private String password;
-	private Sex sex; 
+	private Sex sex;
 	private String date_of_birth;
 	private String avatar;
 	private String role;
-	
 
 	public User() {
 
 	}
 
-	
-	public User( String nick_name, String first_name, String second_name, String address, String e_mail,
-			String password, Sex sex, String date_of_birth, String avatar, String role) {
+	public User(String nick_name, String first_name, String second_name, String address, String e_mail, String password,
+			Sex sex, String date_of_birth, String avatar, String role) {
 		this.nick_name = nick_name;
 		this.first_name = first_name;
 		this.second_name = second_name;
@@ -90,12 +88,22 @@ public class User {
 		this.password = password;
 	}
 
-	public Sex getSex() {
-		return sex;
+	public String getSex() {
+		if (sex == Sex.FEMALE) {
+			return "FEMALE";
+		} else if (sex == Sex.MALE) {
+			return "MALE";
+		} else
+			return null;
 	}
 
-	public void setSex(Sex sex) {
-		this.sex = sex;
+	public void setSex(String sex) {
+		if (sex.equals("FEMALE")) {
+			this.sex=Sex.FEMALE;
+		} else if (sex.equals("MALE")) {
+			this.sex=Sex.MALE;
+		} else
+			this.sex=null;
 	}
 
 	public String getDate_of_birth() {
@@ -124,11 +132,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [uuid=" + uuid + ", nick_name=" + nick_name + ", first_name=" + first_name + ", second_name="
-				+ second_name + ", address =" + address + ", e_mail=" + e_mail + ", password=" + password
-				+ ", sex=" + sex + ", date_of_birth=" + date_of_birth + ", avatar=" + avatar + ", role=" + role
-				+ "]";
+		return "User [nick_name=" + nick_name + ", first_name=" + first_name + ", second_name="
+				+ second_name + ", address =" + address + ", e_mail=" + e_mail + ", password=" + password + ", sex="
+				+ sex + ", date_of_birth=" + date_of_birth + ", avatar=" + avatar + ", role=" + role + "]"+"\n";
 	}
-	
 
 }
