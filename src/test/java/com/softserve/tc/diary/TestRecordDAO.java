@@ -16,11 +16,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
-import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Record;
-import com.softserve.tc.diary.entity.Visibility;
+import com.softserve.tc.diary.entity.status;
 
 public class TestRecordDAO {
 
@@ -114,7 +112,7 @@ public class TestRecordDAO {
 	public void testCreateRecord() {
 		
 		RecordDAOImpl RecordDAO = new RecordDAOImpl();
-		Record newRecord = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", null );
+		Record newRecord = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", status.PRIVATE );
 		RecordDAO.create(newRecord);
 		Record record = null;
 		
@@ -122,20 +120,20 @@ public class TestRecordDAO {
 			ps = conn.prepareStatement("select * from record_list where user_id_rec ='1';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				record = new Record( rs.getString(2), null, rs.getString(4), rs.getString(5),null);
+				record = new Record( rs.getString(2), null, rs.getString(4), rs.getString(5),status.PRIVATE);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		//assertNotNull(record);
-		//assertEquals(5, record.getUuid());
+	
+		assertNotNull(record);
+//		assertEquals(1, record.getId_rec());
 		assertEquals("1", record.getUser_name());
-//		assertEquals("2015-12-12", record.getCreated_time());
+//		assertEquals("2015-05-20 12:00:56", record.getCreated_time());
 		assertEquals("#Hello, how are you??", record.getText());
 		assertEquals("http:/ntiguwgni/gtrwgtwg/gwt", record.getSupplement());
-		 //assertEquals(Visibility.PRIVATE, record.getVisibility());
+		assertEquals("PRIVATE" , record.getVisibility());
 	}
 	
   /*  
@@ -186,10 +184,33 @@ public class TestRecordDAO {
     @Test
     public void TestDeleteRecord() {
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        Record record = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", null );
+        Record record = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
         assertNull(record.getId_rec());
     }
 
+//	@Test
+//	public void testGetAll() {
+//		
+//		try {
+//			ps = conn.prepareStatement("select * from record_list;");
+//			ResultSet rs = ps.executeQuery();
+//			
+//			while (rs.next()){System.out.println(rs.getString("id_rec") +" , " 
+//			+rs.getString("user_id_rec") +" , "+rs.getString("created_time") +" , "+rs.getString("text") 
+//			+" , "+rs.getString("supplement") +" , "+rs.getString("visibility"));}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		RecordDAOImpl recordDAO = new RecordDAOImpl();
+//		Record record = new Record("1", "5", "#spagetti", "https://rondo.com", status.PRIVATE);
+//		recordDAO.create(record);
+//        int actual = recordDAO.getAll().size();
+//        int expected = 3;
+//        assertEquals(expected, actual);
+//	}
+    
 }

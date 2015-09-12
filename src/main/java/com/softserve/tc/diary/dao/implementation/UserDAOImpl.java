@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
@@ -22,6 +23,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 
 	public void create(User object) {
 		try {
+			BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
 			ps.setString(1, getGeneratedId());
@@ -30,7 +32,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps.setString(4, object.getSecond_name());
 			ps.setString(5, object.getAddress());
 			ps.setString(6, object.getE_mail());
-			ps.setString(7, object.getPassword());
+			ps.setString(7, passwordEncryptor.encryptPassword(object.getPassword()));
 			ps.setString(8, object.getSex());
 			ps.setString(9, object.getDate_of_birth());
 			ps.setString(10, object.getAvatar());
