@@ -1,6 +1,6 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -76,6 +77,19 @@ public class TestRoleDAO {
 
 	}
 
+	@After
+	public void afterTest() {
+		String deleteData = "delete from tag_record;" + "delete from record_list;" + "delete from user_card;"
+				+ "delete from address;" + "delete from role;" + "delete from tag;";
+		try {
+			ps = conn.prepareStatement(deleteData);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@Test
 	public void testCreateRole() {
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
@@ -95,4 +109,5 @@ public class TestRoleDAO {
 		assertEquals("Administrator", role.getName());
 
 	}
+
 }

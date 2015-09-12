@@ -8,8 +8,6 @@ import com.softserve.tc.diary.entity.User;
 
 public interface UserDAO extends BaseDAO<User> {
 
-	User getByNickName(String nickName);
-
 	int countAllBySex(Sex sex);
 
 	List<User> getByDateOfBirth(Date dateOfBirth);
