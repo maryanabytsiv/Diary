@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,8 +18,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
+import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+
 
 public class TestRecordDAO {
 
@@ -136,13 +139,13 @@ public class TestRecordDAO {
 		assertEquals("PRIVATE" , record.getVisibility());
 	}
 	
-  /*  
+
 	@Test
 	public void testUpdateRecord() {
 
         RecordDAOImpl recordDAO = new RecordDAOImpl();
         
-        Record rec = new Record("jhbkjhbkj", null, "Nsfsfft","ferfre", Visibility.PRIVATE);
+        Record rec = new Record("jhbkjhbkj", null, "Nsfsfft","ferfre", Status.PRIVATE);
         rec.setId_rec(recordDAO.getGeneratedId());
 
         try {
@@ -179,7 +182,7 @@ public class TestRecordDAO {
         assertEquals(rec.getUser_name(), record.getUser_name());
         assertEquals(rec.getVisibility(), record.getVisibility());
 	}
-*/
+
 	
     @Test
     public void TestDeleteRecord() {

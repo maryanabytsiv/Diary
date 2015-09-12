@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+
 
 public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	
@@ -127,8 +129,42 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	}
 
 	public List<Record> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Record> list = new ArrayList<Record>();
+//		String query = "SELECT * FROM record_list;";
+//		try {
+//			if (conn == null || conn.isClosed()) {
+//				conn = ConnectManager.getConnectionToTestDB();
+//			}
+//			ps = conn.prepareStatement(query);
+//			ResultSet rs = ps.executeQuery();
+//			while (rs.next()) {
+//				String user_name = rs.getString("user_id_rec");
+//				System.out.println(user_name);
+//				String created_time = rs.getString("created_time");
+//				System.out.println(created_time);
+//				String text = rs.getString("text");
+//				System.out.println(text);
+//				String supplement = rs.getString("supplement");
+//				System.out.println(supplement);
+//				String visibility= rs.getString("visibility");
+//				System.out.println(visibility);
+//				if (visibility.equals(Visibility.PRIVATE)) {
+//					list.add(new Record(user_name, created_time, text, supplement, Visibility.PRIVATE));
+//				}
+//				else if (visibility.equals(Visibility.PUBLIC)) {
+//					list.add(new Record(user_name, created_time, text, supplement, Visibility.PUBLIC));
+//				}	
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+		return list;
+	}
+	
+	public static void main(String[] args) {
+		RecordDAOImpl r = new RecordDAOImpl();
+		List<Record> list = r.getAll();
+		System.out.println(list.size());
 	}
 	
 }

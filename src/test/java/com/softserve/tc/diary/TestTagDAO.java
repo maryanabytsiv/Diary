@@ -58,15 +58,28 @@ public class TestTagDAO {
 
 	@Before
 	public void beforeTest() {
-		String query = "insert into tag (uuid, tag_message) values('testkey1','#Hell');"+ '\n'
-					+ "insert into tag (uuid, tag_message) values('testkey2','#Hello');" + '\n'
-					+ "insert into tag (uuid, tag_message) values('testkey3','#HelloWorld');" + '\n'
-					+ "insert into tag (uuid, tag_message) values('testkey4','#HellGuy');" + '\n'
-					+ "insert into tag (uuid, tag_message) values('testkey5','#HellGuy');" + '\n'
-					+ "insert into tag (uuid, tag_message) values('testkey6','#HelpMe');";
+		String query1 =
+			"insert into tag (uuid, tag_message) values('testkey1','#Hell');"+ '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey2','#Hello');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey3','#HelloWorld');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey4','#HellGuy');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey5','#HellGuy');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey6','#HelpMe');";
+		
+//		String query2 = 
+//			     "insert into record_list values('1','1','2015-02-23 00:00:00',"
+//			    		+ "'#Hello my name is #Bod. I am from #NewYork',null,'public');"
+//			    + "insert into record_list values('2','3','2015-05-20 12:00:56',"
+//			    		+ "'That was #nice day. #Halloween so cool',null,'private');"
+//			    + "insert into record_list values('3','1','2015-06-10 17:20:56',"
+//			    		+ "'#HelloTeam, it is #nice to meet in #NewYork',null,'public');";
+
+
 		try {
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query1);
 			ps.execute();
+//			ps = conn.prepareStatement(query2);
+//			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
