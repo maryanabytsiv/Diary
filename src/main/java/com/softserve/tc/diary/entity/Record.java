@@ -7,14 +7,14 @@ public class Record {
 		private String created_time;
 		private String text;
 		private String supplement;
-		private status visibility;
+		private Status visibility;
 		
 		public Record() {
 			// TODO Auto-generated constructor stub
 		}
 		
 		public Record(String user_name, String created_time, String text,
-				String supplement, status visibility) {
+				String supplement, Status visibility) {
 			super();
 			this.user_name = user_name;
 			this.created_time = created_time;
@@ -64,9 +64,9 @@ public class Record {
 		}
 
 		public String getVisibility() {
-			if (visibility == status.PRIVATE) {
+			if (visibility == Status.PRIVATE) {
 				return "PRIVATE";
-			} else if (visibility == status.PUBLIC) {
+			} else if (visibility == Status.PUBLIC) {
 				return "PUBLIC";
 			} else
 				return null;
@@ -74,9 +74,9 @@ public class Record {
 
 		public void setVisibility(String visibility) {
 			if (visibility.equals("PRIVATE")) {
-				this.visibility = status.PRIVATE;
+				this.visibility = Status.PRIVATE;
 			} else if (visibility.equals("PUBLIC")) {
-				this.visibility = status.PUBLIC;
+				this.visibility = Status.PUBLIC;
 			} else
 				this.visibility = null;
 		}		

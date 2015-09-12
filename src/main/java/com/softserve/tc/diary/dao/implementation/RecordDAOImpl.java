@@ -11,7 +11,7 @@ import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
-import com.softserve.tc.diary.entity.status;
+import com.softserve.tc.diary.entity.Status;
 
 public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	
@@ -49,7 +49,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), status.PRIVATE);
+				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), Status.PRIVATE);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

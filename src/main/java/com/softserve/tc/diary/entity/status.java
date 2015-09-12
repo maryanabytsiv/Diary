@@ -1,6 +1,6 @@
 package com.softserve.tc.diary.entity;
 
-public enum status {
+public enum Status {
 	
 	PUBLIC, PRIVATE
 
