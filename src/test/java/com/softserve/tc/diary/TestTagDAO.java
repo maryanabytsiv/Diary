@@ -58,28 +58,40 @@ public class TestTagDAO {
 
 	@Before
 	public void beforeTest() {
-		String query1 =
-			"insert into tag (uuid, tag_message) values('testkey1','#Hell');"+ '\n'
+		 String query1 =
+				"insert into record_list values('1',null,'2015-02-23 00:00:00',"
+				+ "'#Hello my name is Bod. I am from #NewYork',null,'public');"
+				+ "insert into record_list values('2',null,'2015-05-20 12:00:56',"
+				+ "'That was #nice day. #Halloween so cool',null,'private');"
+				+ "insert into record_list values('3',null,'2015-06-10 17:20:56',"
+				+ "'#HelloTeam, it is nice to meet in NewYork',null,'public');";
+		 
+		String query2 = 
+				"insert into tag (uuid, tag_message) values('testkey1','#Hell');" + '\n'
 				+ "insert into tag (uuid, tag_message) values('testkey2','#Hello');" + '\n'
 				+ "insert into tag (uuid, tag_message) values('testkey3','#HelloWorld');" + '\n'
 				+ "insert into tag (uuid, tag_message) values('testkey4','#HellGuy');" + '\n'
-				+ "insert into tag (uuid, tag_message) values('testkey5','#HellGuy');" + '\n'
-				+ "insert into tag (uuid, tag_message) values('testkey6','#HelpMe');";
-		
-//		String query2 = 
-//			     "insert into record_list values('1','1','2015-02-23 00:00:00',"
-//			    		+ "'#Hello my name is #Bod. I am from #NewYork',null,'public');"
-//			    + "insert into record_list values('2','3','2015-05-20 12:00:56',"
-//			    		+ "'That was #nice day. #Halloween so cool',null,'private');"
-//			    + "insert into record_list values('3','1','2015-06-10 17:20:56',"
-//			    		+ "'#HelloTeam, it is #nice to meet in #NewYork',null,'public');";
+				+ "insert into tag (uuid, tag_message) values('testkey5','#nice');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey6','#Halloween');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey7','#HelloTeam');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey8','#NewYork');" + '\n'
+				+ "insert into tag (uuid, tag_message) values('testkey9','#HelpMe');";
 
 
+		 String query3 =
+				 "insert into tag_record values('rt1',1,'testkey2');" + '\n'
+				+ "insert into tag_record values('rt2',1,'testkey8');" + '\n'
+				+ "insert into tag_record values('rt3',2,'testkey5');" + '\n'
+				+ "insert into tag_record values('rt4',2,'testkey6');" + '\n'
+				+ "insert into tag_record values('rt5',3,'testkey7');" + '\n';
+		 
 		try {
 			ps = conn.prepareStatement(query1);
 			ps.execute();
-//			ps = conn.prepareStatement(query2);
-//			ps.execute();
+			ps = conn.prepareStatement(query2);
+			ps.execute();
+			ps = conn.prepareStatement(query3);
+			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,9 +99,15 @@ public class TestTagDAO {
 
 	@After
 	public void afterTest() {
-		String query = "delete from tag;";
+		String query1 = "delete from tag;";
+		String query2 = "delete from record_list";
+		String query3= "delete from tag_record";
 		try {
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query3);
+			ps.execute();
+			ps = conn.prepareStatement(query2);
+			ps.execute();
+			ps = conn.prepareStatement(query1);
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,7 +117,7 @@ public class TestTagDAO {
 	@Test
 	public void testCreateTag() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
-		Tag tagException = new Tag("#HelloWorld");
+	//	Tag tagException = new Tag("#HelloWorld");
 		Tag workingTag = new Tag("#HelloWorldWide");
 		// tagDAO.create(tagException);
 		tagDAO.create(workingTag);
@@ -118,26 +136,32 @@ public class TestTagDAO {
 
 		assertNotNull(workingTag);
 		assertEquals("#HelloWorldWide", workingTag.getTagMessage());
-
-		// assertEquals("#HelloWorld", tagException.getTagMessage());
 	}
 
 	@Test
-	public void testGetListTagsByPrefix() {
-		TagDAOImpl tagDAO = new TagDAOImpl();
-		String prefix = "#Hello";
-		List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
-		assertEquals(2, list.size());
+	public void testCreateFromRecord() {
+		
 	}
 
 	@Test
-	public void testGetListTagsBySuffix() {
+	public void testDeleteFromtagRecord() {
+		String uuid = "testkey8";
 		TagDAOImpl tagDAO = new TagDAOImpl();
-		String suffix = "Hello";
-		List<Tag> list = tagDAO.getListTagsBySuffix(suffix);
-		assertEquals(2, list.size());
+		tagDAO.deleteFromTagRecord(uuid);
+		String query = "Select * from tag_record where tag_uuid like '" + uuid + "';";
+		int count = 0;
+		try {
+			ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				count++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		assertEquals(0, count);
 	}
-
+	
 	@Test
 	public void testDeleteTag() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
@@ -149,10 +173,27 @@ public class TestTagDAO {
 	}
 
 	@Test
+	public void testGetListTagsByPrefix() {
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		String prefix = "#Hello";
+		List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
+		assertEquals(3, list.size());
+	}
+
+	@Test
+	public void testGetListTagsBySuffix() {
+		TagDAOImpl tagDAO = new TagDAOImpl();
+		String suffix = "ell";
+		List<Tag> list = tagDAO.getListTagsBySuffix(suffix);
+		assertEquals(5, list.size());
+	}
+	
+	@Test
 	public void testGetAll() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		List<Tag> list = tagDAO.getAll();
-		assertEquals(6, list.size());
+		assertEquals(9, list.size());
 	}
 
+	
 }

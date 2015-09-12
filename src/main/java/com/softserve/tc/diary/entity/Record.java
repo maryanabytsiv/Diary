@@ -15,7 +15,16 @@ public class Record {
 		
 		public Record(String user_name, String created_time, String text,
 				String supplement, Status visibility) {
-			super();
+			this.user_name = user_name;
+			this.created_time = created_time;
+			this.text = text;
+			this.supplement = supplement;
+			this.visibility = visibility;
+		}
+		
+		public Record(String id_rec, String user_name, String created_time,
+				String text, String supplement, Status visibility) {
+			this.id_rec = id_rec;
 			this.user_name = user_name;
 			this.created_time = created_time;
 			this.text = text;
