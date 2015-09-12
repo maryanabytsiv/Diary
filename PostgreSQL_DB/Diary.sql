@@ -1,60 +1,50 @@
-
 CREATE TABLE role (
-    role_id SERIAL PRIMARY KEY,
-    name character(20) NOT NULL
+    role_id varchar(40) PRIMARY KEY,
+    name varchar(30) NOT NULL
 );
 
 
 CREATE TABLE  address (
-    id SERIAL PRIMARY KEY,
-    country character(20) NOT NULL,
-    city character(20) NOT NULL,
-    street character(20) NOT NULL,
-    build_number int NOT NULL
+    id varchar(40) PRIMARY KEY,
+    country varchar(20),
+    city varchar(20),
+    street varchar(20),
+    build_number int
 );
 
 
 CREATE TABLE user_card (
-    u_id SERIAL PRIMARY KEY,
-    nick_name character(20) NOT NULL,
-    first_name character(20) NOT NULL,
-    second_name character(20) NOT NULL,
-	
-    address_id int references address(id),
-    e_mail character(30) NOT NULL,
-    password character varying(20) NOT NULL,
-    sex character(1) NOT NULL,
-    date_of_birth date ,
-    avatar character varying(50) ,
-    role int references role(role_id) NOT NULL
+    uid varchar(40) PRIMARY KEY,
+    nick_name varchar(20) NOT NULL,
+    first_name varchar(20),
+    second_name varchar(20),
+    address_id varchar(40) references address(id),
+    e_mail varchar(30) NOT NULL,
+    password varchar(20) NOT NULL,
+    sex varchar(6),
+    date_of_birth date,
+    avatar varchar(150),
+    role varchar(40) references role(role_id) NOT NULL
 );
 
 
 CREATE TABLE record_list (
-    u_u_id SERIAL  PRIMARY KEY,
-    user_u_u_id int references user_card(u_id),
-    created_time timestamp without time zone NOT NULL,
-    text text NOT NULL,
-    supplement character varying(50),
-    visibility character(10) NOT NULL
- 
+    id_rec varchar(40) PRIMARY KEY,
+    user_id_rec varchar(40) references user_card(uid),
+    created_time timestamp without time zone,
+    text text,
+    supplement varchar(50),
+    visibility varchar(10) NOT NULL 
 );
 
 
 CREATE TABLE tag (
-    u_u_id SERIAL PRIMARY KEY,
-    tag character varying(20) NOT NULL
+    uuid varchar(40) PRIMARY KEY,
+    tag_message varchar(1000)
 );
-
 
 CREATE TABLE tag_record (
-    u_u_id SERIAL PRIMARY KEY,
-    record_uuid int references record_list(u_u_id) NOT NULL,
-    tag_uuid int references tag(u_u_id) NOT NULL
+    uuid_tr varchar(40) PRIMARY KEY,
+    record_uuid varchar(40) references record_list(id_rec),
+    tag_uuid varchar(40) references tag(uuid)
 );
-
-
-
-
-
-
