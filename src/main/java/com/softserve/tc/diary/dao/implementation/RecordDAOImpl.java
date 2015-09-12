@@ -96,6 +96,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 			ps = conn.prepareStatement("select * from record_list where user_id_rec=?;");
 			ps.setString(1, user_name );
 			ResultSet rs = ps.executeQuery();
+			if(!ps.executeQuery().next())
+				return null;
 			while (rs.next()) {
 				record.setUser_name(rs.getString("user_id_rec"));
 				record.setCreated_time(rs.getString("created_time"));

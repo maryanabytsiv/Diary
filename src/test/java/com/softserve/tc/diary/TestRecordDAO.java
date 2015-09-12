@@ -187,7 +187,7 @@ public class TestRecordDAO {
         Record record = new Record( "2", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
-        assertNotNull(recordDAO.getRecordByName("2"));
+        assertNull(recordDAO.getRecordByName("2"));
     }
 
 //	@Test
