@@ -2,19 +2,19 @@ package com.softserve.tc.diary.entity;
 
 public class Record {
 		
-		private String uuid;
+		private String id_rec;
 		private String user_name;
 		private String created_time;
 		private String text;
 		private String supplement;
-		private Visibility visibility;
+		private status visibility;
 		
 		public Record() {
 			// TODO Auto-generated constructor stub
 		}
 		
 		public Record(String user_name, String created_time, String text,
-				String supplement, Visibility visibility) {
+				String supplement, status visibility) {
 			super();
 			this.user_name = user_name;
 			this.created_time = created_time;
@@ -23,12 +23,12 @@ public class Record {
 			this.visibility = visibility;
 		}
 
-		public String getUuid() {
-			return uuid;
+		public String getId_rec() {
+			return id_rec;
 		}
 
-		public void setUuid(String uuid) {
-			this.uuid = uuid;
+		public void setId_rec(String id_rec) {
+			this.id_rec = id_rec;
 		}
 
 		public String getUser_name() {
@@ -63,17 +63,27 @@ public class Record {
 			this.supplement = supplement;
 		}
 
-		public Visibility getVisibility() {
-			return visibility;
+		public String getVisibility() {
+			if (visibility == status.PRIVATE) {
+				return "PRIVATE";
+			} else if (visibility == status.PUBLIC) {
+				return "PUBLIC";
+			} else
+				return null;
 		}
 
-		public void setVisibility(Visibility visibility) {
-			this.visibility = visibility;
-		}
-
+		public void setVisibility(status visibility) {
+			if (visibility.equals("PRIVATE")) {
+				this.visibility = status.PRIVATE;
+			} else if (visibility.equals("PUBLIC")) {
+				this.visibility = status.PUBLIC;
+			} else
+				this.visibility = null;
+		}		
+		
 		@Override
 		public String toString() {
-			return "Record [uuid=" + uuid + ", user_name=" + user_name
+			return "Record [id_rec=" + id_rec + ", user_name=" + user_name
 					+ ", created_time=" + created_time + ", text=" + text
 					+ ", supplement=" + supplement + ", visibility=" + visibility
 					+ "]";

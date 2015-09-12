@@ -33,14 +33,14 @@ CREATE TABLE user_card (
     role varchar(40) references role(role_id) NOT NULL
 );
 
+
 CREATE TABLE record_list (
     id_rec varchar(40) PRIMARY KEY,
     user_id_rec varchar(40) references user_card(uid),
     created_time timestamp without time zone,
     text text,
     supplement varchar(50),
-    visibility varchar(10) NOT NULL
- 
+    visibility varchar(10) NOT NULL 
 );
 
 CREATE TABLE tag (

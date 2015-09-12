@@ -1,7 +1,6 @@
 package com.softserve.tc.diary.dao.implementation;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,10 +10,8 @@ import java.util.UUID;
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
-import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
-import com.softserve.tc.diary.entity.Tag;
-import com.softserve.tc.diary.entity.Visibility;
+import com.softserve.tc.diary.entity.status;
 
 public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	
@@ -30,13 +27,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			
-			ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,'F');");
+			ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,?);");
 			ps.setString(1, getGeneratedId());
 			ps.setString(2, object.getUser_name());
 			ps.setNull(3, 0);
 			ps.setString(4, object.getText());
 			ps.setString(5, object.getSupplement());  
-			//ps.setString(6, object.getVisibility());
+			ps.setString(6, object.getVisibility());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -52,7 +49,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), Visibility.PUBLIC);
+				record = new Record( rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), status.PRIVATE);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -64,9 +61,15 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
         try {
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement(
-                    "update record_list set user_id_rec = ? where id_rec = ?");
+           "update record_list set user_id_rec = ?, created_time = ?, text = ?,"
+            		+" supplement = ?, visibility = ? where user_id_rec = ?;"
+        		   );
             ps.setString(1, object.getUser_name());
-            ps.setString(2, object.getUuid());
+            ps.setString(2, object.getCreated_time());
+            ps.setString(3, object.getText());
+            ps.setString(4, object.getSupplement());
+            ps.setString(5, object.getVisibility());
+            ps.setString(6, object.getUser_name());
             ps.execute();
             ps.close();
         } catch (SQLException e) {
@@ -78,8 +81,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 	public void delete(Record object) {
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("delete from record_list where uuid=?");
-			ps.setString(1, object.getUuid());
+			ps = conn.prepareStatement("delete from record_list where user_id_rec=?");
+			ps.setString(1, object.getUser_name());
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
