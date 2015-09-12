@@ -73,6 +73,7 @@ public class TestUserDAO {
 	@Test
 	public void testCreateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
+		
 		userDAO.create(new User( "hary12", "Andriy", "Mural", "Lviv", "bg@gmail.com", "64561", Sex.MALE, null, null,
 				"User"));
 		User user = new User();
@@ -159,11 +160,6 @@ public class TestUserDAO {
 	}
 
 	@Test
-	public void testGetCityByMaxNumberOfUsers() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testGetByDateOfBirth() {
 		
 //		UserDAOImpl userDAO = new UserDAOImpl();
@@ -186,14 +182,6 @@ public class TestUserDAO {
 		
 	}
 
-	@Test
-	public void testGetAvarageAgeOfUsers() {
-		fail("Not yet implemented");
-	}
 
-	@Test
-	public void testGetAllEmailsByNickNames() {
-		fail("Not yet implemented");
-	}
 
 }

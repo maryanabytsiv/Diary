@@ -8,8 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+
+import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
@@ -35,6 +36,8 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		
 		getConnection();
 		try {
+			BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+			
 			ps = conn.prepareStatement(
 					"insert into user_card values(?,?,?,?,?,?,?,?,?,?,?);");
 			ps.setString(1, getGeneratedId());
@@ -43,7 +46,8 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps.setString(4, object.getSecond_name());
 			ps.setInt(5, 1);
 			ps.setString(6, object.getE_mail());
-			ps.setString(7, object.getPassword());
+			ps.setString(7, passwordEncryptor.encryptPassword(object.getPassword()));
+			System.out.println(passwordEncryptor.encryptPassword(object.getPassword()));
 			ps.setString(8, "F");
 			ps.setNull(9, 0);
 			ps.setNull(10, 0);
