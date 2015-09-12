@@ -7,14 +7,14 @@ public class Record {
 		private String created_time;
 		private String text;
 		private String supplement;
-		private Visibility visibility;
+		private status visibility;
 		
 		public Record() {
 			// TODO Auto-generated constructor stub
 		}
 		
 		public Record(String user_name, String created_time, String text,
-				String supplement, Visibility visibility) {
+				String supplement, status visibility) {
 			super();
 			this.user_name = user_name;
 			this.created_time = created_time;
@@ -63,14 +63,24 @@ public class Record {
 			this.supplement = supplement;
 		}
 
-		public Visibility getVisibility() {
-			return visibility;
+		public String getVisibility() {
+			if (visibility == status.PRIVATE) {
+				return "PRIVATE";
+			} else if (visibility == status.PUBLIC) {
+				return "PUBLIC";
+			} else
+				return null;
 		}
 
-		public void setVisibility(Visibility visibility) {
-			this.visibility = visibility;
-		}
-
+		public void setVisibility(status visibility) {
+			if (visibility.equals("PRIVATE")) {
+				this.visibility = status.PRIVATE;
+			} else if (visibility.equals("PUBLIC")) {
+				this.visibility = status.PUBLIC;
+			} else
+				this.visibility = null;
+		}		
+		
 		@Override
 		public String toString() {
 			return "Record [id_rec=" + id_rec + ", user_name=" + user_name

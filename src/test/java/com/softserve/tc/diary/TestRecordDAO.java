@@ -1,6 +1,7 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,11 +17,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
-import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Record;
-import com.softserve.tc.diary.entity.Visibility;
+import com.softserve.tc.diary.entity.status;
 
 public class TestRecordDAO {
 
@@ -192,4 +191,27 @@ public class TestRecordDAO {
         assertNull(record.getId_rec());
     }
 
+	@Test
+	public void testGetAll() {
+		
+		try {
+			ps = conn.prepareStatement("select * from record_list;");
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()){System.out.println(rs.getString("id_rec") +" , " 
+			+rs.getString("user_id_rec") +" , "+rs.getString("created_time") +" , "+rs.getString("text") 
+			+" , "+rs.getString("supplement") +" , "+rs.getString("visibility"));}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		RecordDAOImpl recordDAO = new RecordDAOImpl();
+		Record record = new Record("1", "5", "#spagetti", "https://rondo.com", status.PRIVATE);
+		recordDAO.create(record);
+        int actual = recordDAO.getAll().size();
+        int expected = 3;
+        assertEquals(expected, actual);
+	}
+    
 }
