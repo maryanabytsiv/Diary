@@ -2,6 +2,12 @@ package com.softserve.tc.diary.entity;
 
 import java.sql.Timestamp;
 
+/**
+ * 
+ * @author Mykola-
+ *
+ */
+
 public class Record {
 		
 		private String id_rec;

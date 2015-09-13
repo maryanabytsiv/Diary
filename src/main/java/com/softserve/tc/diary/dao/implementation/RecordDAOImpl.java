@@ -14,11 +14,19 @@ import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+import com.softserve.tc.diary.entity.Tag;
+
+/**
+ * 
+ * @author Mykola-
+ *
+ */
 
 public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 
 	private static Connection conn = null;
 	private static PreparedStatement ps;
+	private static PreparedStatement ps1;
 
 	public String getGeneratedId() {
 		UUID idOne = UUID.randomUUID();
@@ -85,7 +93,20 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("delete from record_list where user_id_rec=?;");
 			ps.setString(1, object.getUser_name());
+			
+			
+//			Tag objt = new Tag("1");
+//			ps1 = conn.prepareStatement("select from tag where uuid=?;");
+//			ps1.setString(1, objt.getUuid());
+//			ResultSet rs = ps1.executeQuery();
+//			System.out.println("\nn"+rs);
+//			String record_uuid = rs.getString("tag_message");
+//			System.out.println("/n/n"+record_uuid);
+						
+			
 			ps.execute();
+			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -114,23 +135,19 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 	}
 
 	public List<Record> getRecordByDate(String date) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public List<Record> getRecordByVisibility(String visibility) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public List<Record> getRecordTypeOfSupplement(String typeOfSupplement) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public List<Record> getAll() {
 		List<Record> list = new ArrayList<Record>();
-		 //String query = "SELECT * FROM record_list;";
 		 try {
 			 if (conn == null || conn.isClosed()) {
 				 conn = ConnectManager.getConnectionToTestDB();
@@ -138,31 +155,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 			 ps = conn.prepareStatement("SELECT * FROM record_list;");
 			 ResultSet rs = ps.executeQuery();
 			 while (rs.next()) {
-				 list.add( new Record (rs.getString(1), rs.getString(2),
-							rs.getTimestamp(3),rs.getString(4),
-							rs.getString(5),
-							Status.valueOf(rs.getString(6))));
-//				 list.add( new Record (rs.getString("user_id_rec"),
-//				rs.getTimestamp("created_time"),rs.getString("text"),
-//				rs.getString("supplement"),
-//				Status.valueOf(rs.getString("visibility"))));
-		 //Timestamp created_time = rs.getTimestamp("created_time");
-//		 System.out.println(created_time);
-//		 String text = rs.getString("text");
-//		 System.out.println(text);
-//		 String supplement = rs.getString("supplement");
-//		 System.out.println(supplement);
-//		 String visibility= rs.getString("visibility");
-//		 System.out.println(visibility);
-//		 if (visibility.equals(Status.PRIVATE)) {
-//		 list.add(new Record(user_name, created_time, text, supplement,
-//				 Status.PRIVATE));
-//		 }
-//		 else if (visibility.equals(Status.PUBLIC)) {
-//		 list.add(new Record(user_name, created_time, text, supplement,
-//				 Status.PUBLIC));
-//		 }
-		 }
+				 list.add( new Record (rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4),
+							rs.getString(5), Status.valueOf(rs.getString(6))));
+				 }
 		 } catch (SQLException e) {
 		 e.printStackTrace();
 		 }

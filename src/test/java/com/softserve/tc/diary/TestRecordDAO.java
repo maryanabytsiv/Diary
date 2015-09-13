@@ -25,6 +25,11 @@ import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 
+/**
+ * 
+ * @author Mykola-
+ *
+ */
 
 public class TestRecordDAO {
 
@@ -196,6 +201,8 @@ public class TestRecordDAO {
         RecordDAOImpl recordDAO = new RecordDAOImpl();
         Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
         recordDAO.create(record);
+        List<Record> listTT = recordDAO.getAll();
+        System.out.println(listTT);
         recordDAO.delete(record);
         assertNull(recordDAO.getRecordByName("2"));
     }
