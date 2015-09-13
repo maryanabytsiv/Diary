@@ -16,7 +16,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.RoleDAOImpl;
+import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Role;
+import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.User;
 
 public class TestRoleDAO {
 	private static Connection conn;
@@ -110,4 +113,59 @@ public class TestRoleDAO {
 
 	}
 
+	@Test
+	public void testUpdateRole() {
+
+		RoleDAOImpl roleDAO = new RoleDAOImpl();
+
+		Role role = new Role("reader");
+		role.setId(roleDAO.getGeneratedId());
+		try {
+			ps = conn.prepareStatement("insert into role values(?,?);");
+			ps.setString(1, role.getId());
+			ps.setString(2, role.getName());
+			ps.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		role.setName("reader");
+
+		roleDAO.update(role);
+		Role roleActual = new Role();
+		try {
+			ps = conn.prepareStatement("select * from role where name =?");
+			ps.setString(1, role.getName());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				roleActual.setName(rs.getString("name"));
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertNotNull(roleActual);
+		assertEquals("reader", roleActual.getName());
+	}
+
+	@Test
+	public void testDeleteRole() {
+		RoleDAOImpl roleDAO = new RoleDAOImpl();
+		Role role = new Role("Admin");
+		roleDAO.create(role);
+		roleDAO.delete(role);
+		assertNull(roleDAO.readByKey("Admin"));
+	}
+
+	@Test
+	public void testGetAll() {
+		RoleDAOImpl roleDAO = new RoleDAOImpl();
+		Role role = new Role("SomeUser");
+		roleDAO.create(role);
+		int actual = roleDAO.getAll().size();
+		int expected = 3;
+		assertEquals(expected, actual);
+	}
 }

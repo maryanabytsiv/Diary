@@ -25,7 +25,7 @@ CREATE TABLE user_card (
     second_name varchar(20),
     address_id varchar(40) references address(id),
     e_mail varchar(30) NOT NULL,
-    password varchar(20) NOT NULL,
+    password varchar(50) NOT NULL,
     sex varchar(6),
     date_of_birth date,
     avatar varchar(150),
