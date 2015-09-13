@@ -33,7 +33,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>, IdGenerator {
 	}
 
 	public void create(Role object) {
-		// TODO Auto-generated method stub
 		getConnection();
 
 		try {

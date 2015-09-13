@@ -1,6 +1,8 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,7 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
-import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 
@@ -139,7 +139,7 @@ public class TestRecordDAO {
 		assertEquals("PRIVATE" , record.getVisibility());
 	}
 	
-
+/*
 	@Test
 	public void testUpdateRecord() {
 
@@ -182,7 +182,7 @@ public class TestRecordDAO {
         assertEquals(rec.getUser_name(), record.getUser_name());
         assertEquals(rec.getVisibility(), record.getVisibility());
 	}
-
+*/
 	
     @Test
     public void TestDeleteRecord() {

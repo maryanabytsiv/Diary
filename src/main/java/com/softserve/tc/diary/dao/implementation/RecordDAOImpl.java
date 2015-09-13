@@ -161,10 +161,4 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator{
 		return list;
 	}
 	
-	public static void main(String[] args) {
-		RecordDAOImpl r = new RecordDAOImpl();
-		List<Record> list = r.getAll();
-		System.out.println(list.size());
-	}
-	
 }
