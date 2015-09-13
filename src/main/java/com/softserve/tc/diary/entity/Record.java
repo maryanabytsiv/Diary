@@ -1,10 +1,12 @@
 package com.softserve.tc.diary.entity;
 
+import java.sql.Timestamp;
+
 public class Record {
 		
 		private String id_rec;
 		private String user_name;
-		private String created_time;
+		private Timestamp created_time;
 		private String text;
 		private String supplement;
 		private Status visibility;
@@ -13,7 +15,7 @@ public class Record {
 			// TODO Auto-generated constructor stub
 		}
 		
-		public Record(String user_name, String created_time, String text,
+		public Record(String user_name, Timestamp created_time, String text,
 				String supplement, Status visibility) {
 			this.user_name = user_name;
 			this.created_time = created_time;
@@ -22,11 +24,11 @@ public class Record {
 			this.visibility = visibility;
 		}
 		
-		public Record(String id_rec, String user_name, String created_time,
+		public Record(String id_rec, String user_name, Timestamp created_time2,
 				String text, String supplement, Status visibility) {
 			this.id_rec = id_rec;
 			this.user_name = user_name;
-			this.created_time = created_time;
+			this.created_time = created_time2;
 			this.text = text;
 			this.supplement = supplement;
 			this.visibility = visibility;
@@ -48,11 +50,11 @@ public class Record {
 			this.user_name = user_name;
 		}
 
-		public String getCreated_time() {
+		public Timestamp getCreated_time() {
 			return created_time;
 		}
 
-		public void setCreated_time(String created_time) {
+		public void setCreated_time(Timestamp created_time) {
 			this.created_time = created_time;
 		}
 

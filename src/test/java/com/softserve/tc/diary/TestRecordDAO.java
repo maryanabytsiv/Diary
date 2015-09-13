@@ -2,6 +2,7 @@ package com.softserve.tc.diary;
 
 import static org.junit.Assert.*;
 
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.sql.Timestamp;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,7 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
-import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 
@@ -113,9 +113,11 @@ public class TestRecordDAO {
 	
 	@Test
 		public void testCreateRecord() {
+
+		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
 		
 		RecordDAOImpl RecordDAO = new RecordDAOImpl();
-		Record newRecord = new Record( "1", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
+		Record newRecord = new Record( "1", createdTime, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
 		RecordDAO.create(newRecord);
 		Record record = null;
 		
@@ -123,17 +125,16 @@ public class TestRecordDAO {
 			ps = conn.prepareStatement("select * from record_list where user_id_rec ='1';");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				record = new Record( rs.getString(2), null, rs.getString(4), rs.getString(5),Status.PRIVATE);
+				record = new Record( rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.PRIVATE);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
+		System.out.println(record.getCreated_time());
 		assertNotNull(record);
-//		assertEquals(1, record.getId_rec());
 		assertEquals("1", record.getUser_name());
-//		assertEquals("2015-05-20 12:00:56", record.getCreated_time());
+		assertEquals(newRecord.getCreated_time(), record.getCreated_time());
 		assertEquals("#Hello, how are you??", record.getText());
 		assertEquals("http:/ntiguwgni/gtrwgtwg/gwt", record.getSupplement());
 		assertEquals("PRIVATE" , record.getVisibility());
@@ -142,20 +143,20 @@ public class TestRecordDAO {
 
 	@Test
 	public void testUpdateRecord() {
-
+		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+		
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        
-        Record rec = new Record("jhbkjhbkj", null, "Nsfsfft","ferfre", Status.PRIVATE);
+        Record rec = new Record("1", createdTime, "Nsfsfft","ferfre", Status.PRIVATE);
         rec.setId_rec(recordDAO.getGeneratedId());
 
         try {
-            ps = conn.prepareStatement("insert into record_list(id_rec, user_id_rec, created_time, text, supplement, visibility) values(?,?,?,?,?,?)");
+            ps = conn.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
             ps.setString(1, rec.getId_rec());
             ps.setString(2, rec.getUser_name());
-            ps.setNull(3, 0);
+            ps.setTimestamp(3, rec.getCreated_time());
             ps.setString(4, rec.getText());
             ps.setString(5, rec.getSupplement());
-            ps.setString(6, "pr");
+            ps.setString(6, rec.getVisibility());
             ps.execute();
         } catch (SQLException e1) {
             // TODO Auto-generated catch block
@@ -168,7 +169,7 @@ public class TestRecordDAO {
             ps.setString(1, rec.getId_rec());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            	record = new Record(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),null);
+            	record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.valueOf(rs.getString(6)));
             	record.setId_rec(rs.getString(1));
             }
 
@@ -177,6 +178,7 @@ public class TestRecordDAO {
             e.printStackTrace();
         }
         assertEquals(rec.getId_rec(), record.getId_rec());
+        assertEquals(rec.getCreated_time(), record.getCreated_time());
         assertEquals(rec.getSupplement(), record.getSupplement());
         assertEquals(rec.getText(), record.getText());
         assertEquals(rec.getUser_name(), record.getUser_name());
@@ -186,8 +188,11 @@ public class TestRecordDAO {
 	
     @Test
     public void TestDeleteRecord() {
+		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+		System.out.println(createdTime);
+		
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        Record record = new Record( "2", null, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
+        Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
         assertNull(recordDAO.getRecordByName("2"));
@@ -195,13 +200,14 @@ public class TestRecordDAO {
 
 //	@Test
 //	public void testGetAll() {
-//		
+//		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+//
 //		try {
 //			ps = conn.prepareStatement("select * from record_list;");
 //			ResultSet rs = ps.executeQuery();
 //			
 //			while (rs.next()){System.out.println(rs.getString("id_rec") +" , " 
-//			+rs.getString("user_id_rec") +" , "+rs.getString("created_time") +" , "+rs.getString("text") 
+//			+rs.getString("user_id_rec") +" , "+rs.getTimestamp("created_time") +" , "+rs.getString("text") 
 //			+" , "+rs.getString("supplement") +" , "+rs.getString("visibility"));}
 //
 //		} catch (SQLException e) {
@@ -209,7 +215,7 @@ public class TestRecordDAO {
 //		}
 //		
 //		RecordDAOImpl recordDAO = new RecordDAOImpl();
-//		Record record = new Record("1", "5", "#spagetti", "https://rondo.com", status.PRIVATE);
+//		Record record = new Record("1", createdTime, "#spagetti", "https://rondo.com", Status.PRIVATE);
 //		recordDAO.create(record);
 //        int actual = recordDAO.getAll().size();
 //        int expected = 3;

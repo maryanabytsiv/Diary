@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.junit.validator.ValidateWith;
 
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.TagDAO;
@@ -176,7 +175,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			while (rs.next()) {
 				String rec_id = rs.getString(1);
 				String user_id_rec = rs.getString(2);
-				String created_time = rs.getString(3);
+				Timestamp created_time = rs.getTimestamp(3);
 				String text = rs.getString(4);
 				String supplement = rs.getString(5);
 				String visability = rs.getString(6);
