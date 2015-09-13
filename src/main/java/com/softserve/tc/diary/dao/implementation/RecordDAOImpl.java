@@ -130,36 +130,42 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 
 	public List<Record> getAll() {
 		List<Record> list = new ArrayList<Record>();
-		// String query = "SELECT * FROM record_list;";
-		// try {
-		// if (conn == null || conn.isClosed()) {
-		// conn = ConnectManager.getConnectionToTestDB();
-		// }
-		// ps = conn.prepareStatement(query);
-		// ResultSet rs = ps.executeQuery();
-		// while (rs.next()) {
-		// String user_name = rs.getString("user_id_rec");
-		// System.out.println(user_name);
-		// String created_time = rs.getString("created_time");
-		// System.out.println(created_time);
-		// String text = rs.getString("text");
-		// System.out.println(text);
-		// String supplement = rs.getString("supplement");
-		// System.out.println(supplement);
-		// String visibility= rs.getString("visibility");
-		// System.out.println(visibility);
-		// if (visibility.equals(Visibility.PRIVATE)) {
-		// list.add(new Record(user_name, created_time, text, supplement,
-		// Visibility.PRIVATE));
-		// }
-		// else if (visibility.equals(Visibility.PUBLIC)) {
-		// list.add(new Record(user_name, created_time, text, supplement,
-		// Visibility.PUBLIC));
-		// }
-		// }
-		// } catch (SQLException e) {
-		// e.printStackTrace();
-		// }
+		 //String query = "SELECT * FROM record_list;";
+		 try {
+			 if (conn == null || conn.isClosed()) {
+				 conn = ConnectManager.getConnectionToTestDB();
+				 }
+			 ps = conn.prepareStatement("SELECT * FROM record_list;");
+			 ResultSet rs = ps.executeQuery();
+			 while (rs.next()) {
+				 list.add( new Record (rs.getString(1), rs.getString(2),
+							rs.getTimestamp(3),rs.getString(4),
+							rs.getString(5),
+							Status.valueOf(rs.getString(6))));
+//				 list.add( new Record (rs.getString("user_id_rec"),
+//				rs.getTimestamp("created_time"),rs.getString("text"),
+//				rs.getString("supplement"),
+//				Status.valueOf(rs.getString("visibility"))));
+		 //Timestamp created_time = rs.getTimestamp("created_time");
+//		 System.out.println(created_time);
+//		 String text = rs.getString("text");
+//		 System.out.println(text);
+//		 String supplement = rs.getString("supplement");
+//		 System.out.println(supplement);
+//		 String visibility= rs.getString("visibility");
+//		 System.out.println(visibility);
+//		 if (visibility.equals(Status.PRIVATE)) {
+//		 list.add(new Record(user_name, created_time, text, supplement,
+//				 Status.PRIVATE));
+//		 }
+//		 else if (visibility.equals(Status.PUBLIC)) {
+//		 list.add(new Record(user_name, created_time, text, supplement,
+//				 Status.PUBLIC));
+//		 }
+		 }
+		 } catch (SQLException e) {
+		 e.printStackTrace();
+		 }
 		return list;
 	}
 

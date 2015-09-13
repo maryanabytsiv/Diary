@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -84,9 +84,9 @@ public class TestRecordDAO {
 	    + "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, '2');"
 	    + "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'vfjukiuu', 'F', '1990-03-08', null, '1');"
 	    + "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'M', '1989-02-20', null, '2');"
-	    + "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'public');"
-	    + "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'private');"
-	    + "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'public');"
+	    + "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'PUBLIC');"
+	    + "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'PRIVATE');"
+	    + "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'PUBLIC');"
 	    + "insert into tag values('1','#cars');" + "insert into tag values('3','#family');"
 	    + "insert into tag values('2','#Love');" + "insert into tag values('4','#murderrrrrr');"
 	    + "insert into tag_record values('1','1', '2');"
@@ -96,7 +96,6 @@ public class TestRecordDAO {
 	   ps = conn.prepareStatement(isertData);
 	   ps.execute();
 	  } catch (SQLException e) {
-	   // TODO Auto-generated catch block
 	   e.printStackTrace();
 	  }
 	  
@@ -108,7 +107,6 @@ public class TestRecordDAO {
 	     ps = conn.prepareStatement(deleteData);
 	     ps.execute();
 	    } catch (SQLException e) {
-	     // TODO Auto-generated catch block
 	     e.printStackTrace();
 	    }
 	 }
@@ -134,7 +132,6 @@ public class TestRecordDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(record.getCreated_time());
 		assertNotNull(record);
 		assertEquals("1", record.getUser_name());
 		assertEquals(newRecord.getCreated_time(), record.getCreated_time());
@@ -143,7 +140,7 @@ public class TestRecordDAO {
 		assertEquals("PRIVATE" , record.getVisibility());
 	}
 	
-/*
+
 	@Test
 	public void testUpdateRecord() {
 		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
@@ -162,7 +159,6 @@ public class TestRecordDAO {
             ps.setString(6, rec.getVisibility());
             ps.execute();
         } catch (SQLException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         recordDAO.update(rec);
@@ -177,7 +173,6 @@ public class TestRecordDAO {
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         assertEquals(rec.getId_rec(), record.getId_rec());
@@ -187,42 +182,22 @@ public class TestRecordDAO {
         assertEquals(rec.getUser_name(), record.getUser_name());
         assertEquals(rec.getVisibility(), record.getVisibility());
 	}
-*/
+
+	@Test
+	public void testGetAll() {
+		RecordDAOImpl recordDAO = new RecordDAOImpl();
+		List<Record> list = recordDAO.getAll();
+		assertEquals(3, list.size());
+	}
 	
     @Test
     public void TestDeleteRecord() {
 		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
-		System.out.println(createdTime);
-		
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
+        Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
         assertNull(recordDAO.getRecordByName("2"));
     }
-
-//	@Test
-//	public void testGetAll() {
-//		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
-//
-//		try {
-//			ps = conn.prepareStatement("select * from record_list;");
-//			ResultSet rs = ps.executeQuery();
-//			
-//			while (rs.next()){System.out.println(rs.getString("id_rec") +" , " 
-//			+rs.getString("user_id_rec") +" , "+rs.getTimestamp("created_time") +" , "+rs.getString("text") 
-//			+" , "+rs.getString("supplement") +" , "+rs.getString("visibility"));}
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		RecordDAOImpl recordDAO = new RecordDAOImpl();
-//		Record record = new Record("1", createdTime, "#spagetti", "https://rondo.com", Status.PRIVATE);
-//		recordDAO.create(record);
-//        int actual = recordDAO.getAll().size();
-//        int expected = 3;
-//        assertEquals(expected, actual);
-//	}
     
 }
