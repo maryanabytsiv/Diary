@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.validator.ValidateWith;
+
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
@@ -22,6 +24,24 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	public String getGeneratedId() {
 		UUID idOne = UUID.randomUUID();
 		return idOne.toString();
+	}
+	
+	public Tag getTagByMessage(String tagMessage) {
+		Tag tag = null;
+		String query = "Select * from tag where tag_message like '" + tagMessage + "';";
+		try {
+			if ((conn == null) || (conn.isClosed())) {
+				conn = ConnectManager.getConnectionToTestDB();
+				}
+			ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				tag = new Tag(rs.getString(1), rs.getString(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tag;
 	}
 	
 	public void create(Tag object) {
@@ -55,7 +75,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		}
 	}
 	
-	private void insertValuesInTagRecord(String recordId, String tagId) {
+	public void insertValuesInTagRecord(String recordId, String tagId) {
 		String uuid_tr = getGeneratedId();
 		String query = "Insert into tag_record values(?,?,?);";
 		try {
@@ -235,10 +255,9 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	}
 
 	public void update(Tag object) {
-		// TODO Auto-generated method stub
-		
-	}
 
+	}
+	
 	public List<Record> getListRecordsByListOfTags(List<Tag> listTags) {
 		List<Record> finalList = new ArrayList<Record>();
 		for (Tag t : listTags) {
@@ -250,19 +269,4 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		return finalList;
 	}
 	
-	public static void main(String[] args) {
-		TagDAOImpl t = new TagDAOImpl();
-		RecordDAOImpl r = new RecordDAOImpl();
-		t.create(new Tag("Ys"));
-		System.out.println(t.readByKey("3d50ff14-89ff-47b0-a9fb-042b5925c586"));
-		List<Tag> list = t.getListTagsBySuffix("#");
-		for (Tag ta : list) {
-			System.out.println(ta);
-		}
-	}
-
-
-		
-	
-
 }
