@@ -9,10 +9,19 @@ public class Tag {
 		this.tag = tag;
 	}
 	
+	public Tag(String uuid, String tag) {
+		this.uuid = uuid;
+		this.tag = tag;
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
 	
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 	public String getTagMessage() {
 		return tag;
 	}
