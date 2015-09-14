@@ -2,13 +2,10 @@ package com.softserve.tc.diary;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,79 +15,23 @@ import org.junit.Test;
 import com.softserve.tc.diary.dao.implementation.RoleDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Role;
-import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
 public class TestRoleDAO {
-	private static Connection conn;
-	private static PreparedStatement ps;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		conn = ConnectManager.getConnectionToTestDB();
-		BufferedReader br = null;
-		String scriptSQL;
-		StringBuilder sbResult = new StringBuilder();
-		try {
-			br = new BufferedReader(new FileReader("./PostgreSQL_DB/DiaryTest.sql"));
-			while ((scriptSQL = br.readLine()) != null) {
-				sbResult.append(scriptSQL);
-				sbResult.append("\n");
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		String result = new String(sbResult);
-		ps = conn.prepareStatement(result);
-		ps.execute();
+		Query.setUpBeforeClass();
 	}
 
 	@Before
-	public void beforeTest() {
-		String insertData = "insert into role values('1','Admin') ;" + " insert into role values('2','User') ;"
-				+ "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
-				+ "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
-				+ "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
-				+ "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', 2, 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, 2);"
-				+ "insert into user_card values('2','Sonic', 'Ira', 'Dub', 1, 'dfhfght@gmail.com', 'vfjukiuu', 'F', '1990-03-08', null, 1);"
-				+ "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', 3, 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'M', '1989-02-20', null, 2);"
-				+ "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'public');"
-				+ "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'private');"
-				+ "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'public');"
-				+ "insert into tag values('1','#cars');" + "insert into tag values('3','#family');"
-				+ "insert into tag values('2','#Love');" + "insert into tag values('4','#murderrrrrr');"
-				+ "insert into tag_record values('1','1', '2');" + "insert into tag_record values('2','3', '1');"
-				+ "insert into tag_record values('3','2', '3');";
-		try {
-			ps = conn.prepareStatement(insertData);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public void beforeTest() throws SQLException{
+		Query.insertValue();
 	}
 
 	@After
-	public void afterTest() {
-		String deleteData = "delete from tag_record;" + "delete from record_list;" + "delete from user_card;"
-				+ "delete from address;" + "delete from role;" + "delete from tag;";
-		try {
-			ps = conn.prepareStatement(deleteData);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void afterTest() throws SQLException{
+		Query.deleteAllFromTable();
 	}
 
 	@Test
@@ -100,8 +41,8 @@ public class TestRoleDAO {
 		roleDAO.create(new Role("Administrator"));
 		Role role = new Role();
 		try {
-			ps = conn.prepareStatement("SELECT name FROM role WHERE name ='Administrator'");
-			ResultSet rs = ps.executeQuery();
+			Query.ps = Query.connection.prepareStatement("SELECT name FROM role WHERE name ='Administrator'");
+			ResultSet rs = Query.ps.executeQuery();
 			while (rs.next()) {
 				role.setName(rs.getString("name"));
 			}
@@ -121,10 +62,10 @@ public class TestRoleDAO {
 		Role role = new Role("reader");
 		role.setId(roleDAO.getGeneratedId());
 		try {
-			ps = conn.prepareStatement("insert into role values(?,?);");
-			ps.setString(1, role.getId());
-			ps.setString(2, role.getName());
-			ps.execute();
+			Query.ps = Query.connection.prepareStatement("insert into role values(?,?);");
+			Query.ps.setString(1, role.getId());
+			Query.ps.setString(2, role.getName());
+			Query.ps.execute();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -134,9 +75,9 @@ public class TestRoleDAO {
 		roleDAO.update(role);
 		Role roleActual = new Role();
 		try {
-			ps = conn.prepareStatement("select * from role where name =?");
-			ps.setString(1, role.getName());
-			ResultSet rs = ps.executeQuery();
+			Query.ps = Query.connection.prepareStatement("select * from role where name =?");
+			Query.ps.setString(1, role.getName());
+			ResultSet rs = Query.ps.executeQuery();
 			while (rs.next()) {
 				roleActual.setName(rs.getString("name"));
 
@@ -154,7 +95,34 @@ public class TestRoleDAO {
 	public void testDeleteRole() {
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 		Role role = new Role("Admin");
-		roleDAO.create(role);
+		//roleDAO.create(role);
+		List <User> list = new ArrayList<User>();
+		
+		try {
+			Query.ps = Query.connection.prepareStatement("select * from user_card where role LIKE 'Admin'");
+			ResultSet rs = Query.ps.executeQuery();
+            while (rs.next()) {
+            	User userActual = new User();
+            	userActual.setNick_name(rs.getString("nick_name"));
+				userActual.setFirst_name(rs.getString("first_name"));
+				userActual.setSecond_name(rs.getString("second_name"));
+				userActual.setAddress(rs.getString("address_id"));
+				userActual.setE_mail(rs.getString("e_mail"));
+				userActual.setPassword(rs.getString("password"));
+				userActual.setSex(rs.getString("Sex"));
+				userActual.setDate_of_birth(rs.getString("date_of_birth"));
+				userActual.setAvatar(rs.getString("avatar"));
+				userActual.setRole(rs.getString("role"));
+				list.add(userActual);
+            }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		UserDAOImpl ud = new UserDAOImpl();
+		for(User u:list){
+			ud.delete(u);
+		}
 		roleDAO.delete(role);
 		assertNull(roleDAO.readByKey("Admin"));
 	}
