@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,86 +34,26 @@ public class TestRecordDAO {
 
 	private static Connection conn;
 	private static PreparedStatement ps;
-
+	
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-
-		BufferedReader br = null;
-		String scriptSQL;
-		String result = "";
-		try {
-			br = new BufferedReader(new FileReader("./PostgreSQL_DB/DiaryTest.sql"));
-			while ((scriptSQL = br.readLine()) != null) {
-				result += scriptSQL + "\n";
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+	public static void setUpBeforeClass() throws SQLException{
+		Query.setUpBeforeClass();
 		}
-
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement(result);
-			ps.execute();
-			ps.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-        ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-                + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
-                + "DROP TABLE IF EXISTS tag;");
-        ps.execute();
-        ps.close();
-	}
+	public static void tearDownAfterClass() throws SQLException {
+		Query.DropTableIfExists();
+		}
 
-	
 	@Before
-	 public void beforeTest() {
-	  String isertData = "insert into role values('1','Admin') ;" + " insert into role values('2','User') ;"
-	    + "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
-	    + "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
-	    + "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
-	    + "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com', 'kdfhgrr', 'M', '1992-02-02', null, '2');"
-	    + "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'vfjukiuu', 'F', '1990-03-08', null, '1');"
-	    + "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'M', '1989-02-20', null, '2');"
-	    + "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'PUBLIC');"
-	    + "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'PRIVATE');"
-	    + "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'PUBLIC');"
-	    + "insert into tag values('1','#cars');" + "insert into tag values('3','#family');"
-	    + "insert into tag values('2','#Love');" + "insert into tag values('4','#murderrrrrr');"
-	    + "insert into tag_record values('1','1', '2');"
-	    + "insert into tag_record values('2','3', '1');"
-	    + "insert into tag_record values('3','2', '3');";
-	  try {
-	   ps = conn.prepareStatement(isertData);
-	   ps.execute();
-	  } catch (SQLException e) {
-	   e.printStackTrace();
-	  }
-	  
-	 }
+	public void beforeTest() throws SQLException{
+		Query.insertValue();
+		}
+	
 	 @After
-	 public void afterTest(){
-	  String deleteData="delete from tag_record;"+"delete from record_list;"+"delete from user_card;"+"delete from address;"+"delete from role;"+"delete from tag;";
-	    try {
-	     ps = conn.prepareStatement(deleteData);
-	     ps.execute();
-	    } catch (SQLException e) {
-	     e.printStackTrace();
-	    }
-	 }
+	public void afterTest() throws SQLException{
+		Query.deleteAllFromTable();
+		}
 	
 	
 	@Test
@@ -128,8 +67,8 @@ public class TestRecordDAO {
 		Record record = null;
 		
 		try {
-			ps = conn.prepareStatement("select * from record_list where user_id_rec ='1';");
-			ResultSet rs = ps.executeQuery();
+			Query.ps = Query.connection.prepareStatement("select * from record_list where user_id_rec ='1';");
+			ResultSet rs = Query.ps.executeQuery();
 			while (rs.next()) {
 				record = new Record( rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.PRIVATE);
 			}
@@ -155,23 +94,23 @@ public class TestRecordDAO {
         rec.setId_rec(recordDAO.getGeneratedId());
 
         try {
-            ps = conn.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
-            ps.setString(1, rec.getId_rec());
-            ps.setString(2, rec.getUser_name());
-            ps.setTimestamp(3, rec.getCreated_time());
-            ps.setString(4, rec.getText());
-            ps.setString(5, rec.getSupplement());
-            ps.setString(6, rec.getVisibility());
-            ps.execute();
+            Query.ps = Query.connection.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
+            Query.ps.setString(1, rec.getId_rec());
+            Query.ps.setString(2, rec.getUser_name());
+            Query.ps.setTimestamp(3, rec.getCreated_time());
+            Query.ps.setString(4, rec.getText());
+            Query.ps.setString(5, rec.getSupplement());
+            Query.ps.setString(6, rec.getVisibility());
+            Query.ps.execute();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
         recordDAO.update(rec);
         Record record = null;
         try {
-            ps = conn.prepareStatement("select * from record_list where id_rec=?");
-            ps.setString(1, rec.getId_rec());
-            ResultSet rs = ps.executeQuery();
+        	Query.ps = Query.connection.prepareStatement("select * from record_list where id_rec=?");
+        	Query.ps.setString(1, rec.getId_rec());
+            ResultSet rs = Query.ps.executeQuery();
             while (rs.next()) {
             	record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.valueOf(rs.getString(6)));
             	record.setId_rec(rs.getString(1));
@@ -202,9 +141,7 @@ public class TestRecordDAO {
         Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
         recordDAO.create(record);
         List<Record> listTT = recordDAO.getAll();
-        System.out.println(listTT);
         recordDAO.delete(record);
         assertNull(recordDAO.getRecordByName("2"));
     }
-    
 }
