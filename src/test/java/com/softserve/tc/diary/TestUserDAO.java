@@ -1,12 +1,10 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
-import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
@@ -29,88 +25,21 @@ public class TestUserDAO {
     private static PreparedStatement ps;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-
-		BufferedReader br = null;
-		String scriptSQL;
-		String result = "";
-		try {
-			br = new BufferedReader(new FileReader("./PostgreSQL_DB/DiaryTest.sql"));
-			while ((scriptSQL = br.readLine()) != null) {
-				result += scriptSQL + "\n";
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		try {
-            conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement(result);
-			ps.execute();
-			ps.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void setUpBeforeClass() throws SQLException {
+		Query.setUpBeforeClass();
 	}
 	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		 ps = conn.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
-		 + "DROP TABLE IF EXISTS role;"
-		 + "DROP TABLE IF EXISTS tag;");
-		 ps.execute();
-		ps.close();
-		conn.close();
+	public static void tearDownAfterClass() throws SQLException {
+		Query.DropTableIfExists();
 	}
 	@Before
-	public void beforeTest() {
-		String isertData = "insert into role values('1','Admin') ;" + " insert into role values('2','User') ;"
-				+ "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
-				+ "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
-				+ "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
-				+ "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com', 'kdfhgrr', 'MALE', '1992-02-02', null, '2');"
-				+ "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'vfjukiuu', 'FEMALE', '1990-03-08', null, '1');"
-				+ "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'MALE', '1989-02-20', null, '2');"
-				+ "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'public');"
-				+ "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'private');"
-				+ "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'public');"
-				+ "insert into tag values('1','#cars');" + "insert into tag values('3','#family');"
-				+ "insert into tag values('2','#Love');" + "insert into tag values('4','#murderrrrrr');"
-				+ "insert into tag_record values('1','1', '2');"
-				+ "insert into tag_record values('2','3', '1');"
-				+ "insert into tag_record values('3','2', '3');";
-		try {
-			ps = conn.prepareStatement(isertData);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public void beforeTest() throws SQLException{
+		Query.insertValue();
 	}
 	@After
-	public void afterTest(){
-		String deleteData="delete from tag_record;"+"delete from record_list;"+"delete from user_card;"+"delete from address;"+"delete from role;"+"delete from tag;";
-				try {
-					ps = conn.prepareStatement(deleteData);
-					ps.execute();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	public void afterTest() throws SQLException{
+		Query.deleteAllFromTable();
 	}
-	
-
-	
 
 	@Test
 	public void testCreateUser() {
@@ -120,8 +49,8 @@ public class TestUserDAO {
 		User userActual = new User();
 		try {
 
-			ps = conn.prepareStatement("select * from user_card where nick_name ='hary12';");
-			ResultSet rs = ps.executeQuery();
+			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name ='hary12';");
+			ResultSet rs = Query.ps.executeQuery();
 			while (rs.next()) {
 				userActual.setNick_name(rs.getString("nick_name"));
 				userActual.setFirst_name(rs.getString("first_name"));
@@ -135,7 +64,6 @@ public class TestUserDAO {
 				userActual.setRole(rs.getString("role"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -161,21 +89,20 @@ public class TestUserDAO {
 		"1");
 		user.setUuid(userDAO.getGeneratedId());
         try {
-            ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-			ps.setString(1, user.getUuid());
-			ps.setString(2, user.getNick_name());
-			ps.setString(3, user.getFirst_name());
-			ps.setString(4, user.getSecond_name());
-			ps.setString(5, user.getAddress());
-			ps.setString(6, user.getE_mail());
-			ps.setString(7, user.getPassword());
-			ps.setString(8, user.getSex());
-			ps.setString(9, user.getDate_of_birth());
-			ps.setString(10, user.getAvatar());
-			ps.setString(11, user.getRole());
-			ps.execute();
+        	Query.ps = Query.connection.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
+        	Query.ps.setString(1, user.getUuid());
+        	Query.ps.setString(2, user.getNick_name());
+        	Query.ps.setString(3, user.getFirst_name());
+        	Query.ps.setString(4, user.getSecond_name());
+        	Query.ps.setString(5, user.getAddress());
+        	Query.ps.setString(6, user.getE_mail());
+        	Query.ps.setString(7, user.getPassword());
+        	Query.ps.setString(8, user.getSex());
+        	Query.ps.setString(9, user.getDate_of_birth());
+        	Query.ps.setString(10, user.getAvatar());
+        	Query.ps.setString(11, user.getRole());
+        	Query.ps.execute();
         } catch (SQLException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         user.setFirst_name("IRA");
@@ -183,9 +110,9 @@ public class TestUserDAO {
         userDAO.update(user);
         User userActual = new User();
         try {
-            ps = conn.prepareStatement("select * from user_card where nick_name =?");
-            ps.setString(1, user.getNick_name());
-            ResultSet rs = ps.executeQuery();
+        	Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
+        	Query.ps.setString(1, user.getNick_name());
+            ResultSet rs = Query.ps.executeQuery();
             while (rs.next()) {
 				userActual.setNick_name(rs.getString("nick_name"));
 				userActual.setFirst_name(rs.getString("first_name"));
@@ -200,7 +127,6 @@ public class TestUserDAO {
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 		assertNotNull(userActual);
@@ -244,9 +170,9 @@ public class TestUserDAO {
 	public void testGetByNickName() {
 		 User userActual = new User();
 	        try {
-	            ps = conn.prepareStatement("select * from user_card where nick_name =?");
-	            ps.setString(1, "TreeTree");
-	            ResultSet rs = ps.executeQuery();
+	        	Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
+	        	Query.ps.setString(1, "TreeTree");
+	            ResultSet rs = Query.ps.executeQuery();
 	            while (rs.next()) {
 					userActual.setNick_name(rs.getString("nick_name"));
 					userActual.setFirst_name(rs.getString("first_name"));
@@ -261,7 +187,6 @@ public class TestUserDAO {
 	            }
 
 	        } catch (SQLException e) {
-	            // TODO Auto-generated catch block
 	            e.printStackTrace();
 	        }
 			assertNotNull(userActual);
