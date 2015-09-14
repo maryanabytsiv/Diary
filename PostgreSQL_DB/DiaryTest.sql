@@ -20,7 +20,7 @@ CREATE TABLE  address (
 
 CREATE TABLE user_card (
     uid varchar(40) PRIMARY KEY,
-    nick_name varchar(20) NOT NULL,
+    nick_name varchar(20) NOT NULL UNIQUE,
     first_name varchar(20),
     second_name varchar(20),
     address_id varchar(40) references address(id),
@@ -44,7 +44,7 @@ CREATE TABLE record_list (
 
 CREATE TABLE tag (
     uuid varchar(40) PRIMARY KEY,
-    tag_message varchar(1000)
+    tag_message varchar(1000) UNIQUE
 );
 
 CREATE TABLE tag_record (
