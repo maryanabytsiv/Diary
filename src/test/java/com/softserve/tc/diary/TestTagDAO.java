@@ -1,11 +1,10 @@
 package com.softserve.tc.diary;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.junit.After;
@@ -16,6 +15,7 @@ import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
+import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
 
 public class TestTagDAO {
@@ -55,9 +55,7 @@ public class TestTagDAO {
 	@Test
 	public void testCreateTag() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
-	//	Tag tagException = new Tag("#HelloWorld");
-		Tag workingTag = new Tag("#HelloWorldWide");
-		// tagDAO.create(tagException);
+		Tag workingTag = new Tag("#HelloWorldWide"); 
 		tagDAO.create(workingTag);
 		try {
 			String query1 = "SELECT tag_message FROM tag " + "WHERE tag_message Like '#HelloWorldWide';";
@@ -71,11 +69,14 @@ public class TestTagDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		assertNotNull(workingTag);
 		assertEquals("#HelloWorldWide", workingTag.getTagMessage());
+		
+		Tag tagAlreadyExist = new Tag("#HelloWorld");
+		tagDAO.create(tagAlreadyExist);
+		
 	}
-
+	
 	@Test
 	public void testCreateFromRecord() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
@@ -113,6 +114,17 @@ public class TestTagDAO {
 		assertEquals(countTagRecordAfter, countTagRecordBefore + 1);
 	}
 
+	@Test
+	public void testCheckIfTagAlreadyExist() {
+		TagDAOImpl dao = new TagDAOImpl();
+		Tag existTag = new Tag("#HellGuy");
+		boolean result = dao.checkIfTagExist(existTag.getTagMessage());
+		assertTrue(result);
+		Tag notExistTag = new Tag("#Pelmeni");
+		result = dao.checkIfTagExist(notExistTag.getTagMessage());
+		assertFalse(result);
+	}
+	
 	@Test
 	public void testReadByKey() {
 		TagDAOImpl tagDAO = new TagDAOImpl();
@@ -154,6 +166,17 @@ public class TestTagDAO {
 
 	}
 
+	@Test
+	public void testCheckIfRecordHasTag() {
+		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+		Record rec = new Record(null, createdTime, "#Hello my name is #Bob. I am from #NewYork", "https://motivation/", Status.PRIVATE);
+		TagDAOImpl dao = new TagDAOImpl();
+		List<Tag> list = dao.checkIfRecordHasTag(rec);
+		assertEquals("#Hello", list.get(0).getTagMessage());
+		assertEquals("#Bob.", list.get(1).getTagMessage());
+		assertEquals("#NewYork", list.get(2).getTagMessage());
+	}
+	
 	@Test
 	public void testGetListTagsByPrefix() {
 		TagDAOImpl tagDAO = new TagDAOImpl();

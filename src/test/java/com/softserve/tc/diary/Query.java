@@ -74,7 +74,7 @@ public class Query {
 														+"'vfjukiuu', 'FEMALE', '1990-03-08', null, '1');"
 			+ "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com',"
 														+"'flgkjhlkftjt', 'MALE', '1989-02-20', null, '2');"
-	+ "insert into record_list values('1',null,'2015-02-23 00:00:00','#Hello my name is Bod. I am from #NewYork',"
+	+ "insert into record_list values('1',null,'2015-02-23 00:00:00','#Hello my name is Bob. I am from #NewYork',"
 										+"'https://motivation/inUkraine/improveMySelf','PUBLIC');"
 	+ "insert into record_list values('2',null,'2015-05-20 12:00:56','That was #nice day. #Halloween so cool',"
 										+"'http:/bigBoss/works/perfectly','PRIVATE');"

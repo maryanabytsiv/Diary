@@ -44,6 +44,10 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	}
 	
 	public void create(Tag object) {
+		String tagMessage = object.getTagMessage();
+		if (true == checkIfTagExist(tagMessage)) {
+			System.out.println("Tag already exist");
+		} else {
 		try {
 			if ((conn == null) || (conn.isClosed())) {
 				conn = ConnectManager.getConnectionToTestDB();
@@ -56,9 +60,23 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		}
+	}
+	
+	public boolean checkIfTagExist(String tagMessage) {
+		List<Tag> list = getAll();
+		for (Tag tag : list) {
+			if (tag.getTagMessage().equals(tagMessage)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void createFromRecord(String recordId, String tagMessage) {
+		if (true == checkIfTagExist(tagMessage)) {
+			System.out.println("Tag already exist");
+		} else {
 		try {
 			if ((conn == null) || (conn.isClosed())) {
 				conn = ConnectManager.getConnectionToTestDB();
@@ -71,6 +89,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			insertValuesInTagRecord(recordId, tagId);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
 		}
 	}
 	
@@ -199,23 +218,29 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		}
 	}
 
-	private boolean checkIfRecordHasTag(Record record, Tag tag) {
+	public List<Tag> checkIfRecordHasTag(Record record) {
 		String textRecord = record.getText();
-		String tagMessage = tag.getTagMessage();
-		for (int i = 0; i < textRecord.length(); i++) {
-			if (textRecord.charAt(i) == '#') {
-				for (int j = 0; j < tagMessage.length(); j++) {
-					if ((textRecord.charAt(i + j)) != (tagMessage.charAt(j))) {
-						break;
-					}
-					if ((j == tagMessage.length() - 1) && (textRecord.charAt(i + j + 1) == ' ')) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+        List<Tag> list = new ArrayList<Tag>();
+        for (int i = 0; i < textRecord.length(); i++) {
+            if ((textRecord.charAt(i) == '#' && i==0  ) ||
+                    (textRecord.charAt(i) == '#' && textRecord.charAt(i - 1) == ' ')) {
+                String tagMessage = "";
+                for (int j = i; j < textRecord.length(); j++) {
+                    if ((textRecord.charAt(j) == ' ')) {
+                        tagMessage = textRecord.substring(i, j);
+                        i = j;
+                        list.add(new Tag(tagMessage));
+                        break;
+                    }
+                    if (j == (textRecord.length() - 1)) {
+                        tagMessage = textRecord.substring(i);
+                        list.add(new Tag (tagMessage));
+                    }
+                }
+            }
+        }
+        return list;
+    }
 
 	public List<Tag> getAll() {
 		List<Tag> list = new ArrayList<Tag>();
@@ -252,10 +277,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		}
 		return tag;
 	}
-
-	public void update(Tag object) {
-
-	}
 	
 	public List<Record> getListRecordsByListOfTags(List<Tag> listTags) {
 		List<Record> finalList = new ArrayList<Record>();
@@ -267,5 +288,8 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		}	
 		return finalList;
 	}
-	
+
+	public void update(Tag object) {
+
+	}
 }
