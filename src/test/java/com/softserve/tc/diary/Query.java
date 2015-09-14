@@ -68,17 +68,33 @@ public class Query {
 				+ "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
 				+ "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
 				+ "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
-				+ "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com', 'kdfhgrr', 'MALE', '1992-02-02', null, '2');"
-				+ "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'vfjukiuu', 'FEMALE', '1990-03-08', null, '1');"
-				+ "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com', 'flgkjhlkftjt', 'MALE', '1989-02-20', null, '2');"
-				+ "insert into record_list values('1','1','2015-02-23 00:00:00','skjdhugfkdxufgesiurkgtiudshkfjghkdf',null,'PUBLIC');"
-				+ "insert into record_list values('2','3','2015-05-20 12:00:56','skjdhugfkdxufge',null,'PRIVATE');"
-				+ "insert into record_list values('3','1','2015-06-10 17:20:56','fkjb5kj4g5khg4555xufge',null,'PUBLIC');"
-				+ "insert into tag values('1','#cars');" + "insert into tag values('3','#family');"
-				+ "insert into tag values('2','#Love');" + "insert into tag values('4','#murderrrrrr');"
-				+ "insert into tag_record values('1','1', '2');"
-				+ "insert into tag_record values('2','3', '1');"
-				+ "insert into tag_record values('3','2', '3');";
+			+ "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com',"
+														+"'kdfhgrr', 'MALE', '1992-02-02', null, '2');"
+			+ "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com',"
+														+"'vfjukiuu', 'FEMALE', '1990-03-08', null, '1');"
+			+ "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com',"
+														+"'flgkjhlkftjt', 'MALE', '1989-02-20', null, '2');"
+	+ "insert into record_list values('1',null,'2015-02-23 00:00:00','#Hello my name is Bod. I am from #NewYork',"
+										+"'https://motivation/inUkraine/improveMySelf','PUBLIC');"
+	+ "insert into record_list values('2',null,'2015-05-20 12:00:56','That was #nice day. #Halloween so cool',"
+										+"'http:/bigBoss/works/perfectly','PRIVATE');"
+	+ "insert into record_list values('3',null,'2015-06-10 17:20:56','#HelloTeam, it is #nice to meet in NewYork',"
+										+"'http:/Lviv/theBest/Town/everSeen','PUBLIC');"
+				+ "insert into tag values('testkey1','#Hell');" + '\n'
+				+ "insert into tag values('testkey2','#Hello');" + '\n'
+				+ "insert into tag values('testkey3','#HelloWorld');" + '\n'
+				+ "insert into tag values('testkey4','#HellGuy');" + '\n'
+				+ "insert into tag values('testkey5','#nice');" + '\n'
+				+ "insert into tag values('testkey6','#Halloween');" + '\n'
+				+ "insert into tag values('testkey7','#HelloTeam');" + '\n'
+				+ "insert into tag values('testkey8','#NewYork');" + '\n'
+				+ "insert into tag values('testkey9','#HelpMe');"
+						+ "insert into tag_record values('rt1',1,'testkey2');" + '\n'
+						+ "insert into tag_record values('rt2',1,'testkey8');" + '\n'
+						+ "insert into tag_record values('rt3',2,'testkey5');" + '\n'
+						+ "insert into tag_record values('rt4',2,'testkey6');" + '\n'
+						+ "insert into tag_record values('rt5',3,'testkey7');" + '\n'
+						+ "insert into tag_record values('rt6',3,'testkey5');" + '\n';
 		try {
 			ps = connection.prepareStatement(isertData);
 			ps.execute();
