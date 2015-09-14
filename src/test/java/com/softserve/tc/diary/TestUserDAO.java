@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -20,9 +18,6 @@ import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
 public class TestUserDAO {
-
-    private static Connection conn;
-    private static PreparedStatement ps;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {

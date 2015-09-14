@@ -4,11 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -31,9 +26,6 @@ import com.softserve.tc.diary.entity.Status;
  */
 
 public class TestRecordDAO {
-
-	private static Connection conn;
-	private static PreparedStatement ps;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException{
@@ -62,7 +54,7 @@ public class TestRecordDAO {
 		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
 		
 		RecordDAOImpl RecordDAO = new RecordDAOImpl();
-		Record newRecord = new Record( "1", createdTime, "#Hello, how are you??", "http:/ntiguwgni/gtrwgtwg/gwt", Status.PRIVATE );
+		Record newRecord = new Record( "1", createdTime, "#JUST DO IT!!!", "http:/bigBoss/works/perfectly", Status.PRIVATE );
 		RecordDAO.create(newRecord);
 		Record record = null;
 		
@@ -79,8 +71,8 @@ public class TestRecordDAO {
 		assertNotNull(record);
 		assertEquals("1", record.getUser_name());
 		assertEquals(newRecord.getCreated_time(), record.getCreated_time());
-		assertEquals("#Hello, how are you??", record.getText());
-		assertEquals("http:/ntiguwgni/gtrwgtwg/gwt", record.getSupplement());
+		assertEquals("#JUST DO IT!!!", record.getText());
+		assertEquals("http:/bigBoss/works/perfectly", record.getSupplement());
 		assertEquals("PRIVATE" , record.getVisibility());
 	}
 	
@@ -90,7 +82,7 @@ public class TestRecordDAO {
 		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
 		
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        Record rec = new Record("1", createdTime, "Nsfsfft","ferfre", Status.PRIVATE);
+        Record rec = new Record("1", createdTime, "#Work HARD!!!","https://motivation/inUkraine/improveMySelf", Status.PRIVATE);
         rec.setId_rec(recordDAO.getGeneratedId());
 
         try {
@@ -140,7 +132,6 @@ public class TestRecordDAO {
         RecordDAOImpl recordDAO = new RecordDAOImpl();
         Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
         recordDAO.create(record);
-        List<Record> listTT = recordDAO.getAll();
         recordDAO.delete(record);
         assertNull(recordDAO.getRecordByName("2"));
     }
