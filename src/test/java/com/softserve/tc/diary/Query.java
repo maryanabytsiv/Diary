@@ -14,14 +14,18 @@ import java.sql.SQLException;
  */
 public class Query {
 	
-    protected static Connection connection;
-    protected static PreparedStatement ps;
+    protected static Connection connection = null;
+    protected static PreparedStatement ps = null;
     
 	public static void setUpBeforeClass() throws SQLException {
 
 		BufferedReader br = null;
 		String scriptSQL;
 		String result = "";
+//		if(connection == null || connection.isClose()){
+//			return;
+//		}
+		
 		try {
 			br = new BufferedReader(new FileReader("./PostgreSQL_DB/DiaryTest.sql"));
 			while ((scriptSQL = br.readLine()) != null) {
@@ -46,25 +50,15 @@ public class Query {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	} 
-
-	public static void DropTableIfExists() throws SQLException {
-		try{
-		 ps = connection.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
-		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
-		 + "DROP TABLE IF EXISTS role;"
-		 + "DROP TABLE IF EXISTS tag;");
-		 }catch (Exception e) {
-			 e.printStackTrace();
-			 }finally{
-				 ps.execute();
-				 ps.close();
-				 connection.close();
-				 }
+		if (connection.isClosed()) {
+			System.out.println("close");
+		} else {
+			System.out.println("Ok");
 		}
+	} 
 	
 	public static void insertValue() throws SQLException{
-		String isertData = "insert into role values('1','Admin') ;" + " insert into role values('2','User') ;"
+		String insertData = "insert into role values('1','Admin') ;" + " insert into role values('2','User') ;"
 				+ "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
 				+ "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
 				+ "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
@@ -80,14 +74,14 @@ public class Query {
 										+"'http:/bigBoss/works/perfectly','PRIVATE');"
 	+ "insert into record_list values('3',null,'2015-06-10 17:20:56','#HelloTeam, it is #nice to meet in NewYork',"
 										+"'http:/Lviv/theBest/Town/everSeen','PUBLIC');"
-				+ "insert into tag values('testkey1','#Hell');" + '\n'
-				+ "insert into tag values('testkey2','#Hello');" + '\n'
-				+ "insert into tag values('testkey3','#HelloWorld');" + '\n'
-				+ "insert into tag values('testkey4','#HellGuy');" + '\n'
-				+ "insert into tag values('testkey5','#nice');" + '\n'
-				+ "insert into tag values('testkey6','#Halloween');" + '\n'
-				+ "insert into tag values('testkey7','#HelloTeam');" + '\n'
-				+ "insert into tag values('testkey8','#NewYork');" + '\n'
+				+ "insert into tag values('testkey1','#Hell');"
+				+ "insert into tag values('testkey2','#Hello');"
+				+ "insert into tag values('testkey3','#HelloWorld');"
+				+ "insert into tag values('testkey4','#HellGuy');"
+				+ "insert into tag values('testkey5','#nice');"
+				+ "insert into tag values('testkey6','#Halloween');"
+				+ "insert into tag values('testkey7','#HelloTeam');"
+				+ "insert into tag values('testkey8','#NewYork');"
 				+ "insert into tag values('testkey9','#HelpMe');"
 						+ "insert into tag_record values('rt1',1,'testkey2');" + '\n'
 						+ "insert into tag_record values('rt2',1,'testkey8');" + '\n'
@@ -96,7 +90,7 @@ public class Query {
 						+ "insert into tag_record values('rt5',3,'testkey7');" + '\n'
 						+ "insert into tag_record values('rt6',3,'testkey5');" + '\n';
 		try {
-			ps = connection.prepareStatement(isertData);
+			ps = connection.prepareStatement(insertData);
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -105,6 +99,7 @@ public class Query {
 
 	public static void deleteAllFromTable() throws SQLException{
 		String deleteData="delete from tag_record;"+"delete from record_list;"+"delete from user_card;"+"delete from address;"+"delete from role;"+"delete from tag;";
+//		String deleteData="delete from tag_record;"+"delete from record_list;"+"delete from address;"+"delete from role;"+"delete from tag;"+"delete from user_card;";
 				try {
 					ps = connection.prepareStatement(deleteData);
 					ps.execute();
@@ -112,4 +107,19 @@ public class Query {
 					e.printStackTrace();
 					}
 				}
+	
+	public static void DropTableIfExists() throws SQLException {
+		try{
+		 ps = connection.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
+		 + "DROP TABLE IF EXISTS role;"
+		 + "DROP TABLE IF EXISTS tag;");
+		 }catch (Exception e) {
+			 e.printStackTrace();
+			 }finally{
+				 ps.execute();
+				 ps.close();
+				 connection.close();
+				 }
+		}
 	}

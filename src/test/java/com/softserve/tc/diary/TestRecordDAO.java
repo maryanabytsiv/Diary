@@ -32,11 +32,6 @@ public class TestRecordDAO {
 		Query.setUpBeforeClass();
 		}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws SQLException {
-		Query.DropTableIfExists();
-		}
-
 	@Before
 	public void beforeTest() throws SQLException{
 		Query.insertValue();
@@ -47,6 +42,10 @@ public class TestRecordDAO {
 		Query.deleteAllFromTable();
 		}
 	
+	@AfterClass
+	public static void tearDownAfterClass() throws SQLException {
+		Query.DropTableIfExists();
+		}	 
 	
 	@Test
 		public void testCreateRecord() {
@@ -130,9 +129,9 @@ public class TestRecordDAO {
     public void TestDeleteRecord() {
 		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
         RecordDAOImpl recordDAO = new RecordDAOImpl();
-        Record record = new Record( "2", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
+        Record record = new Record( "1", createdTime, "#Hello, how are you??", "http:/Lviv/theBest/Town", Status.PRIVATE );
         recordDAO.create(record);
         recordDAO.delete(record);
-        assertNull(recordDAO.getRecordByName("2"));
+        assertNull(recordDAO.getRecordByName("1"));
     }
 }
