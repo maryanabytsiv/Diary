@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;
 
@@ -64,7 +66,7 @@ public class TestRoleDAO {
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 
 		Role role = new Role("reader");
-		role.setId(roleDAO.getGeneratedId());
+		role.setId(UUID.randomUUID().toString());
 		try {
 			Query.ps = Query.connection.prepareStatement("insert into role values(?,?);");
 			Query.ps.setString(1, role.getId());

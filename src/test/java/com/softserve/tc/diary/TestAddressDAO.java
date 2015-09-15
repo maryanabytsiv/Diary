@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -65,7 +66,7 @@ public class TestAddressDAO {
         PropertyConfigurator.configure("log4j.properties");
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
-        add.setId(addressDAO.getGeneratedId());
+        add.setId(UUID.randomUUID().toString());
         try {
             Query.ps = Query.connection
                     .prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");

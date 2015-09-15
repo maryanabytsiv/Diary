@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -43,7 +44,7 @@ public class TestUserDAO {
 
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testCreateUserNullPointerException() {
 		UserDAOImpl userDAO = new UserDAOImpl();
 		userDAO.create(new User(null, "Andriy", "Mural", "1", null, "64561", Sex.FEMALE, "1999-03-02",
@@ -81,7 +82,7 @@ public class TestUserDAO {
 		UserDAOImpl userDAO = new UserDAOImpl();
 		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10",
 				"some.jpeg", "1");
-		user.setUuid(userDAO.getGeneratedId());
+		user.setUuid(UUID.randomUUID().toString());
 		try {
 			Query.ps = Query.connection
 					.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");

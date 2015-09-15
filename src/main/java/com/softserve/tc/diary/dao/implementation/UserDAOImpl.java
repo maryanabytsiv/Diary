@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasypt.util.password.BasicPasswordEncryptor;
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
-public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
+public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 	private static Connection conn = null;
 	private static PreparedStatement ps = null;
 	private static ResultSet rs;
@@ -45,11 +44,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		try {
 			if ((object.getRole() == null) || (object.getE_mail() == null) || (object.getNick_name() == null)) {
 				System.err.println("!!!!!!!!You not enter nickname, e-mail or role!!!!!!!");
-				throw new NullPointerException();
+				throw new IllegalArgumentException();
 			} else {
 				conn = ConnectManager.getConnectionToTestDB();
 				ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-				ps.setString(1, getGeneratedId());
+				ps.setString(1, UUID.randomUUID().toString());
 				ps.setString(2, object.getNick_name());
 				ps.setString(3, object.getFirst_name());
 				ps.setString(4, object.getSecond_name());
@@ -142,11 +141,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		int users = 0;
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("select * from user_card where sex =?;");
+			ps = conn.prepareStatement("select COUNT(*) from user_card where sex =? group by sex;");
 			ps.setString(1, sex.toUpperCase());
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				users++;
+				users=rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
@@ -174,21 +173,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		return users;
 	}
 
-	public String getGeneratedId() {
-		UUID idOne = UUID.randomUUID();
-		return idOne.toString();
-	}
-
 	public List<User> getByYearOfBirth(String yearOfBirth) {
 		List<User> usersByYear = new ArrayList<User>();
-		String rangeFrom = yearOfBirth + "-01-01";
-		String rangeTo = yearOfBirth + "-12-31";
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement(
-					"select * from user_card where date_of_birth>CAST(? AS DATE) AND date_of_birth<CAST(? AS DATE); ");
-			ps.setString(1, rangeFrom);
-			ps.setString(2, rangeTo);
+					"select * from user_card where extract (year from date_of_birth)=CAST(? AS double precision); ");
+			ps.setString(1, yearOfBirth);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				usersByYear.add(resultSet(rs));

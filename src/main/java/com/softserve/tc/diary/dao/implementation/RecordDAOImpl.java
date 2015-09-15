@@ -21,16 +21,11 @@ import com.softserve.tc.diary.entity.Status;
  *
  */
 
-public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
+public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 
 	private static Connection conn = null;
 	private static PreparedStatement ps = null;
 	private static ResultSet rs = null;
-
-	public String getGeneratedId() {
-		UUID idOne = UUID.randomUUID();
-		return idOne.toString();
-	}
 
 	public void create(Record object) {
 //		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
@@ -43,7 +38,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 			conn = ConnectManager.getConnectionToTestDB();
 
 			ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,?);");
-			ps.setString(1, getGeneratedId());
+			ps.setString(1, UUID.randomUUID().toString());
 			ps.setString(2, object.getUser_name());
 			ps.setTimestamp(3, object.getCreated_time());
 			ps.setString(4, object.getText());

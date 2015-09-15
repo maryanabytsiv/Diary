@@ -20,7 +20,7 @@ import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 
-public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>, IdGenerator {
+public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 
 	private static Connection conn;
 	private static PreparedStatement ps;
@@ -34,18 +34,13 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>, IdGenerator {
 		}
 	}
 
-	public String getGeneratedId() {
-		UUID idOne = UUID.randomUUID();
-		return idOne.toString();
-	}
-
 	public void create(Role object) {
 	        PropertyConfigurator.configure("log4j.properties");
 		getConnection();
 		logger.debug("Creating role");
 		try {
 			ps = conn.prepareStatement("insert into role values(?,?);");
-			ps.setString(1, getGeneratedId());
+			ps.setString(1, UUID.randomUUID().toString());
 			ps.setString(2, object.getName());
 			ps.execute();
 			logger.debug("Role created");

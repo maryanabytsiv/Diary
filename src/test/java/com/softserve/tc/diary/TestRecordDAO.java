@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -82,7 +83,7 @@ public class TestRecordDAO {
 		
         RecordDAOImpl recordDAO = new RecordDAOImpl();
         Record rec = new Record("1", createdTime, "#Work HARD!!!","https://motivation/inUkraine/improveMySelf", Status.PRIVATE);
-        rec.setId_rec(recordDAO.getGeneratedId());
+        rec.setId_rec(UUID.randomUUID().toString());
 
         try {
             Query.ps = Query.connection.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
