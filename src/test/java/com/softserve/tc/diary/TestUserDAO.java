@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.dao.implementation.PasswordHelper;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
@@ -79,6 +80,7 @@ public class TestUserDAO {
 		assertEquals("Mural", userActual.getSecond_name());
 		assertEquals("bg@gmail.com", userActual.getE_mail());
 		assertEquals("1", userActual.getAddress());
+		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
 		assertEquals("1995-03-02", userActual.getDate_of_birth());
 		assertEquals("folder/folder/image.png", userActual.getAvatar());
@@ -196,7 +198,7 @@ public class TestUserDAO {
 		assertEquals("Gontar", userActual.getSecond_name());
 		assertEquals("jhfcjfdf@gmail.com", userActual.getE_mail());
 		assertEquals("3", userActual.getAddress());
-		assertEquals("flgkjhlkftjt", userActual.getPassword());
+		assertEquals(PasswordHelper.encrypt("flgkjhlkftjt"), userActual.getPassword());
 		assertEquals("MALE", userActual.getSex());
 		assertEquals("1989-02-20", userActual.getDate_of_birth());
 		assertEquals(null, userActual.getAvatar());
