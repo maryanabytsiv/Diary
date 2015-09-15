@@ -30,22 +30,22 @@ public class TestRecordDAO {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException{
-		Query.setUpBeforeClass();
+		SQL_Statement.setUpBeforeClass();
 		}
 
 	@Before
 	public void beforeTest() throws SQLException{
-		Query.insertValue();
+		SQL_Statement.insertValue();
 		}
 	
 	 @After
 	public void afterTest() throws SQLException{
-		Query.deleteAllFromTable();
+		SQL_Statement.deleteAllFromTable();
 		}
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws SQLException {
-		Query.DropTableIfExists();
+		SQL_Statement.DropTableIfExists();
 		}	 
 	
 	@Test
@@ -59,8 +59,8 @@ public class TestRecordDAO {
 		Record record = null;
 		
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from record_list where user_id_rec ='1';");
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from record_list where user_id_rec ='1';");
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				record = new Record( rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.PRIVATE);
 			}
@@ -86,23 +86,23 @@ public class TestRecordDAO {
         rec.setId_rec(UUID.randomUUID().toString());
 
         try {
-            Query.ps = Query.connection.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
-            Query.ps.setString(1, rec.getId_rec());
-            Query.ps.setString(2, rec.getUser_name());
-            Query.ps.setTimestamp(3, rec.getCreated_time());
-            Query.ps.setString(4, rec.getText());
-            Query.ps.setString(5, rec.getSupplement());
-            Query.ps.setString(6, rec.getVisibility());
-            Query.ps.execute();
+            SQL_Statement.ps = SQL_Statement.connection.prepareStatement("insert into record_list values(?,?,CAST(? AS DATE),?,?,?)");
+            SQL_Statement.ps.setString(1, rec.getId_rec());
+            SQL_Statement.ps.setString(2, rec.getUser_name());
+            SQL_Statement.ps.setTimestamp(3, rec.getCreated_time());
+            SQL_Statement.ps.setString(4, rec.getText());
+            SQL_Statement.ps.setString(5, rec.getSupplement());
+            SQL_Statement.ps.setString(6, rec.getVisibility());
+            SQL_Statement.ps.execute();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
         recordDAO.update(rec);
         Record record = null;
         try {
-        	Query.ps = Query.connection.prepareStatement("select * from record_list where id_rec=?");
-        	Query.ps.setString(1, rec.getId_rec());
-            ResultSet rs = Query.ps.executeQuery();
+        	SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from record_list where id_rec=?");
+        	SQL_Statement.ps.setString(1, rec.getId_rec());
+            ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
             	record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),Status.valueOf(rs.getString(6)));
             	record.setId_rec(rs.getString(1));

@@ -26,17 +26,17 @@ public class TestRoleDAO {
         static final Logger logger = Logger.getLogger(TestRoleDAO.class);
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Query.setUpBeforeClass();
+		SQL_Statement.setUpBeforeClass();
 	}
 
 	@Before
 	public void beforeTest() throws SQLException{
-		Query.insertValue();
+		SQL_Statement.insertValue();
 	}
 
 	@After
 	public void afterTest() throws SQLException{
-		Query.deleteAllFromTable();
+		SQL_Statement.deleteAllFromTable();
 	}
 
 	@Test
@@ -47,8 +47,8 @@ public class TestRoleDAO {
 		roleDAO.create(new Role("Administrator"));
 		Role role = new Role();
 		try {
-			Query.ps = Query.connection.prepareStatement("SELECT name FROM role WHERE name ='Administrator'");
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("SELECT name FROM role WHERE name ='Administrator'");
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				role.setName(rs.getString("name"));
 			}
@@ -68,10 +68,10 @@ public class TestRoleDAO {
 		Role role = new Role("reader");
 		role.setId(UUID.randomUUID().toString());
 		try {
-			Query.ps = Query.connection.prepareStatement("insert into role values(?,?);");
-			Query.ps.setString(1, role.getId());
-			Query.ps.setString(2, role.getName());
-			Query.ps.execute();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("insert into role values(?,?);");
+			SQL_Statement.ps.setString(1, role.getId());
+			SQL_Statement.ps.setString(2, role.getName());
+			SQL_Statement.ps.execute();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			logger.error("insert failed", e1);
@@ -81,9 +81,9 @@ public class TestRoleDAO {
 		roleDAO.update(role);
 		Role roleActual = new Role();
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from role where name =?");
-			Query.ps.setString(1, role.getName());
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from role where name =?");
+			SQL_Statement.ps.setString(1, role.getName());
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				roleActual.setName(rs.getString("name"));
 
@@ -106,8 +106,8 @@ public class TestRoleDAO {
 		List <User> list = new ArrayList<User>();
 		
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from user_card where role LIKE 'Admin'");
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where role LIKE 'Admin'");
+			ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
             	User userActual = new User();
             	userActual.setNick_name(rs.getString("nick_name"));
