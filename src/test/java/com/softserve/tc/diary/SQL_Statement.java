@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * @author Mykola-
  *
  */
-public class Query {
+public class SQL_Statement {
 	
     protected static Connection connection = null;
     protected static PreparedStatement ps = null;
@@ -107,4 +107,19 @@ public class Query {
 					e.printStackTrace();
 					}
 				}
-}
+	
+	public static void DropTableIfExists() throws SQLException {
+		try{
+		 ps = connection.prepareStatement("DROP TABLE IF EXISTS tag_record;" + "DROP TABLE IF EXISTS record_list;"
+		 + "DROP TABLE IF EXISTS user_card;" + "DROP TABLE IF EXISTS address;"
+		 + "DROP TABLE IF EXISTS role;"
+		 + "DROP TABLE IF EXISTS tag;");
+		 }catch (Exception e) {
+			 e.printStackTrace();
+			 }finally{
+				 ps.execute();
+				 ps.close();
+				 connection.close();
+				 }
+		}
+	}

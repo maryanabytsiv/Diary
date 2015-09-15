@@ -14,7 +14,7 @@ import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
-public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
+public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 	private static Connection conn = null;
 	private static PreparedStatement ps = null;
 	private static ResultSet rs;
@@ -44,11 +44,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		try {
 			if ((object.getRole() == null) || (object.getE_mail() == null) || (object.getNick_name() == null)) {
 				System.err.println("!!!!!!!!You not enter nickname, e-mail or role!!!!!!!");
-				throw new NullPointerException();
+				throw new IllegalArgumentException();
 			} else {
 				conn = ConnectManager.getConnectionToTestDB();
 				ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-				ps.setString(1, getGeneratedId());
+				ps.setString(1, UUID.randomUUID().toString());
 				ps.setString(2, object.getNick_name());
 				ps.setString(3, object.getFirst_name());
 				ps.setString(4, object.getSecond_name());
@@ -128,18 +128,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps.setString(1, user.getNick_name());
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				while (rs.next()) {
-					user.setNick_name(rs.getString("nick_name"));
-					user.setFirst_name(rs.getString("first_name"));
-					user.setSecond_name(rs.getString("second_name"));
-					user.setAddress(rs.getString("address_id"));
-					user.setE_mail(rs.getString("e_mail"));
-					user.setPassword(rs.getString("password"));
-					user.setSex(rs.getString("Sex"));
-					user.setDate_of_birth(rs.getString("date_of_birth"));
-					user.setAvatar(rs.getString("avatar"));
-					user.setRole(rs.getString("role"));
-				}
+				user=resultSet(rs);
 				return user;
 			}
 		} catch (SQLException e) {
@@ -152,11 +141,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		int users = 0;
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("select * from user_card where sex =?;");
+			ps = conn.prepareStatement("select COUNT(*) from user_card where sex =? group by sex;");
 			ps.setString(1, sex.toUpperCase());
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				users++;
+				users=rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
@@ -184,31 +173,41 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		return users;
 	}
 
-	public String getGeneratedId() {
-		UUID idOne = UUID.randomUUID();
-		return idOne.toString();
-	}
-
 	public List<User> getByYearOfBirth(String yearOfBirth) {
 		List<User> usersByYear = new ArrayList<User>();
-		String rangeFrom = yearOfBirth + "-01-01";
-		String rangeTo = yearOfBirth + "-12-31";
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement(
-					"select * from user_card where date_of_birth>CAST(? AS DATE) AND date_of_birth<CAST(? AS DATE); ");
-			ps.setString(1, rangeFrom);
-			ps.setString(2, rangeTo);
+					"select * from user_card where extract (year from date_of_birth)=CAST(? AS double precision); ");
+			ps.setString(1, yearOfBirth);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				usersByYear.add(new User(rs.getString("nick_name"), rs.getString("first_name"),
-						rs.getString("second_name"), rs.getString("address_id"), rs.getString("e_mail"),
-						rs.getString("password"), Sex.valueOf(rs.getString("Sex")), rs.getString("date_of_birth"),
-						rs.getString("avatar"), rs.getString("role")));
+				usersByYear.add(resultSet(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return usersByYear;
+	}
+	
+	private User resultSet(ResultSet rs){
+		User user=new User();
+		try {
+			while (rs.next()) {
+				user.setNick_name(rs.getString("nick_name"));
+				user.setFirst_name(rs.getString("first_name"));
+				user.setSecond_name(rs.getString("second_name"));
+				user.setAddress(rs.getString("address_id"));
+				user.setE_mail(rs.getString("e_mail"));
+				user.setPassword(rs.getString("password"));
+				user.setSex(rs.getString("Sex"));
+				user.setDate_of_birth(rs.getString("date_of_birth"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setRole(rs.getString("role"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 }

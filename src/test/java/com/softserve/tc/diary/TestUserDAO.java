@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,27 +24,27 @@ public class TestUserDAO {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
-		Query.setUpBeforeClass();
+		SQL_Statement.setUpBeforeClass();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws SQLException {
-		Query.DropTableIfExists();
+		SQL_Statement.DropTableIfExists();
 		UserDAOImpl.close();
 	}
 
 	@Before
 	public void beforeTest() throws SQLException {
-		Query.insertValue();
+		SQL_Statement.insertValue();
 	}
 
 	@After
 	public void afterTest() throws SQLException {
-		Query.deleteAllFromTable();
+		SQL_Statement.deleteAllFromTable();
 
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testCreateUserNullPointerException() {
 		UserDAOImpl userDAO = new UserDAOImpl();
 		userDAO.create(new User(null, "Andriy", "Mural", "1", null, "64561", Sex.FEMALE, "1999-03-02",
@@ -57,20 +58,9 @@ public class TestUserDAO {
 				"folder/folder/image.png", "2"));
 		User userActual = new User();
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name ='hary12';");
-			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name ='hary12';");
+			ResultSet rs = SQL_Statement.ps.executeQuery();
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -79,6 +69,7 @@ public class TestUserDAO {
 		assertEquals("Andriy", userActual.getFirst_name());
 		assertEquals("Mural", userActual.getSecond_name());
 		assertEquals("bg@gmail.com", userActual.getE_mail());
+		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("1", userActual.getAddress());
 		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
@@ -92,22 +83,22 @@ public class TestUserDAO {
 		UserDAOImpl userDAO = new UserDAOImpl();
 		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10",
 				"some.jpeg", "1");
-		user.setUuid(userDAO.getGeneratedId());
+		user.setUuid(UUID.randomUUID().toString());
 		try {
-			Query.ps = Query.connection
+			SQL_Statement.ps = SQL_Statement.connection
 					.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-			Query.ps.setString(1, user.getUuid());
-			Query.ps.setString(2, user.getNick_name());
-			Query.ps.setString(3, user.getFirst_name());
-			Query.ps.setString(4, user.getSecond_name());
-			Query.ps.setString(5, user.getAddress());
-			Query.ps.setString(6, user.getE_mail());
-			Query.ps.setString(7, user.getPassword());
-			Query.ps.setString(8, user.getSex());
-			Query.ps.setString(9, user.getDate_of_birth());
-			Query.ps.setString(10, user.getAvatar());
-			Query.ps.setString(11, user.getRole());
-			Query.ps.execute();
+			SQL_Statement.ps.setString(1, user.getUuid());
+			SQL_Statement.ps.setString(2, user.getNick_name());
+			SQL_Statement.ps.setString(3, user.getFirst_name());
+			SQL_Statement.ps.setString(4, user.getSecond_name());
+			SQL_Statement.ps.setString(5, user.getAddress());
+			SQL_Statement.ps.setString(6, user.getE_mail());
+			SQL_Statement.ps.setString(7, user.getPassword());
+			SQL_Statement.ps.setString(8, user.getSex());
+			SQL_Statement.ps.setString(9, user.getDate_of_birth());
+			SQL_Statement.ps.setString(10, user.getAvatar());
+			SQL_Statement.ps.setString(11, user.getRole());
+			SQL_Statement.ps.execute();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -116,22 +107,10 @@ public class TestUserDAO {
 		userDAO.update(user);
 		User userActual = new User();
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
-			Query.ps.setString(1, user.getNick_name());
-			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
-
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name =?");
+			SQL_Statement.ps.setString(1, user.getNick_name());
+			ResultSet rs = SQL_Statement.ps.executeQuery();
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -173,22 +152,10 @@ public class TestUserDAO {
 	public void testGetByNickName() {
 		User userActual = new User();
 		try {
-			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
-			Query.ps.setString(1, "TreeTree");
-			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
-
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name =?");
+			SQL_Statement.ps.setString(1, "TreeTree");
+			ResultSet rs = SQL_Statement.ps.executeQuery();
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -222,4 +189,24 @@ public class TestUserDAO {
 
 	}
 
+	private User resultSet(ResultSet rs) {
+		User user = new User();
+		try {
+			while (rs.next()) {
+				user.setNick_name(rs.getString("nick_name"));
+				user.setFirst_name(rs.getString("first_name"));
+				user.setSecond_name(rs.getString("second_name"));
+				user.setAddress(rs.getString("address_id"));
+				user.setE_mail(rs.getString("e_mail"));
+				user.setPassword(rs.getString("password"));
+				user.setSex(rs.getString("Sex"));
+				user.setDate_of_birth(rs.getString("date_of_birth"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setRole(rs.getString("role"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
 }

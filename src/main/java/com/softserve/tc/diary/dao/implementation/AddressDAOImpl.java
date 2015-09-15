@@ -14,7 +14,7 @@ import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
 
-public class AddressDAOImpl implements AddressDAO, IdGenerator {
+public class AddressDAOImpl implements AddressDAO{
 
     private static Connection conn = null;
     private static PreparedStatement ps;
@@ -27,7 +27,7 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn
                     .prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
-            ps.setString(1, getGeneratedId());
+            ps.setString(1, UUID.randomUUID().toString());
             ps.setString(2, object.getCountry());
             ps.setString(3, object.getCity());
             ps.setString(4, object.getStreet());
@@ -105,11 +105,6 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
             logger.error("Can't getAll address", e);
         }
         return list;
-    }
-
-    public String getGeneratedId() {
-        UUID idOne = UUID.randomUUID();
-        return idOne.toString();
     }
 
 }

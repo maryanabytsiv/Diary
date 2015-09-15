@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +14,6 @@ import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
-import com.softserve.tc.diary.entity.Tag;
 
 /**
  * 
@@ -22,25 +21,24 @@ import com.softserve.tc.diary.entity.Tag;
  *
  */
 
-public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
+public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 
 	private static Connection conn = null;
-	private static PreparedStatement ps;
-	private static PreparedStatement ps1;
-
-	public String getGeneratedId() {
-		UUID idOne = UUID.randomUUID();
-		return idOne.toString();
-	}
+	private static PreparedStatement ps = null;
+	private static ResultSet rs = null;
 
 	public void create(Record object) {
-		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+//		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
 		
 		try {
+		if ((object.getVisibility() == null)) {
+			System.err.println("!!!!!!!!Please, enter your visibility (PUBLIC / PRIVATE) !!!!!!!");
+			throw new NullPointerException();
+		} else {
 			conn = ConnectManager.getConnectionToTestDB();
 
 			ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,?);");
-			ps.setString(1, getGeneratedId());
+			ps.setString(1, UUID.randomUUID().toString());
 			ps.setString(2, object.getUser_name());
 			ps.setTimestamp(3, object.getCreated_time());
 			ps.setString(4, object.getText());
@@ -48,6 +46,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 			ps.setString(6, object.getVisibility());
 			ps.execute();
 			ps.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -59,7 +58,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>, IdGenerator {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from record_list where id_rec=?;");
 			ps.setString(1, id);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5), Status.PRIVATE);				
 			}
