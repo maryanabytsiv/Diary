@@ -172,7 +172,7 @@ public class TestUserDAO {
 		assertEquals("Gontar", userActual.getSecond_name());
 		assertEquals("jhfcjfdf@gmail.com", userActual.getE_mail());
 		assertEquals("3", userActual.getAddress());
-		assertEquals(PasswordHelper.encrypt("flgkjhlkftjt"), userActual.getPassword());
+		assertEquals("flgkjhlkftjt", userActual.getPassword());
 		assertEquals("MALE", userActual.getSex());
 		assertEquals("1989-02-20", userActual.getDate_of_birth());
 		assertEquals(null, userActual.getAvatar());
