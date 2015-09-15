@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;
 
 import org.junit.After;
@@ -16,15 +15,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RoleDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.User;
+import com.softserve.tc.log.Log;
 
 public class TestRoleDAO {
-        static final Logger logger = Logger.getLogger(TestRoleDAO.class);
-	@BeforeClass
+        private Logger logger = Log.init(this.getClass().getName());
+	
+        @BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SQL_Statement.setUpBeforeClass();
 	}
@@ -41,7 +41,6 @@ public class TestRoleDAO {
 
 	@Test
 	public void testCreateRole() {
-	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 
 		roleDAO.create(new Role("Administrator"));
@@ -62,7 +61,6 @@ public class TestRoleDAO {
 
 	@Test
 	public void testUpdateRole() {
-	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 
 		Role role = new Role("reader");
@@ -73,7 +71,6 @@ public class TestRoleDAO {
 			SQL_Statement.ps.setString(2, role.getName());
 			SQL_Statement.ps.execute();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			logger.error("insert failed", e1);
 		}
 		role.setName("reader");
@@ -86,7 +83,6 @@ public class TestRoleDAO {
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				roleActual.setName(rs.getString("name"));
-
 			}
 
 		} catch (SQLException e) {
@@ -99,7 +95,6 @@ public class TestRoleDAO {
 
 	@Test
 	public void testDeleteRole() {
-	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 		Role role = new Role("Admin");
 		//roleDAO.create(role);
@@ -136,7 +131,6 @@ public class TestRoleDAO {
 
 	@Test
 	public void testGetAll() {
-	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 		Role role = new Role("SomeUser");
 		roleDAO.create(role);

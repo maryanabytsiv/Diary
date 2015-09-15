@@ -50,7 +50,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	public void create(Tag object) {
 		String tagMessage = object.getTagMessage();
 		if (true == checkIfTagExist(tagMessage)) {
-			System.out.println("Tag already exist");
+			logger.warn("Tag already exist");
 		} else {
 		try {
 			if ((conn == null) || (conn.isClosed())) {

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,9 +20,11 @@ import com.softserve.tc.diary.dao.implementation.PasswordHelper;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
+import com.softserve.tc.log.Log;
 
 public class TestUserDAO {
-
+        private Logger logger = Log.init(this.getClass().getName());
+        
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
 		SQL_Statement.setUpBeforeClass();
@@ -62,7 +65,7 @@ public class TestUserDAO {
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
 		assertEquals("hary12", userActual.getNick_name());
@@ -76,6 +79,7 @@ public class TestUserDAO {
 		assertEquals("1995-03-02", userActual.getDate_of_birth());
 		assertEquals("folder/folder/image.png", userActual.getAvatar());
 		assertEquals("2", userActual.getRole());
+		logger.info("test create user");
 	}
 
 	@Test
@@ -100,7 +104,7 @@ public class TestUserDAO {
 			SQL_Statement.ps.setString(11, user.getRole());
 			SQL_Statement.ps.execute();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			logger.error("insert failed", e1);
 		}
 		user.setFirst_name("IRA");
 		user.setSecond_name("BLLLLL");
@@ -112,7 +116,7 @@ public class TestUserDAO {
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
 		assertEquals("read", userActual.getNick_name());
@@ -125,6 +129,7 @@ public class TestUserDAO {
 		assertEquals("1999-10-10", userActual.getDate_of_birth());
 		assertEquals("some.jpeg", userActual.getAvatar());
 		assertEquals("1", userActual.getRole());
+		logger.info("test update user");
 	}
 
 	@Test
@@ -135,6 +140,7 @@ public class TestUserDAO {
 		userDAO.create(user);
 		userDAO.delete(user);
 		assertNull(userDAO.readByKey("delete"));
+		logger.info("test delete user");
 	}
 
 	@Test
@@ -146,6 +152,7 @@ public class TestUserDAO {
 		int actual = userDAO.getAll().size();
 		int expected = 4;
 		assertEquals(expected, actual);
+		logger.info("test get all");
 	}
 
 	@Test
@@ -157,7 +164,7 @@ public class TestUserDAO {
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
 		assertEquals("TreeTree", userActual.getNick_name());
@@ -170,6 +177,7 @@ public class TestUserDAO {
 		assertEquals("1989-02-20", userActual.getDate_of_birth());
 		assertEquals(null, userActual.getAvatar());
 		assertEquals("2", userActual.getRole());
+		logger.info("test get by nickname");
 	}
 
 	@Test
@@ -205,7 +213,7 @@ public class TestUserDAO {
 				user.setRole(rs.getString("role"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("result set failed", e);
 		}
 		return user;
 	}

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,9 +18,11 @@ import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
+import com.softserve.tc.log.Log;
 
 public class TestTagDAO {
-
+        private Logger logger = Log.init(this.getClass().getName());
+    
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
 		SQL_Statement.setUpBeforeClass();
@@ -50,6 +53,7 @@ public class TestTagDAO {
 		
 		assertEquals("#HellGuy", tag1.getTagMessage());
 		assertNull(tag2);
+		logger.info("test get tag by message");
 	}
 	
 	@Test
@@ -67,14 +71,14 @@ public class TestTagDAO {
 				workingTag = new Tag(rs.getString("tag_message"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertNotNull(workingTag);
 		assertEquals("#HelloWorldWide", workingTag.getTagMessage());
 		
 		Tag tagAlreadyExist = new Tag("#HelloWorld");
 		tagDAO.create(tagAlreadyExist);
-		
+		logger.info("test create tag");
 	}
 	
 	@Test
@@ -93,7 +97,7 @@ public class TestTagDAO {
 				countTagRecordBefore = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 
 		tagDAO.createFromRecord(rec_id, tagMessage);
@@ -109,9 +113,10 @@ public class TestTagDAO {
 				countTagRecordAfter = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("execute query failed", e);
 		}
 		assertEquals(countTagRecordAfter, countTagRecordBefore + 1);
+		logger.info("test create from record");
 	}
 
 	@Test
@@ -123,6 +128,7 @@ public class TestTagDAO {
 		Tag notExistTag = new Tag("#Pelmeni");
 		result = dao.checkIfTagExist(notExistTag.getTagMessage());
 		assertFalse(result);
+		logger.info("test check if tag already exist");
 	}
 	
 	@Test
@@ -135,6 +141,7 @@ public class TestTagDAO {
 		uuid = "testkey10";
 		tag = tagDAO.readByKey(uuid);
 		assertNull(tag);
+		logger.info("test read by key");
 	}
 
 	@Test
@@ -151,9 +158,10 @@ public class TestTagDAO {
 				count++;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertEquals(0, count);
+		logger.info("test delete from tag_record");
 	}
 	
 	@Test
@@ -163,7 +171,7 @@ public class TestTagDAO {
 		tagDAO.delete(listBeforeDel.get(2));
 		List<Tag> listAfterDel = tagDAO.getAll();
 		assertEquals(listBeforeDel.size() - 1, listAfterDel.size());
-
+		logger.info("test delete tag");
 	}
 
 	@Test
@@ -175,6 +183,7 @@ public class TestTagDAO {
 		assertEquals("#Hello", list.get(0).getTagMessage());
 		assertEquals("#Bob.", list.get(1).getTagMessage());
 		assertEquals("#NewYork", list.get(2).getTagMessage());
+		logger.info("test check if record has tag");
 	}
 	
 	@Test
@@ -183,6 +192,7 @@ public class TestTagDAO {
 		String prefix = "#Hello";
 		List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
 		assertEquals(3, list.size());
+		logger.info("test get list tags by prefix");
 	}
 
 	@Test
@@ -191,6 +201,7 @@ public class TestTagDAO {
 		String suffix = "ell";
 		List<Tag> list = tagDAO.getListTagsBySuffix(suffix);
 		assertEquals(5, list.size());
+		logger.info("test get list tags by suffix");
 	}
 	
 	@Test
@@ -198,6 +209,7 @@ public class TestTagDAO {
 		TagDAOImpl tagDAO = new TagDAOImpl();
 		List<Tag> list = tagDAO.getAll();
 		assertEquals(9, list.size());
+		logger.info("test get all");
 	}
 
 	@Test
@@ -206,6 +218,7 @@ public class TestTagDAO {
 		Tag tag = new Tag("testkey5", "#nice");
 		List<Record> list = tagDAO.getListRecordsByTag(tag);
 		assertEquals(list.size(), 2);
+		logger.info("test get list record by tag");
 	}
 	
 	@Test
