@@ -6,19 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.Logger;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RoleDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.User;
 
 public class TestRoleDAO {
-
+        static final Logger logger = Logger.getLogger(TestRoleDAO.class);
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Query.setUpBeforeClass();
@@ -36,6 +39,7 @@ public class TestRoleDAO {
 
 	@Test
 	public void testCreateRole() {
+	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 
 		roleDAO.create(new Role("Administrator"));
@@ -47,16 +51,16 @@ public class TestRoleDAO {
 				role.setName(rs.getString("name"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 
 		assertEquals("Administrator", role.getName());
-
+		logger.info("Test create role");
 	}
 
 	@Test
 	public void testUpdateRole() {
-
+	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 
 		Role role = new Role("reader");
@@ -68,7 +72,7 @@ public class TestRoleDAO {
 			Query.ps.execute();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error("insert failed", e1);
 		}
 		role.setName("reader");
 
@@ -84,15 +88,16 @@ public class TestRoleDAO {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		assertNotNull(roleActual);
 		assertEquals("reader", roleActual.getName());
+		logger.info("test update role");
 	}
 
 	@Test
 	public void testDeleteRole() {
+	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 		Role role = new Role("Admin");
 		//roleDAO.create(role);
@@ -116,8 +121,7 @@ public class TestRoleDAO {
 				list.add(userActual);
             }
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		UserDAOImpl ud = new UserDAOImpl();
 		for(User u:list){
@@ -125,15 +129,18 @@ public class TestRoleDAO {
 		}
 		roleDAO.delete(role);
 		assertNull(roleDAO.readByKey("Admin"));
+		logger.info("test delete role");
 	}
 
 	@Test
 	public void testGetAll() {
+	        PropertyConfigurator.configure("log4j.properties");
 		RoleDAOImpl roleDAO = new RoleDAOImpl();
 		Role role = new Role("SomeUser");
 		roleDAO.create(role);
 		int actual = roleDAO.getAll().size();
 		int expected = 3;
 		assertEquals(expected, actual);
+		logger.info("test getAll");
 	}
 }

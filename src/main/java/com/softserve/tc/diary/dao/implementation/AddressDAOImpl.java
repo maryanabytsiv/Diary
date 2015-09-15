@@ -7,22 +7,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
-import com.softserve.tc.diary.entity.User;
 
 public class AddressDAOImpl implements AddressDAO, IdGenerator {
 
     private static Connection conn = null;
     private static PreparedStatement ps;
+    static final Logger logger = Logger.getLogger(AddressDAOImpl.class);
 
     public void create(Address object) {
-        
+        PropertyConfigurator.configure("log4j.properties");
+        logger.debug("Creating address");
         try {
             conn = ConnectManager.getConnectionToTestDB();
-            ps = conn.prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
+            ps = conn
+                    .prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
             ps.setString(1, getGeneratedId());
             ps.setString(2, object.getCountry());
             ps.setString(3, object.getCity());
@@ -30,13 +34,16 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
             ps.setInt(5, object.getBuild_number());
             ps.execute();
             ps.close();
+            logger.debug("Address created");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Creating address failed", e);
         }
     }
 
     public Address readByKey(String id) {
+        PropertyConfigurator.configure("log4j.properties");
         Address address = null;
+        logger.debug("Reading by key");
         try {
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement("select * from address where id=?");
@@ -45,75 +52,48 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
             }
+            logger.debug("ReadByKey done");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't select from Address", e);
         }
         return address;
     }
 
     public void update(Address object) {
+        PropertyConfigurator.configure("log4j.properties");
+        logger.debug("Updating address");
         try {
             conn = ConnectManager.getConnectionToTestDB();
-            ps = conn.prepareStatement(
-                    "update address set country = ? where id = ?");
+            ps = conn.prepareStatement("update address set country = ? where id = ?");
             ps.setString(1, object.getCountry());
             ps.setString(2, object.getId());
             ps.execute();
             ps.close();
+            logger.debug("Address updated");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't update address", e);
         }
 
     }
 
     public void delete(Address object) {
+        PropertyConfigurator.configure("log4j.properties");
         try {
+            logger.debug("Deleting address");
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement("delete from address where id=?");
             ps.setString(1, object.getId());
             ps.execute();
+            logger.debug("Address deleted");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't delete address", e);
         }
     }
 
-    public List<User> getUsersByCountry(String country) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<User> getUsersByCity(String city) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<Address> getByCity(String city) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public String getMostCommonCountry() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public int countAllByCountry(String country) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public int countAllByCity(String city) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public int countAllByStreet(String city) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     public List<Address> getAll() {
+        PropertyConfigurator.configure("log4j.properties");
         List<Address> list = new ArrayList<Address>();
+        logger.debug("Get all address records");
         try {
             conn = ConnectManager.getConnectionToTestDB();
             ps = conn.prepareStatement("select * from address");
@@ -122,7 +102,7 @@ public class AddressDAOImpl implements AddressDAO, IdGenerator {
                 list.add(new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't getAll address", e);
         }
         return list;
     }

@@ -1,7 +1,6 @@
 package com.softserve.tc.diary.dao.implementation;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,34 +12,59 @@ import org.jasypt.util.password.BasicPasswordEncryptor;
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
-import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 	private static Connection conn = null;
-	private static PreparedStatement ps;
+	private static PreparedStatement ps = null;
+	private static ResultSet rs;
+
+	public static void close() {
+		try {
+			if (rs != null)
+				rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (ps != null)
+				ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void create(User object) {
 		try {
 			BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-			ps.setString(1, getGeneratedId());
-			ps.setString(2, object.getNick_name());
-			ps.setString(3, object.getFirst_name());
-			ps.setString(4, object.getSecond_name());
-			ps.setString(5, object.getAddress());
-			ps.setString(6, object.getE_mail());
-			ps.setString(7, passwordEncryptor.encryptPassword(object.getPassword()));
-			ps.setString(8, object.getSex());
-			ps.setString(9, object.getDate_of_birth());
-			ps.setString(10, object.getAvatar());
-			ps.setString(11, object.getRole());
-			ps.execute();
-			ps.close();
+			if ((object.getRole() == null) || (object.getE_mail() == null) || (object.getNick_name() == null)) {
+				System.err.println("!!!!!!!!You not enter nickname, e-mail or role!!!!!!!");
+				throw new NullPointerException();
+			} else {
+				conn = ConnectManager.getConnectionToTestDB();
+				ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
+				ps.setString(1, getGeneratedId());
+				ps.setString(2, object.getNick_name());
+				ps.setString(3, object.getFirst_name());
+				ps.setString(4, object.getSecond_name());
+				ps.setString(5, object.getAddress());
+				ps.setString(6, object.getE_mail());
+				ps.setString(7, passwordEncryptor.encryptPassword(object.getPassword()));
+				ps.setString(8, object.getSex().toUpperCase());
+				ps.setString(9, object.getDate_of_birth());
+				ps.setString(10, object.getAvatar());
+				ps.setString(11, object.getRole());
+				ps.execute();
+
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -57,17 +81,15 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps.setString(4, object.getAddress());
 			ps.setString(5, object.getE_mail());
 			ps.setString(6, object.getPassword());
-			ps.setString(7, object.getSex());
+			ps.setString(7, object.getSex().toUpperCase());
 			ps.setString(8, object.getDate_of_birth());
 			ps.setString(9, object.getAvatar());
 			ps.setString(10, object.getRole());
 			ps.setString(11, object.getNick_name());
 			ps.execute();
-			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void delete(User object) {
@@ -76,10 +98,10 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 			ps = conn.prepareStatement("delete from user_card where nick_name=?");
 			ps.setString(1, object.getNick_name());
 			ps.execute();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public List<User> getAll() {
@@ -87,13 +109,14 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from user_card");
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				list.add(new User(rs.getString("nick_name"), rs.getString("first_name"), rs.getString("second_name"),
 						rs.getString("address_id"), rs.getString("e_mail"), rs.getString("password"),
 						Sex.valueOf(rs.getString("Sex")), rs.getString("date_of_birth"), rs.getString("avatar"),
 						rs.getString("role")));
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -105,31 +128,62 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		try {
 			ps = conn.prepareStatement("select * from user_card where nick_name =?;");
 			ps.setString(1, user.getNick_name());
-			ResultSet rs = ps.executeQuery();
-			if (!ps.executeQuery().next())
-				return null;
-			while (rs.next()) {
-				user.setNick_name(rs.getString("nick_name"));
-				user.setFirst_name(rs.getString("first_name"));
-				user.setSecond_name(rs.getString("second_name"));
-				user.setAddress(rs.getString("address_id"));
-				user.setE_mail(rs.getString("e_mail"));
-				user.setPassword(rs.getString("password"));
-				user.setSex(rs.getString("Sex"));
-				user.setDate_of_birth(rs.getString("date_of_birth"));
-				user.setAvatar(rs.getString("avatar"));
-				user.setRole(rs.getString("role"));
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				while (rs.next()) {
+					user.setNick_name(rs.getString("nick_name"));
+					user.setFirst_name(rs.getString("first_name"));
+					user.setSecond_name(rs.getString("second_name"));
+					user.setAddress(rs.getString("address_id"));
+					user.setE_mail(rs.getString("e_mail"));
+					user.setPassword(rs.getString("password"));
+					user.setSex(rs.getString("Sex"));
+					user.setDate_of_birth(rs.getString("date_of_birth"));
+					user.setAvatar(rs.getString("avatar"));
+					user.setRole(rs.getString("role"));
+				}
+				return user;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return user;
+		return null;
 	}
 
-	public int countAllBySex(Sex sex) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int countAllBySex(String sex) {
+		int users = 0;
+		try {
+			conn = ConnectManager.getConnectionToTestDB();
+			ps = conn.prepareStatement("select * from user_card where sex =?;");
+			ps.setString(1, sex.toUpperCase());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				users++;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return users;
 	}
 
 	public String getGeneratedId() {
@@ -137,14 +191,26 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User>, IdGenerator {
 		return idOne.toString();
 	}
 
-	public List<User> getByDateOfBirth(Date dateOfBirth) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getByYearOfBirth(String yearOfBirth) {
+		List<User> usersByYear = new ArrayList<User>();
+		String rangeFrom = yearOfBirth + "-01-01";
+		String rangeTo = yearOfBirth + "-12-31";
+		try {
+			conn = ConnectManager.getConnectionToTestDB();
+			ps = conn.prepareStatement(
+					"select * from user_card where date_of_birth>CAST(? AS DATE) AND date_of_birth<CAST(? AS DATE); ");
+			ps.setString(1, rangeFrom);
+			ps.setString(2, rangeTo);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				usersByYear.add(new User(rs.getString("nick_name"), rs.getString("first_name"),
+						rs.getString("second_name"), rs.getString("address_id"), rs.getString("e_mail"),
+						rs.getString("password"), Sex.valueOf(rs.getString("Sex")), rs.getString("date_of_birth"),
+						rs.getString("avatar"), rs.getString("role")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return usersByYear;
 	}
-
-	public List<User> getByDateOfBirth(String dateOfBirth) {
-
-		return null;
-	}
-
 }
