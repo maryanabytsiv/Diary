@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.dao.implementation.PasswordHelper;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
@@ -58,18 +59,7 @@ public class TestUserDAO {
 		try {
 			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name ='hary12';");
 			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -78,6 +68,7 @@ public class TestUserDAO {
 		assertEquals("Andriy", userActual.getFirst_name());
 		assertEquals("Mural", userActual.getSecond_name());
 		assertEquals("bg@gmail.com", userActual.getE_mail());
+		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("1", userActual.getAddress());
 		assertEquals("FEMALE", userActual.getSex());
 		assertEquals("1995-03-02", userActual.getDate_of_birth());
@@ -117,19 +108,7 @@ public class TestUserDAO {
 			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
 			Query.ps.setString(1, user.getNick_name());
 			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
-
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -174,19 +153,7 @@ public class TestUserDAO {
 			Query.ps = Query.connection.prepareStatement("select * from user_card where nick_name =?");
 			Query.ps.setString(1, "TreeTree");
 			ResultSet rs = Query.ps.executeQuery();
-			while (rs.next()) {
-				userActual.setNick_name(rs.getString("nick_name"));
-				userActual.setFirst_name(rs.getString("first_name"));
-				userActual.setSecond_name(rs.getString("second_name"));
-				userActual.setAddress(rs.getString("address_id"));
-				userActual.setE_mail(rs.getString("e_mail"));
-				userActual.setPassword(rs.getString("password"));
-				userActual.setSex(rs.getString("Sex"));
-				userActual.setDate_of_birth(rs.getString("date_of_birth"));
-				userActual.setAvatar(rs.getString("avatar"));
-				userActual.setRole(rs.getString("role"));
-			}
-
+			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -220,4 +187,24 @@ public class TestUserDAO {
 
 	}
 
+	private User resultSet(ResultSet rs) {
+		User user = new User();
+		try {
+			while (rs.next()) {
+				user.setNick_name(rs.getString("nick_name"));
+				user.setFirst_name(rs.getString("first_name"));
+				user.setSecond_name(rs.getString("second_name"));
+				user.setAddress(rs.getString("address_id"));
+				user.setE_mail(rs.getString("e_mail"));
+				user.setPassword(rs.getString("password"));
+				user.setSex(rs.getString("Sex"));
+				user.setDate_of_birth(rs.getString("date_of_birth"));
+				user.setAvatar(rs.getString("avatar"));
+				user.setRole(rs.getString("role"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
 }
