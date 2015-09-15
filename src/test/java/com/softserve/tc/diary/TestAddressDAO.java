@@ -21,12 +21,12 @@ public class TestAddressDAO {
 
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-        Query.setUpBeforeClass();
+        SQL_Statement.setUpBeforeClass();
     }
 
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-        Query.DropTableIfExists();
+        SQL_Statement.DropTableIfExists();
     }
 
     @Test
@@ -38,13 +38,13 @@ public class TestAddressDAO {
         Address address = null;
 
         try {
-            Query.ps = Query.connection.prepareStatement(
+            SQL_Statement.ps = SQL_Statement.connection.prepareStatement(
                     "select * from address where country = ? and city = ? and street = ? and build_number = ?");
-            Query.ps.setString(1, newAddress.getCountry());
-            Query.ps.setString(2, newAddress.getCity());
-            Query.ps.setString(3, newAddress.getStreet());
-            Query.ps.setInt(4, newAddress.getBuild_number());
-            ResultSet rs = Query.ps.executeQuery();
+            SQL_Statement.ps.setString(1, newAddress.getCountry());
+            SQL_Statement.ps.setString(2, newAddress.getCity());
+            SQL_Statement.ps.setString(3, newAddress.getStreet());
+            SQL_Statement.ps.setInt(4, newAddress.getBuild_number());
+            ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
             }
@@ -67,23 +67,23 @@ public class TestAddressDAO {
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
         add.setId(addressDAO.getGeneratedId());
         try {
-            Query.ps = Query.connection
+            SQL_Statement.ps = SQL_Statement.connection
                     .prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
-            Query.ps.setString(1, add.getId());
-            Query.ps.setString(2, add.getCountry());
-            Query.ps.setString(3, add.getCity());
-            Query.ps.setString(4, add.getStreet());
-            Query.ps.setInt(5, add.getBuild_number());
-            Query.ps.execute();
+            SQL_Statement.ps.setString(1, add.getId());
+            SQL_Statement.ps.setString(2, add.getCountry());
+            SQL_Statement.ps.setString(3, add.getCity());
+            SQL_Statement.ps.setString(4, add.getStreet());
+            SQL_Statement.ps.setInt(5, add.getBuild_number());
+            SQL_Statement.ps.execute();
         } catch (SQLException e1) {
             logger.error("insert failed", e1);
         }
         addressDAO.update(add);
         Address address = null;
         try {
-            Query.ps = Query.connection.prepareStatement("select * from address where id=?");
-            Query.ps.setString(1, add.getId());
-            ResultSet rs = Query.ps.executeQuery();
+            SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from address where id=?");
+            SQL_Statement.ps.setString(1, add.getId());
+            ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
                 address.setId(rs.getString(1));

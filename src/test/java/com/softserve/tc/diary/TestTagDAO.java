@@ -22,22 +22,22 @@ public class TestTagDAO {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
-		Query.setUpBeforeClass();
+		SQL_Statement.setUpBeforeClass();
 	}
 
 	@Before
 	public void beforeTest() throws SQLException{
-		Query.insertValue();
+		SQL_Statement.insertValue();
 	}
 
 	@After
 	public void afterTest() throws SQLException {
-		Query.deleteAllFromTable();
+		SQL_Statement.deleteAllFromTable();
 	}
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws SQLException {
-		Query.DropTableIfExists();
+		SQL_Statement.DropTableIfExists();
 		}
 
 	@Test
@@ -61,8 +61,8 @@ public class TestTagDAO {
 			String query1 = "SELECT tag_message FROM tag " + "WHERE tag_message Like '#HelloWorldWide';";
 			// String query2 = "SELECT tag_message FROM tag "
 			// + "WHERE tag_message Like '#HelloWorld';";
-			Query.ps = Query.connection.prepareStatement(query1);
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement(query1);
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				workingTag = new Tag(rs.getString("tag_message"));
 			}
@@ -87,8 +87,8 @@ public class TestTagDAO {
 		int countTagRecordBefore = 0;
 		String query = "Select COUNT(*) from tag_record";
 		try {
-			Query.ps = Query.connection.prepareStatement(query);
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement(query);
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				countTagRecordBefore = rs.getInt(1);
 			}
@@ -103,8 +103,8 @@ public class TestTagDAO {
 
 		int countTagRecordAfter = 0;
 		try {
-			Query.ps = Query.connection.prepareStatement(query);
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement(query);
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				countTagRecordAfter = rs.getInt(1);
 			}
@@ -145,8 +145,8 @@ public class TestTagDAO {
 		String query = "Select * from tag_record where tag_uuid like '" + uuid + "';";
 		int count = 0;
 		try {
-			Query.ps = Query.connection.prepareStatement(query);
-			ResultSet rs = Query.ps.executeQuery();
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement(query);
+			ResultSet rs = SQL_Statement.ps.executeQuery();
 			while (rs.next()) {
 				count++;
 			}
