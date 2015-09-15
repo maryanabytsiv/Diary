@@ -9,17 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
+import com.softserve.tc.log.Log;
 
 public class TagDAOImpl implements TagDAO, IdGenerator {
 
 	private static Connection conn;
 	private static PreparedStatement ps;
-
+	private Logger logger = Log.init(this.getClass().getName());
+	
 	public String getGeneratedId() {
 		UUID idOne = UUID.randomUUID();
 		return idOne.toString();
@@ -38,7 +42,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 				tag = new Tag(rs.getString(1), rs.getString(2));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("can't get tag by message", e);
 		}
 		return tag;
 	}
@@ -58,7 +62,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			ps.setString(2, object.getTagMessage());
 			ps.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("can't create tag", e);
 		}
 		}
 	}
@@ -75,7 +79,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 
 	public void createFromRecord(String recordId, String tagMessage) {
 		if (true == checkIfTagExist(tagMessage)) {
-			System.out.println("Tag already exist");
+			logger.warn("Tag already exist");
 		} else {
 		try {
 			if ((conn == null) || (conn.isClosed())) {
@@ -88,7 +92,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			ps.execute();
 			insertValuesInTagRecord(recordId, tagId);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("can't create from record", e);
 		}
 		}
 	}
@@ -106,7 +110,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		ps.setString(3, tagId);
 		ps.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("insert failed", e);
 		}
 	}
 
@@ -124,7 +128,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			ps = conn.prepareStatement(query);
 			ps.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("delete failed", e);
 		}
 	}
 	
@@ -139,7 +143,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			ps = conn.prepareStatement(query);
 			ps.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("delete from tag_record failed", e);
 		}
 	}
 	
@@ -157,7 +161,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 				list.add(new Tag(rs.getString(1)));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select failed", e);
 		}
 		return list;
 	}
@@ -175,7 +179,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 				list.add(new Tag(rs.getString(1)));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select by suffix failed", e);
 		}
 		return list;
 	}
@@ -203,7 +207,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 				listRecordsWithTag.add(rec);
 			}
 		}catch (SQLException e) {
-			
+			logger.error("select by tag failed", e);
 		}
 		
 		return listRecordsWithTag;
@@ -255,7 +259,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 				list.add(new Tag(rs.getString(1),rs.getString(2)));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("select all failed", e);
 		}
 		return list;
 	}
@@ -273,7 +277,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		tag = new Tag(rs.getString(1), rs.getString(2));
 		}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("read by key failed", e);
 		}
 		return tag;
 	}
@@ -290,6 +294,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	}
 
 	public void update(Tag object) {
-
+	    logger.info("not supported");
 	}
 }

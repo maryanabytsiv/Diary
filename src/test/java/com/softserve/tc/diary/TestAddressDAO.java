@@ -18,7 +18,7 @@ import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.log.Log;
 
 public class TestAddressDAO {
-    Logger logger = Log.init(this.getClass().getName());
+    private Logger logger = Log.init(this.getClass().getName());
 
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {

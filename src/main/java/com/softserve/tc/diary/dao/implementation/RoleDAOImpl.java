@@ -1,30 +1,25 @@
 package com.softserve.tc.diary.dao.implementation;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RoleDAO;
-import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Role;
-import com.softserve.tc.diary.entity.Sex;
-import com.softserve.tc.diary.entity.Tag;
-import com.softserve.tc.diary.entity.User;
+import com.softserve.tc.log.Log;
 
 public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 
 	private static Connection conn;
 	private static PreparedStatement ps;
-	static final Logger logger = Logger.getLogger(RoleDAOImpl.class);
+	private Logger logger = Log.init(this.getClass().getName());
 	
 	private static void getConnection() {
 		try {
@@ -35,7 +30,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 	}
 
 	public void create(Role object) {
-	        PropertyConfigurator.configure("log4j.properties");
 		getConnection();
 		logger.debug("Creating role");
 		try {
@@ -51,7 +45,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 	}
 
 	public Role readByKey(String id) { // id as NAME
-	        PropertyConfigurator.configure("log4j.properties");
 		Role role = new Role();
 		logger.debug("read by key");
 		try {
@@ -70,7 +63,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 	}
 
 	public void update(Role object) {
-	        PropertyConfigurator.configure("log4j.properties");
 	        logger.debug("updating role");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
@@ -86,7 +78,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 	}
 
 	public void delete(Role object) {
-	        PropertyConfigurator.configure("log4j.properties");
 	        logger.debug("deleting role");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
@@ -100,7 +91,6 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 	}
 
 	public List<Role> getAll() {
-	        PropertyConfigurator.configure("log4j.properties");
 		List<Role> list = new ArrayList<Role>();
 		logger.debug("Get all role records");
 		try {

@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+import com.softserve.tc.log.Log;
 
 /**
  * 
@@ -26,13 +29,14 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 	private static Connection conn = null;
 	private static PreparedStatement ps = null;
 	private static ResultSet rs = null;
-
+	private Logger logger = Log.init(this.getClass().getName());
+	
 	public void create(Record object) {
 //		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
-		
+		logger.debug("creating record");
 		try {
 		if ((object.getVisibility() == null)) {
-			System.err.println("!!!!!!!!Please, enter your visibility (PUBLIC / PRIVATE) !!!!!!!");
+		        logger.error("Please, enter your visibility (PUBLIC / PRIVATE)");
 			throw new NullPointerException();
 		} else {
 			conn = ConnectManager.getConnectionToTestDB();
@@ -47,13 +51,15 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			ps.execute();
 			ps.close();
 			}
+		logger.debug("record created");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("record create failed", e);
 		}
 	}
 
 	public Record readByKey(String id) {
 		Record record = null;
+		logger.debug("reading by key");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from record_list where id_rec=?;");
@@ -63,12 +69,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 				record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5), Status.PRIVATE);				
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("readByKey failed", e);
 		}
 		return record;
 	}
 
 	public void update(Record object) {
+	    logger.debug("updating record");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement(
@@ -82,12 +89,14 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			ps.setString(6, object.getUser_name());
 			ps.execute();
 			ps.close();
+			logger.debug("record updated");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("can't update record", e);
 		}
 	}
 
 	public void delete(Record object) {
+	    logger.debug("deleting record");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("delete from record_list where user_id_rec=?;");
@@ -105,9 +114,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			
 			ps.execute();
 			
-
+			logger.debug("record deleted");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("can't delete record", e);
 		}
 
 	}
@@ -128,7 +137,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 				record.setVisibility(rs.getString("visibility"));
 			}
 		} catch (SQLException error) {
-			error.printStackTrace();
+			logger.error("can't get record by name", error);
 		}
 		return record;
 	}
@@ -158,7 +167,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 							rs.getString(5), Status.valueOf(rs.getString(6))));
 				 }
 		 } catch (SQLException e) {
-		 e.printStackTrace();
+		 logger.error("can't get all records", e);
 		 }
 		return list;
 	}

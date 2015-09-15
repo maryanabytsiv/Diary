@@ -18,7 +18,7 @@ public class AddressDAOImpl implements AddressDAO {
 
     private static Connection conn = null;
     private static PreparedStatement ps;
-    Logger logger = Log.init(this.getClass().getName());
+    private Logger logger = Log.init(this.getClass().getName());
 
     public void create(Address object) {
         logger.debug("Creating address");
