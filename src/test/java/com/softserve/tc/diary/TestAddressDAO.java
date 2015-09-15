@@ -9,16 +9,16 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.entity.Address;
+import com.softserve.tc.log.Log;
 
 public class TestAddressDAO {
-    static final Logger logger = Logger.getLogger(TestAddressDAO.class);
+    Logger logger = Log.init(this.getClass().getName());
 
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
@@ -32,12 +32,10 @@ public class TestAddressDAO {
 
     @Test
     public void testCreateAddress() {
-        PropertyConfigurator.configure("log4j.properties");
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address newAddress = new Address("Ukraine", "IF", "street", 12);
         addressDAO.create(newAddress);
         Address address = null;
-
         try {
             SQL_Statement.ps = SQL_Statement.connection.prepareStatement(
                     "select * from address where country = ? and city = ? and street = ? and build_number = ?");
@@ -50,6 +48,7 @@ public class TestAddressDAO {
                 address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
             }
         } catch (SQLException e) {
+
             logger.error("select failed", e);
         }
 
@@ -63,7 +62,6 @@ public class TestAddressDAO {
 
     @Test
     public void testUpdateAddress() {
-        PropertyConfigurator.configure("log4j.properties");
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
         add.setId(UUID.randomUUID().toString());
@@ -102,7 +100,6 @@ public class TestAddressDAO {
 
     @Test
     public void TestDeleteAddress() {
-        PropertyConfigurator.configure("log4j.properties");
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
         addressDAO.create(address);

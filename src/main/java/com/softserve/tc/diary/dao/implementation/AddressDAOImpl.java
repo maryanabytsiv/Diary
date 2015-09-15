@@ -7,21 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.ConnectManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
+import com.softserve.tc.log.Log;
 
-public class AddressDAOImpl implements AddressDAO{
+public class AddressDAOImpl implements AddressDAO {
 
     private static Connection conn = null;
     private static PreparedStatement ps;
-    static final Logger logger = Logger.getLogger(AddressDAOImpl.class);
+    Logger logger = Log.init(this.getClass().getName());
 
     public void create(Address object) {
-        PropertyConfigurator.configure("log4j.properties");
         logger.debug("Creating address");
         try {
             conn = ConnectManager.getConnectionToTestDB();
@@ -41,7 +40,6 @@ public class AddressDAOImpl implements AddressDAO{
     }
 
     public Address readByKey(String id) {
-        PropertyConfigurator.configure("log4j.properties");
         Address address = null;
         logger.debug("Reading by key");
         try {
@@ -60,7 +58,6 @@ public class AddressDAOImpl implements AddressDAO{
     }
 
     public void update(Address object) {
-        PropertyConfigurator.configure("log4j.properties");
         logger.debug("Updating address");
         try {
             conn = ConnectManager.getConnectionToTestDB();
@@ -73,11 +70,9 @@ public class AddressDAOImpl implements AddressDAO{
         } catch (SQLException e) {
             logger.error("Can't update address", e);
         }
-
     }
 
     public void delete(Address object) {
-        PropertyConfigurator.configure("log4j.properties");
         try {
             logger.debug("Deleting address");
             conn = ConnectManager.getConnectionToTestDB();
@@ -91,7 +86,6 @@ public class AddressDAOImpl implements AddressDAO{
     }
 
     public List<Address> getAll() {
-        PropertyConfigurator.configure("log4j.properties");
         List<Address> list = new ArrayList<Address>();
         logger.debug("Get all address records");
         try {
@@ -106,5 +100,4 @@ public class AddressDAOImpl implements AddressDAO{
         }
         return list;
     }
-
 }
