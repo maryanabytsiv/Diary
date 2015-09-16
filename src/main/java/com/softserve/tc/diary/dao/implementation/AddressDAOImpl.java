@@ -69,9 +69,12 @@ public class AddressDAOImpl implements AddressDAO {
 		logger.debug("Updating address");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement("update address set country = ? where id = ?");
+			ps = conn.prepareStatement("update address set country = ?, city = ? ,street = ?, build_number = ?  where id = ?");
 			ps.setString(1, object.getCountry());
-			ps.setString(2, object.getId());
+			ps.setString(2, object.getCity());
+			ps.setString(3, object.getStreet());
+			ps.setString(4, object.getBuild_number());
+			ps.setString(5, object.getId());
 			ps.execute();
 			ps.close();
 			logger.debug("Address updated");

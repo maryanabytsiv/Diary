@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -49,19 +48,19 @@ public class TestUserDAO {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateUserNullPointerException() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User(null, "Andriy", "Mural", "1", null, "64561", Sex.FEMALE, "1999-03-02",
+		userDAO.create(new User(null, "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", null, "64561", Sex.FEMALE, "1999-03-02",
 				"folder/folder/image.png", null));
 	}
 
 	@Test
 	public void testCreateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User("hary12", "Andriy", "Mural", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1995-03-02",
+		userDAO.create(new User("hary12", "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561", Sex.FEMALE, "1995-03-02",
 				"folder/folder/image.png", "2"));
 		User userActual = new User();
 		try {
 			SQL_Statement.ps = SQL_Statement.connection
-					.prepareStatement("select * from user_card where nick_name ='hary12';");
+					.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name ='hary12';");
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
@@ -73,7 +72,7 @@ public class TestUserDAO {
 		assertEquals("Mural", userActual.getSecond_name());
 		assertEquals("bg@gmail.com", userActual.getE_mail());
 		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
-		assertEquals("1", userActual.getAddress());
+		assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
 		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
 		assertEquals("1995-03-02", userActual.getDate_of_birth());
@@ -85,33 +84,16 @@ public class TestUserDAO {
 	@Test
 	public void testUpdateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("read", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10",
+		User user = new User("read", "Natalya", "Bolyk", "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10",
 				"some.jpeg", "1");
-		user.setUuid(UUID.randomUUID().toString());
-		try {
-			SQL_Statement.ps = SQL_Statement.connection
-					.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
-			SQL_Statement.ps.setString(1, user.getUuid());
-			SQL_Statement.ps.setString(2, user.getNick_name());
-			SQL_Statement.ps.setString(3, user.getFirst_name());
-			SQL_Statement.ps.setString(4, user.getSecond_name());
-			SQL_Statement.ps.setString(5, user.getAddress());
-			SQL_Statement.ps.setString(6, user.getE_mail());
-			SQL_Statement.ps.setString(7, user.getPassword());
-			SQL_Statement.ps.setString(8, user.getSex());
-			SQL_Statement.ps.setString(9, user.getDate_of_birth());
-			SQL_Statement.ps.setString(10, user.getAvatar());
-			SQL_Statement.ps.setString(11, user.getRole());
-			SQL_Statement.ps.execute();
-		} catch (SQLException e1) {
-			logger.error("insert failed", e1);
-		}
+		userDAO.create(user);
 		user.setFirst_name("IRA");
 		user.setSecond_name("BLLLLL");
+		user.setAddress("Poland, Gdansk, Naberejna, 52");
 		userDAO.update(user);
 		User userActual = new User();
 		try {
-			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name =?");
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
 			SQL_Statement.ps.setString(1, user.getNick_name());
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
@@ -123,7 +105,7 @@ public class TestUserDAO {
 		assertEquals("IRA", userActual.getFirst_name());
 		assertEquals("BLLLLL", userActual.getSecond_name());
 		assertEquals("bg@gmail.com", userActual.getE_mail());
-		assertEquals("1", userActual.getAddress());
+		assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
 		assertEquals("64561", userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
 		assertEquals("1999-10-10", userActual.getDate_of_birth());
@@ -135,7 +117,7 @@ public class TestUserDAO {
 	@Test
 	public void testDeleteUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("delete", "Natalya", "Bolyk", "1", "bg@gmail.com", "64561", Sex.FEMALE, null, "jfhfff.mvn",
+		User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5", "bg@gmail.com", "64561", Sex.FEMALE, null, "jfhfff.mvn",
 				"1");
 		userDAO.create(user);
 		userDAO.delete(user);
@@ -146,7 +128,7 @@ public class TestUserDAO {
 	@Test
 	public void testGetAll() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("Bozo", "Oleg", "Ponkin", "2", "bsss@gmail.com", "64561", Sex.MALE, null, "jsjwe.txt",
+		User user = new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10", "bsss@gmail.com", "64561", Sex.MALE, null, "jsjwe.txt",
 				"1");
 		userDAO.create(user);
 		int actual = userDAO.getAll().size();
@@ -159,11 +141,11 @@ public class TestUserDAO {
 	public void testGetByNickName() {
 		User userActual = new User();
 		UserDAOImpl userDAO=new UserDAOImpl();
-		User user = new User("Bobik", "Oleg", "Ponkin", "2", "bsss@gmail.com", "kjhgyiuu", Sex.MALE, null, "jsjwe.txt",
+		User user = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu", Sex.MALE, null, "jsjwe.txt",
 				"1");
 		userDAO.create(user);
 		try {
-			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name =?");
+			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
 			SQL_Statement.ps.setString(1, "Bobik");
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
@@ -198,17 +180,17 @@ public class TestUserDAO {
 		int actual = list.size();
 		int expected = 1;
 		assertEquals(expected, actual);
-
 	}
 
 	private User resultSet(ResultSet rs) {
-		User user = new User();
+		User user = null;
 		try {
 			while (rs.next()) {
+				user = new User();
 				user.setNick_name(rs.getString("nick_name"));
 				user.setFirst_name(rs.getString("first_name"));
 				user.setSecond_name(rs.getString("second_name"));
-				user.setAddress(rs.getString("address_id"));
+				user.setAddress(rs.getString("country")+", "+rs.getString("city")+", "+rs.getString("street")+", "+rs.getString("build_number"));
 				user.setE_mail(rs.getString("e_mail"));
 				user.setPassword(rs.getString("password"));
 				user.setSex(rs.getString("Sex"));
