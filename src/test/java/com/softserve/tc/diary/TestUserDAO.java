@@ -158,25 +158,29 @@ public class TestUserDAO {
 	@Test
 	public void testGetByNickName() {
 		User userActual = new User();
+		UserDAOImpl userDAO=new UserDAOImpl();
+		User user = new User("Bobik", "Oleg", "Ponkin", "2", "bsss@gmail.com", "kjhgyiuu", Sex.MALE, null, "jsjwe.txt",
+				"1");
+		userDAO.create(user);
 		try {
 			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name =?");
-			SQL_Statement.ps.setString(1, "TreeTree");
+			SQL_Statement.ps.setString(1, "Bobik");
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
-		assertEquals("TreeTree", userActual.getNick_name());
-		assertEquals("Sergey", userActual.getFirst_name());
-		assertEquals("Gontar", userActual.getSecond_name());
-		assertEquals("jhfcjfdf@gmail.com", userActual.getE_mail());
-		assertEquals("3", userActual.getAddress());
-		assertEquals("flgkjhlkftjt", userActual.getPassword());
-		assertEquals("MALE", userActual.getSex());
-		assertEquals("1989-02-20", userActual.getDate_of_birth());
-		assertEquals(null, userActual.getAvatar());
-		assertEquals("2", userActual.getRole());
+		assertEquals(user.getNick_name(), userActual.getNick_name());
+		assertEquals(user.getFirst_name(), userActual.getFirst_name());
+		assertEquals(user.getSecond_name(), userActual.getSecond_name());
+		assertEquals(user.getE_mail(), userActual.getE_mail());
+		assertEquals(user.getAddress(), userActual.getAddress());
+		assertEquals(PasswordHelper.encrypt(user.getPassword()), userActual.getPassword());
+		assertEquals(user.getSex(), userActual.getSex());
+		assertEquals(user.getDate_of_birth(), userActual.getDate_of_birth());
+		assertEquals(user.getAvatar(), userActual.getAvatar());
+		assertEquals(user.getRole(), userActual.getRole());
 		logger.info("test get by nickname");
 	}
 
