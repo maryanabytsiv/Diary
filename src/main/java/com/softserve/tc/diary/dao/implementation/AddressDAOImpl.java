@@ -31,7 +31,7 @@ public class AddressDAOImpl implements AddressDAO {
 			ps.setString(2, object.getCountry());
 			ps.setString(3, object.getCity());
 			ps.setString(4, object.getStreet());
-			ps.setInt(5, object.getBuild_number());
+			ps.setString(5, object.getBuild_number());
 			ps.execute();
 			ps.close();
 			logger.debug("Address created");
@@ -41,8 +41,7 @@ public class AddressDAOImpl implements AddressDAO {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("connection failed", e);
 			}
 		}
 	}
@@ -56,7 +55,7 @@ public class AddressDAOImpl implements AddressDAO {
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
+				address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
 			}
 			logger.debug("ReadByKey done");
 			conn.close();
@@ -82,8 +81,7 @@ public class AddressDAOImpl implements AddressDAO {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			        logger.error("connection failed", e);
 			}
 		}
 	}
@@ -102,8 +100,7 @@ public class AddressDAOImpl implements AddressDAO {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("connection failed", e);
 			}
 		}
 	}
@@ -116,7 +113,7 @@ public class AddressDAOImpl implements AddressDAO {
 			ps = conn.prepareStatement("select * from address");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				list.add(new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
+				list.add(new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
 			}
 		} catch (SQLException e) {
 			logger.error("Can't getAll address", e);
@@ -124,8 +121,7 @@ public class AddressDAOImpl implements AddressDAO {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("connection failed", e);
 			}
 		}
 		return list;

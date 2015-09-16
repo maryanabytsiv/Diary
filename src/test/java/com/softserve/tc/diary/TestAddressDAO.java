@@ -46,7 +46,7 @@ public class TestAddressDAO {
     @Test
     public void testCreateAddress() {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
-        Address newAddress = new Address("Ukraine", "IF", "street", 12);
+        Address newAddress = new Address("Ukraine", "IF", "street", "12");
         addressDAO.create(newAddress);
         Address address = null;
         try {
@@ -55,10 +55,10 @@ public class TestAddressDAO {
             SQL_Statement.ps.setString(1, newAddress.getCountry());
             SQL_Statement.ps.setString(2, newAddress.getCity());
             SQL_Statement.ps.setString(3, newAddress.getStreet());
-            SQL_Statement.ps.setInt(4, newAddress.getBuild_number());
+            SQL_Statement.ps.setString(4, newAddress.getBuild_number());
             ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
-                address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
+                address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
             }
         } catch (SQLException e) {
 
@@ -69,14 +69,14 @@ public class TestAddressDAO {
         assertEquals("Ukraine", address.getCountry());
         assertEquals("IF", address.getCity());
         assertEquals("street", address.getStreet());
-        assertEquals(12, address.getBuild_number());
+        assertEquals("12", address.getBuild_number());
         logger.info("Test create address");
     }
 
     @Test
     public void testUpdateAddress() {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
-        Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", 16);
+        Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", "16");
         add.setId(UUID.randomUUID().toString());
         try {
             SQL_Statement.ps = SQL_Statement.connection
@@ -85,7 +85,7 @@ public class TestAddressDAO {
             SQL_Statement.ps.setString(2, add.getCountry());
             SQL_Statement.ps.setString(3, add.getCity());
             SQL_Statement.ps.setString(4, add.getStreet());
-            SQL_Statement.ps.setInt(5, add.getBuild_number());
+            SQL_Statement.ps.setString(5, add.getBuild_number());
             SQL_Statement.ps.execute();
         } catch (SQLException e1) {
             logger.error("insert failed", e1);
@@ -97,7 +97,7 @@ public class TestAddressDAO {
             SQL_Statement.ps.setString(1, add.getId());
             ResultSet rs = SQL_Statement.ps.executeQuery();
             while (rs.next()) {
-                address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
+                address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
                 address.setId(rs.getString(1));
             }
 
@@ -114,7 +114,7 @@ public class TestAddressDAO {
     @Test
     public void TestDeleteAddress() {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
-        Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
+        Address address = new Address("Ukraine", "Lviv", "Pasternaka", "5");
         addressDAO.create(address);
         addressDAO.delete(address);
         assertNull(address.getId());
@@ -124,7 +124,7 @@ public class TestAddressDAO {
     @Test
     public void TestGetAll() {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
-        Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
+        Address address = new Address("Ukraine", "Lviv", "Pasternaka", "5");
         addressDAO.create(address);
         int actual = addressDAO.getAll().size();
         int expected = 4;
