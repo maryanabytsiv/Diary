@@ -23,8 +23,8 @@ import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.log.Log;
 
 public class TestUserDAO {
-        private Logger logger = Log.init(this.getClass().getName());
-        
+	private Logger logger = Log.init(this.getClass().getName());
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
 		SQL_Statement.setUpBeforeClass();
@@ -33,7 +33,6 @@ public class TestUserDAO {
 	@AfterClass
 	public static void tearDownAfterClass() throws SQLException {
 		SQL_Statement.DropTableIfExists();
-		UserDAOImpl.close();
 	}
 
 	@Before
@@ -61,7 +60,8 @@ public class TestUserDAO {
 				"folder/folder/image.png", "2"));
 		User userActual = new User();
 		try {
-			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select * from user_card where nick_name ='hary12';");
+			SQL_Statement.ps = SQL_Statement.connection
+					.prepareStatement("select * from user_card where nick_name ='hary12';");
 			ResultSet rs = SQL_Statement.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {

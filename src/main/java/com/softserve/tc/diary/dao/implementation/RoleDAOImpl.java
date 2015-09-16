@@ -15,31 +15,30 @@ import com.softserve.tc.diary.dao.RoleDAO;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.log.Log;
 
-public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
+public class RoleDAOImpl implements RoleDAO, BaseDAO<Role> {
 
 	private static Connection conn;
 	private static PreparedStatement ps;
 	private Logger logger = Log.init(this.getClass().getName());
-	
-	private static void getConnection() {
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void create(Role object) {
-		getConnection();
 		logger.debug("Creating role");
 		try {
+			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("insert into role values(?,?);");
 			ps.setString(1, UUID.randomUUID().toString());
 			ps.setString(2, object.getName());
 			ps.execute();
 			logger.debug("Role created");
 		} catch (SQLException e) {
-		        logger.error("Creating role failed" ,e);
+			logger.error("Creating role failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -48,6 +47,7 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 		Role role = new Role();
 		logger.debug("read by key");
 		try {
+			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from role where name =?;");
 			ps.setString(1, role.getName());
 			ResultSet rs = ps.executeQuery();
@@ -58,12 +58,19 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 			}
 		} catch (SQLException e) {
 			logger.error("select failed in readyByKey", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return role;
 	}
 
 	public void update(Role object) {
-	        logger.debug("updating role");
+		logger.debug("updating role");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("update role set name=?;");
@@ -73,12 +80,19 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 			logger.debug("role updated");
 		} catch (SQLException e) {
 			logger.error("updated failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 	public void delete(Role object) {
-	        logger.debug("deleting role");
+		logger.debug("deleting role");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("delete from role where role_id=?");
@@ -87,6 +101,13 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 			logger.debug("role deleted");
 		} catch (SQLException e) {
 			logger.error("delete failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -102,6 +123,13 @@ public class RoleDAOImpl implements RoleDAO, BaseDAO<Role>{
 			}
 		} catch (SQLException e) {
 			logger.error("selest all failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}

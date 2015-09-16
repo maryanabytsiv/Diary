@@ -9,13 +9,16 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.log.Log;
+
 
 public class TestAddressDAO {
     private Logger logger = Log.init(this.getClass().getName());
@@ -29,6 +32,16 @@ public class TestAddressDAO {
     public static void tearDownAfterClass() throws SQLException {
         SQL_Statement.DropTableIfExists();
     }
+
+	@Before
+	public void beforeTest() throws SQLException {
+		SQL_Statement.insertValue();
+	}
+
+	@After
+	public void afterTest() throws SQLException {
+		SQL_Statement.deleteAllFromTable();
+	}
 
     @Test
     public void testCreateAddress() {
@@ -114,7 +127,7 @@ public class TestAddressDAO {
         Address address = new Address("Ukraine", "Lviv", "Pasternaka", 5);
         addressDAO.create(address);
         int actual = addressDAO.getAll().size();
-        int expected = 2;
+        int expected = 4;
         assertEquals(expected, actual);
         logger.info("Test getAll");
     }
