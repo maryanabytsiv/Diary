@@ -20,9 +20,9 @@ public final class ConnectManager {
 		dataSource.setPassword("root");
 
 		dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
-		dataSourceTestDB.setUrl("jdbc:postgresql://$OPENSHIFT_POSTGRESQL_DB_HOST:$OPENSHIFT_POSTGRESQL_DB_PORT/jenkins");
-		dataSourceTestDB.setUsername("adminiblnfma");
-		dataSourceTestDB.setPassword("sNNvjjyGPz5G");
+		dataSourceTestDB.setUrl("jdbc:postgresql://127.11.237.2:5432/DiaryTest");
+		dataSourceTestDB.setUsername("root");
+		dataSourceTestDB.setPassword("root");
 		dataSourceTestDB.setMaxActive(100);
 	}
 
