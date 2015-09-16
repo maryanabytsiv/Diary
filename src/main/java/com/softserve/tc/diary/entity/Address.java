@@ -6,14 +6,14 @@ public class Address {
     private String country;
     private String city;
     private String street;
-    private int build_number;
+    private String build_number;
 
     public Address() {
 
     }
 
 	
-    public Address(String country, String city, String street, int build_number) {
+    public Address(String country, String city, String street, String build_number) {
         this.country = country;
         this.city = city;
         this.street = street;
@@ -52,11 +52,11 @@ public class Address {
         this.street = street;
     }
 
-    public int getBuild_number() {
+    public String getBuild_number() {
         return build_number;
     }
 
-    public void setBuild_number(int build_number) {
+    public void setBuild_number(String build_number) {
         this.build_number = build_number;
     }
 
