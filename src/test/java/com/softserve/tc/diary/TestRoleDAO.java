@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,6 +39,11 @@ public class TestRoleDAO {
 	public void afterTest() throws SQLException{
 		SQL_Statement.deleteAllFromTable();
 	}
+	
+    @AfterClass
+    public static void tearDownAfterClass() throws SQLException {
+        SQL_Statement.DropTableIfExists();
+    }
 
 	@Test
 	public void testCreateRole() {

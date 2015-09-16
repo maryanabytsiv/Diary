@@ -22,35 +22,15 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 	private static PreparedStatement ps = null;
 	private static ResultSet rs;
 	private static Logger logger = Log.init("UserDAOImpl");
-	
-	public static void close() {
-		try {
-			if (rs != null)
-				rs.close();
-		} catch (SQLException e) {
-			logger.error("can't close ResultSet", e);
-		}
-		try {
-			if (ps != null)
-				ps.close();
-		} catch (SQLException e) {
-		        logger.error("can't close PreparedStatement", e);
-		}
-		try {
-			if (conn != null)
-				conn.close();
-		} catch (SQLException e) {
-		        logger.error("can't close Connection", e);
-		}
-	}
 
 	public void create(User object) {
 		try {
+			conn = ConnectManager.getConnectionToTestDB();
 			if ((object.getRole() == null) || (object.getE_mail() == null) || (object.getNick_name() == null)) {
 				logger.error("You not enter nickname, e-mail or role");
 				throw new IllegalArgumentException();
 			} else {
-				conn = ConnectManager.getConnectionToTestDB();
+
 				ps = conn.prepareStatement("insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?);");
 				ps.setString(1, UUID.randomUUID().toString());
 				ps.setString(2, object.getNick_name());
@@ -68,6 +48,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 			}
 		} catch (SQLException e) {
 			logger.error("create user failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -91,6 +78,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 			ps.execute();
 		} catch (SQLException e) {
 			logger.error("update user failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -103,6 +97,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 
 		} catch (SQLException e) {
 			logger.error("delete user failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -121,6 +122,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 
 		} catch (SQLException e) {
 			logger.error("select all failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -128,15 +136,23 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 	public User readByKey(String id) { // id as NICK_NAME
 		User user = new User();
 		try {
+			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from user_card where nick_name =?;");
 			ps.setString(1, user.getNick_name());
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				user=resultSet(rs);
+				user = resultSet(rs);
 				return user;
 			}
 		} catch (SQLException e) {
 			logger.error("read by key failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -149,31 +165,20 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 			ps.setString(1, sex.toUpperCase());
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				users=rs.getInt(1);
+				users = rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
 			logger.error("Sorry, I can't count all by sex ;(", e);
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
+				conn.close();
 			} catch (SQLException e) {
-			        logger.error("can't close ResultSet", e);
-			}
-			try {
-				if (ps != null)
-					ps.close();
-			} catch (SQLException e) {
-			        logger.error("can't close PreparedStatement", e);
-			}
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-			        logger.error("can't close Connection", e);
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
+
 		return users;
 	}
 
@@ -190,28 +195,36 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 			}
 		} catch (SQLException e) {
 			logger.error("get by birthday failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return usersByYear;
 	}
-	
-	private User resultSet(ResultSet rs){
-		User user=new User();
-		try {
-			while (rs.next()) {
-				user.setNick_name(rs.getString("nick_name"));
-				user.setFirst_name(rs.getString("first_name"));
-				user.setSecond_name(rs.getString("second_name"));
-				user.setAddress(rs.getString("address_id"));
-				user.setE_mail(rs.getString("e_mail"));
-				user.setPassword(rs.getString("password"));
-				user.setSex(rs.getString("Sex"));
-				user.setDate_of_birth(rs.getString("date_of_birth"));
-				user.setAvatar(rs.getString("avatar"));
-				user.setRole(rs.getString("role"));
+
+	private User resultSet(ResultSet rs) {
+		User user = new User();
+			try {
+				while (rs.next()) {
+					user.setNick_name(rs.getString("nick_name"));
+					user.setFirst_name(rs.getString("first_name"));
+					user.setSecond_name(rs.getString("second_name"));
+					user.setAddress(rs.getString("address_id"));
+					user.setE_mail(rs.getString("e_mail"));
+					user.setPassword(rs.getString("password"));
+					user.setSex(rs.getString("Sex"));
+					user.setDate_of_birth(rs.getString("date_of_birth"));
+					user.setAvatar(rs.getString("avatar"));
+					user.setRole(rs.getString("role"));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			logger.error("result set failed", e);
+			return user;
 		}
-		return user;
-	}
 }

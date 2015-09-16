@@ -24,36 +24,44 @@ import com.softserve.tc.log.Log;
  *
  */
 
-public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
+public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
 
 	private static Connection conn = null;
 	private static PreparedStatement ps = null;
 	private static ResultSet rs = null;
 	private Logger logger = Log.init(this.getClass().getName());
-	
+
 	public void create(Record object) {
-//		Timestamp  createdTime = new Timestamp(new java.util.Date().getTime());
+		// Timestamp createdTime = new Timestamp(new
+		// java.util.Date().getTime());
 		logger.debug("creating record");
 		try {
-		if ((object.getVisibility() == null)) {
-		        logger.error("Please, enter your visibility (PUBLIC / PRIVATE)");
-			throw new NullPointerException();
-		} else {
-			conn = ConnectManager.getConnectionToTestDB();
+			if ((object.getVisibility() == null)) {
+				logger.error("Please, enter your visibility (PUBLIC / PRIVATE)");
+				throw new NullPointerException();
+			} else {
+				conn = ConnectManager.getConnectionToTestDB();
 
-			ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,?);");
-			ps.setString(1, UUID.randomUUID().toString());
-			ps.setString(2, object.getUser_name());
-			ps.setTimestamp(3, object.getCreated_time());
-			ps.setString(4, object.getText());
-			ps.setString(5, object.getSupplement());
-			ps.setString(6, object.getVisibility());
-			ps.execute();
-			ps.close();
+				ps = conn.prepareStatement("insert into record_list values(?,?,?,?,?,?);");
+				ps.setString(1, UUID.randomUUID().toString());
+				ps.setString(2, object.getUser_name());
+				ps.setTimestamp(3, object.getCreated_time());
+				ps.setString(4, object.getText());
+				ps.setString(5, object.getSupplement());
+				ps.setString(6, object.getVisibility());
+				ps.execute();
+				ps.close();
 			}
-		logger.debug("record created");
+			logger.debug("record created");
 		} catch (SQLException e) {
 			logger.error("record create failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -66,16 +74,24 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			ps.setString(1, id);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5), Status.PRIVATE);				
+				record = new Record(rs.getString(2), rs.getTimestamp(3), rs.getString(4), rs.getString(5),
+						Status.PRIVATE);
 			}
 		} catch (SQLException e) {
 			logger.error("readByKey failed", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return record;
 	}
 
 	public void update(Record object) {
-	    logger.debug("updating record");
+		logger.debug("updating record");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement(
@@ -92,31 +108,34 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			logger.debug("record updated");
 		} catch (SQLException e) {
 			logger.error("can't update record", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void delete(Record object) {
-	    logger.debug("deleting record");
+		logger.debug("deleting record");
 		try {
 			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("delete from record_list where user_id_rec=?;");
 			ps.setString(1, object.getUser_name());
-			
-			
-//			Tag objt = new Tag("1");
-//			ps1 = conn.prepareStatement("select from tag where uuid=?;");
-//			ps1.setString(1, objt.getUuid());
-//			ResultSet rs = ps1.executeQuery();
-//			System.out.println("\nn"+rs);
-//			String record_uuid = rs.getString("tag_message");
-//			System.out.println("/n/n"+record_uuid);
-						
-			
 			ps.execute();
-			
+
 			logger.debug("record deleted");
 		} catch (SQLException e) {
 			logger.error("can't delete record", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -124,6 +143,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 	public Record getRecordByName(String user_name) {
 		Record record = new Record();
 		try {
+			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement("select * from record_list where user_id_rec=?;");
 			ps.setString(1, user_name);
 			ResultSet rs = ps.executeQuery();
@@ -138,6 +158,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 			}
 		} catch (SQLException error) {
 			logger.error("can't get record by name", error);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return record;
 	}
@@ -156,19 +183,26 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record>{
 
 	public List<Record> getAll() {
 		List<Record> list = new ArrayList<Record>();
-		 try {
-			 if (conn == null || conn.isClosed()) {
-				 conn = ConnectManager.getConnectionToTestDB();
-				 }
-			 ps = conn.prepareStatement("SELECT * FROM record_list;");
-			 ResultSet rs = ps.executeQuery();
-			 while (rs.next()) {
-				 list.add( new Record (rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4),
-							rs.getString(5), Status.valueOf(rs.getString(6))));
-				 }
-		 } catch (SQLException e) {
-		 logger.error("can't get all records", e);
-		 }
+		try {
+			if (conn == null || conn.isClosed()) {
+				conn = ConnectManager.getConnectionToTestDB();
+			}
+			ps = conn.prepareStatement("SELECT * FROM record_list;");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(new Record(rs.getString(1), rs.getString(2), rs.getTimestamp(3), rs.getString(4),
+						rs.getString(5), Status.valueOf(rs.getString(6))));
+			}
+		} catch (SQLException e) {
+			logger.error("can't get all records", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return list;
 	}
 
