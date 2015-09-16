@@ -23,6 +23,7 @@ public final class ConnectManager {
 		dataSourceTestDB.setUrl("jdbc:postgresql://localhost:5432/DiaryTest");
 		dataSourceTestDB.setUsername("root");
 		dataSourceTestDB.setPassword("root");
+		dataSourceTestDB.setMaxActive(100);
 	}
 
 	private ConnectManager() {
