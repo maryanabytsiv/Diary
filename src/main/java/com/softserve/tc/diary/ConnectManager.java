@@ -28,7 +28,7 @@ public final class ConnectManager {
 		dataSource.setPassword("root");
 
 		dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
-		dataSourceTestDB.setUrl("jdbc:postgresql://127.11.237.2:5432/DiaryTest");
+		dataSourceTestDB.setUrl("jdbc:postgresql://127.11.237.2:5432/diarytest");
 		dataSourceTestDB.setUsername("root");
 		dataSourceTestDB.setPassword("root");
 		dataSourceTestDB.setMaxActive(100);
