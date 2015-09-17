@@ -1,4 +1,4 @@
-package com.softserve.tc.diary.dao.implementation;
+package com.softserve.tc.diary.dao.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

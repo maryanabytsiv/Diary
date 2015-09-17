@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.softserve.tc.diary.connectmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
+import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;

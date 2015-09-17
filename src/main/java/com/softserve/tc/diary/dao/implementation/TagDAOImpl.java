@@ -18,7 +18,7 @@ import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.log.Log;
 
-public class TagDAOImpl implements TagDAO, IdGenerator {
+public class TagDAOImpl implements TagDAO {
     
     // private static Connection conn;
     private static PreparedStatement ps;
