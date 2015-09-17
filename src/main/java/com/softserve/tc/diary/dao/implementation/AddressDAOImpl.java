@@ -51,7 +51,6 @@ public class AddressDAOImpl implements AddressDAO {
 				address = new Address(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
 			}
 			logger.debug("ReadByKey done");
-			conn.close();
 		} catch (SQLException e) {
 			logger.error("Can't select from Address", e);
 		}

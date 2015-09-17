@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.ConnectManager;
+import com.softserve.tc.diary.connectmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -20,7 +20,7 @@ import com.softserve.tc.log.Log;
 
 public class TagDAOImpl implements TagDAO, IdGenerator {
 
-	private static Connection conn;
+	// private static Connection conn;
 	private static PreparedStatement ps;
 	private Logger logger = Log.init(this.getClass().getName());
 
@@ -32,8 +32,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	public Tag getTagByMessage(String tagMessage) {
 		Tag tag = null;
 		String query = "Select * from tag where tag_message like '" + tagMessage + "';";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -41,13 +40,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("can't get tag by message", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return tag;
 	}
@@ -57,22 +49,15 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		if (true == checkIfTagExist(tagMessage)) {
 			logger.warn("Tag already exist");
 		} else {
-			try {
-				conn = ConnectManager.getConnectionToTestDB();
+			try (Connection conn = TestDBConnection.getConnection()) {
 				ps = conn.prepareStatement("insert into tag values(?,?);");
 				String tagId = getGeneratedId();
 				ps.setString(1, tagId);
 				ps.setString(2, object.getTagMessage());
 				ps.execute();
+				ps.close();
 			} catch (SQLException e) {
 				logger.error("can't create tag", e);
-			} finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
 	}
@@ -92,21 +77,13 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		if (checkIfTagExist(tagMessage)) {
 			logger.warn("Tag already exist");
 		} else {
-			try {
-				conn = ConnectManager.getConnectionToTestDB();
+			try (Connection conn = TestDBConnection.getConnection()) {
 				ps = conn.prepareStatement("insert into tag values(?,?);");
 				ps.setString(1, tagId);
 				ps.setString(2, tagMessage);
 				ps.execute();
 			} catch (SQLException e) {
 				logger.error("can't create from record", e);
-			} finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 			insertValuesInTagRecord(recordId, tagId);
 		}
@@ -115,8 +92,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	public void insertValuesInTagRecord(String recordId, String tagId) {
 		String uuid_tr = getGeneratedId();
 		String query = "Insert into tag_record values(?,?,?);";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ps.setString(1, uuid_tr);
 			ps.setString(2, recordId);
@@ -124,13 +100,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			ps.execute();
 		} catch (SQLException e) {
 			logger.error("insert failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -139,44 +108,45 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		deleteFromTagRecord(uuid);
 		String tagMessage = object.getTagMessage();
 		String query = "DELETE FROM tag WHERE tag_message Like '" + tagMessage + "';";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement(query);
-			ps.execute();
+		try (Connection conn = TestDBConnection.getConnection()) {
+			try {
+				conn.setAutoCommit(false);
+				ps = conn.prepareStatement(query);
+				ps.execute();
+				conn.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				conn.rollback();
+				conn.setAutoCommit(true);
+			}
+			conn.setAutoCommit(true);
 		} catch (SQLException e) {
 			logger.error("delete failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 
 	public void deleteFromTagRecord(String uuid) {
 		String query = "DELETE FROM tag_record WHERE tag_uuid LIKE '" + uuid + "';";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
-			ps = conn.prepareStatement(query);
-			ps.execute();
+		try (Connection conn = TestDBConnection.getConnection()) {
+			try {
+				conn.setAutoCommit(false);
+				ps = conn.prepareStatement(query);
+				ps.execute();
+				conn.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				conn.rollback();
+				conn.setAutoCommit(true);
+			}
+			conn.setAutoCommit(true);
 		} catch (SQLException e) {
 			logger.error("delete from tag_record failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 
 	public List<Tag> getListTagsByPrefix(String prefix) {
 		List<Tag> list = new ArrayList<Tag>();
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '" + prefix + "%';";
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
@@ -185,21 +155,13 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("select failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return list;
 	}
 
 	public List<Tag> getListTagsBySuffix(String suffix) {
 		List<Tag> list = new ArrayList<Tag>();
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '%" + suffix + "%';";
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
@@ -208,13 +170,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("select by suffix failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return list;
 	}
@@ -224,8 +179,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 		String uuid = object.getUuid();
 		String query = "Select * from record_list where id_rec IN "
 				+ "(Select record_uuid from tag_record where tag_uuid Like '" + uuid + "');";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -241,15 +195,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("select by tag failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
-
 		return listRecordsWithTag;
 	}
 
@@ -288,8 +234,7 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 	public List<Tag> getAll() {
 		List<Tag> list = new ArrayList<Tag>();
 		String query = "SELECT * FROM tag;";
-		try {
-			conn = ConnectManager.getConnectionToTestDB();
+		try (Connection conn = TestDBConnection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -297,22 +242,14 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("select all failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return list;
 	}
 
 	public Tag readByKey(String uuid) {
 		Tag tag = null;
-		try {
+		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "Select * from tag where uuid Like '" + uuid + "';";
-			conn = ConnectManager.getConnectionToTestDB();
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -320,13 +257,6 @@ public class TagDAOImpl implements TagDAO, IdGenerator {
 			}
 		} catch (SQLException e) {
 			logger.error("read by key failed", e);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return tag;
 	}
