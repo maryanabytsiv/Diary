@@ -26,22 +26,22 @@ public class TestUserDAO {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
-		SQL_Statement.setUpBeforeClass();
+		DBCreationManager.setUpBeforeClass();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws SQLException {
-		SQL_Statement.DropTableIfExists();
+		DBCreationManager.DropTableIfExists();
 	}
 
 	@Before
 	public void beforeTest() throws SQLException {
-		SQL_Statement.insertValue();
+		DBCreationManager.insertValue();
 	}
 
 	@After
 	public void afterTest() throws SQLException {
-		SQL_Statement.deleteAllFromTable();
+		DBCreationManager.deleteAllFromTable();
 
 	}
 
@@ -59,9 +59,9 @@ public class TestUserDAO {
 				"folder/folder/image.png", "2"));
 		User userActual = new User();
 		try {
-			SQL_Statement.ps = SQL_Statement.connection
+			DBCreationManager.ps = DBCreationManager.connection
 					.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name ='hary12';");
-			ResultSet rs = SQL_Statement.ps.executeQuery();
+			ResultSet rs = DBCreationManager.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
@@ -93,9 +93,9 @@ public class TestUserDAO {
 		userDAO.update(user);
 		User userActual = new User();
 		try {
-			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-			SQL_Statement.ps.setString(1, user.getNick_name());
-			ResultSet rs = SQL_Statement.ps.executeQuery();
+			DBCreationManager.ps = DBCreationManager.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
+			DBCreationManager.ps.setString(1, user.getNick_name());
+			ResultSet rs = DBCreationManager.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
@@ -145,9 +145,9 @@ public class TestUserDAO {
 				"1");
 		userDAO.create(user);
 		try {
-			SQL_Statement.ps = SQL_Statement.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-			SQL_Statement.ps.setString(1, "Bobik");
-			ResultSet rs = SQL_Statement.ps.executeQuery();
+			DBCreationManager.ps = DBCreationManager.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
+			DBCreationManager.ps.setString(1, "Bobik");
+			ResultSet rs = DBCreationManager.ps.executeQuery();
 			userActual = resultSet(rs);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
