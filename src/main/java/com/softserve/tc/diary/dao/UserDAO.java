@@ -5,9 +5,9 @@ import java.util.List;
 import com.softserve.tc.diary.entity.User;
 
 public interface UserDAO extends BaseDAO<User> {
-
-	int countAllBySex(String sex);
-
-	List<User> getByYearOfBirth(String yearOfBirth);
-
+    
+    int countAllBySex(String sex);
+    
+    List<User> getByYearOfBirth(String yearOfBirth);
+    
 }
