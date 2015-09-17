@@ -20,7 +20,7 @@ public class TestDBConnection extends ConnectManager {
 
 	static {
 		dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
-		dataSourceTestDB.setUrl("jdbc:postgresql://127.11.237.2:5432/diarytest");
+		dataSourceTestDB.setUrl("jdbc:postgresql://localhost:5432/DiaryTest");
 		dataSourceTestDB.setUsername("root");
 		dataSourceTestDB.setPassword("root");
 

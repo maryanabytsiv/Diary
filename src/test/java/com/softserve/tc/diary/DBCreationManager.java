@@ -20,7 +20,7 @@ import com.softserve.tc.log.Log;
 public class DBCreationManager {
 
 	// protected static Connection connection = null;
-	protected static PreparedStatement ps = null;
+	private static PreparedStatement ps = null;
 	private static Logger logger = Log.init("SQL_Statement");
 
 	public static void setUpBeforeClass() throws SQLException {

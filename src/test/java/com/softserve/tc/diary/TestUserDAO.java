@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.connectmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.implementation.PasswordHelper;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Sex;
@@ -23,6 +26,7 @@ import com.softserve.tc.log.Log;
 
 public class TestUserDAO {
 	private Logger logger = Log.init(this.getClass().getName());
+	private PreparedStatement ps = null;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
@@ -48,21 +52,30 @@ public class TestUserDAO {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateUserNullPointerException() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User(null, "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", null, "64561", Sex.FEMALE, "1999-03-02",
-				"folder/folder/image.png", null));
+		userDAO.create(new User(null, "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", null, "64561", Sex.FEMALE,
+				"1999-03-02", "folder/folder/image.png", null));
 	}
 
 	@Test
 	public void testCreateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		userDAO.create(new User("hary12", "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561", Sex.FEMALE, "1995-03-02",
-				"folder/folder/image.png", "2"));
+		userDAO.create(new User("hary12", "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561",
+				Sex.FEMALE, "1995-03-02", "folder/folder/image.png", "2"));
 		User userActual = new User();
-		try {
-			DBCreationManager.ps = DBCreationManager.connection
-					.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name ='hary12';");
-			ResultSet rs = DBCreationManager.ps.executeQuery();
-			userActual = resultSet(rs);
+		try (Connection connection = TestDBConnection.getConnection()) {
+			try {
+				connection.setAutoCommit(false);
+				ps = connection.prepareStatement(
+						"select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name ='hary12';");
+				ResultSet rs = ps.executeQuery();
+				userActual = resultSet(rs);
+				connection.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				connection.rollback();
+				connection.setAutoCommit(true);
+			}
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
 		}
@@ -84,19 +97,29 @@ public class TestUserDAO {
 	@Test
 	public void testUpdateUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("read", "Natalya", "Bolyk", "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561", Sex.FEMALE, "1999-10-10",
-				"some.jpeg", "1");
+		User user = new User("read", "Natalya", "Bolyk", "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
+				Sex.FEMALE, "1999-10-10", "some.jpeg", "1");
 		userDAO.create(user);
 		user.setFirst_name("IRA");
 		user.setSecond_name("BLLLLL");
 		user.setAddress("Poland, Gdansk, Naberejna, 52");
 		userDAO.update(user);
 		User userActual = new User();
-		try {
-			DBCreationManager.ps = DBCreationManager.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-			DBCreationManager.ps.setString(1, user.getNick_name());
-			ResultSet rs = DBCreationManager.ps.executeQuery();
-			userActual = resultSet(rs);
+		try (Connection connection = TestDBConnection.getConnection()) {
+			try {
+				connection.setAutoCommit(false);
+				ps = connection.prepareStatement(
+						"select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
+				ps.setString(1, user.getNick_name());
+				ResultSet rs = ps.executeQuery();
+				userActual = resultSet(rs);
+				connection.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				connection.rollback();
+				connection.setAutoCommit(true);
+			}
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
 		}
@@ -117,8 +140,8 @@ public class TestUserDAO {
 	@Test
 	public void testDeleteUser() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5", "bg@gmail.com", "64561", Sex.FEMALE, null, "jfhfff.mvn",
-				"1");
+		User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5", "bg@gmail.com", "64561", Sex.FEMALE, null,
+				"jfhfff.mvn", "1");
 		userDAO.create(user);
 		userDAO.delete(user);
 		assertNull(userDAO.readByKey("delete"));
@@ -128,8 +151,8 @@ public class TestUserDAO {
 	@Test
 	public void testGetAll() {
 		UserDAOImpl userDAO = new UserDAOImpl();
-		User user = new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10", "bsss@gmail.com", "64561", Sex.MALE, null, "jsjwe.txt",
-				"1");
+		User user = new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10", "bsss@gmail.com", "64561", Sex.MALE,
+				null, "jsjwe.txt", "1");
 		userDAO.create(user);
 		int actual = userDAO.getAll().size();
 		int expected = 4;
@@ -140,15 +163,25 @@ public class TestUserDAO {
 	@Test
 	public void testGetByNickName() {
 		User userActual = new User();
-		UserDAOImpl userDAO=new UserDAOImpl();
-		User user = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu", Sex.MALE, null, "jsjwe.txt",
-				"1");
+		UserDAOImpl userDAO = new UserDAOImpl();
+		User user = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
+				Sex.MALE, null, "jsjwe.txt", "1");
 		userDAO.create(user);
-		try {
-			DBCreationManager.ps = DBCreationManager.connection.prepareStatement("select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-			DBCreationManager.ps.setString(1, "Bobik");
-			ResultSet rs = DBCreationManager.ps.executeQuery();
-			userActual = resultSet(rs);
+		try (Connection connection = TestDBConnection.getConnection()) {
+			try {
+				connection.setAutoCommit(false);
+				ps = connection.prepareStatement(
+						"select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
+				ps.setString(1, "Bobik");
+				ResultSet rs = ps.executeQuery();
+				userActual = resultSet(rs);
+				connection.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				connection.rollback();
+				connection.setAutoCommit(true);
+			}
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			logger.error("select failed", e);
 		}
@@ -190,7 +223,8 @@ public class TestUserDAO {
 				user.setNick_name(rs.getString("nick_name"));
 				user.setFirst_name(rs.getString("first_name"));
 				user.setSecond_name(rs.getString("second_name"));
-				user.setAddress(rs.getString("country")+", "+rs.getString("city")+", "+rs.getString("street")+", "+rs.getString("build_number"));
+				user.setAddress(rs.getString("country") + ", " + rs.getString("city") + ", " + rs.getString("street")
+						+ ", " + rs.getString("build_number"));
 				user.setE_mail(rs.getString("e_mail"));
 				user.setPassword(rs.getString("password"));
 				user.setSex(rs.getString("Sex"));
@@ -199,7 +233,7 @@ public class TestUserDAO {
 				user.setRole(rs.getString("role"));
 			}
 		} catch (SQLException e) {
-			logger.error("result set failed", e);
+			logger.error("ResultSet failed", e);
 		}
 		return user;
 	}
