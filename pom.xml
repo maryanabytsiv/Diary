@@ -79,7 +79,7 @@
 					<server>tomcat</server>
 					<username>admin</username>
 					<password>s3cret</password>
-					<path>${project.artifactId}</path>
+					<path>/Diary</path>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -95,6 +95,14 @@
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<configuration>
 					<useProjectReferences>false</useProjectReferences>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<sourceDirectory>src</sourceDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
