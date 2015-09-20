@@ -184,7 +184,7 @@ public class TestTagDAO {
     @Test
     public void testCheckIfRecordHasTag() {
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
-        Record rec = new Record(null, createdTime,
+        Record rec = new Record(null, createdTime, null,
                 "#Hello my name is #Bob. I am from #NewYork",
                 "https://motivation/",
                 Status.PRIVATE);
@@ -231,11 +231,11 @@ public class TestTagDAO {
         logger.info("test get list record by tag");
     }
     
-    @Test
-    public void testGetListRecordByListTag() {
-        // TagDAOImpl tagDAO = new TagDAOImpl();
-        // List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
-        // List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
-        // assertEquals(listRecord.size(), 1);
-    }
+//    @Test
+//    public void testGetListRecordByListTag() {
+//         TagDAOImpl tagDAO = new TagDAOImpl();
+//         List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
+//         List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
+//         assertEquals(listRecord.size(), 1);
+//    }
 }

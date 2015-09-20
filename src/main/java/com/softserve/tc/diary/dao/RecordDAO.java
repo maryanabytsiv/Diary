@@ -5,7 +5,7 @@ import java.util.List;
 import com.softserve.tc.diary.entity.Record;
 
 public interface RecordDAO extends BaseDAO<Record> {
-            Record getRecordByName(String user_name);
+    List<Record> getRecordByUserId(String user_name);
             
     List<Record> getRecordByDate(String date);
     

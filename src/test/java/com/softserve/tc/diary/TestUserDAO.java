@@ -20,6 +20,7 @@ import org.junit.Test;
 import com.softserve.tc.diary.connectmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
+import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.log.Log;
@@ -62,7 +63,7 @@ public class TestUserDAO {
         UserDAOImpl userDAO = new UserDAOImpl();
         userDAO.create(new User("hary12", "Andriy", "Mural",
                 "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1995-03-02", "folder/folder/image.png", "2"));
+                Sex.FEMALE, "1995-03-02", "folder/folder/image.png", Role.USER));
         User userActual = new User();
         try (Connection connection = TestDBConnection.getConnection()) {
             try {
@@ -92,7 +93,7 @@ public class TestUserDAO {
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1995-03-02", userActual.getDate_of_birth());
         assertEquals("folder/folder/image.png", userActual.getAvatar());
-        assertEquals("2", userActual.getRole());
+        assertEquals("USER", userActual.getRole());
         logger.info("test create user");
     }
     
@@ -101,7 +102,7 @@ public class TestUserDAO {
         UserDAOImpl userDAO = new UserDAOImpl();
         User user = new User("read", "Natalya", "Bolyk",
                 "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1999-10-10", "some.jpeg", "1");
+                Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
         userDAO.create(user);
         user.setFirst_name("IRA");
         user.setSecond_name("BLLLLL");
@@ -136,7 +137,7 @@ public class TestUserDAO {
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDate_of_birth());
         assertEquals("some.jpeg", userActual.getAvatar());
-        assertEquals("1", userActual.getRole());
+        assertEquals("ADMIN", userActual.getRole());
         logger.info("test update user");
     }
     
@@ -145,10 +146,10 @@ public class TestUserDAO {
         UserDAOImpl userDAO = new UserDAOImpl();
         User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5",
                 "bg@gmail.com", "64561", Sex.FEMALE, null,
-                "jfhfff.mvn", "1");
+                "jfhfff.mvn", Role.ADMIN);
         userDAO.create(user);
         userDAO.delete(user);
-        assertNull(userDAO.readByKey("delete"));
+        assertNull(userDAO.readByNickName("delete"));
         logger.info("test delete user");
     }
     
@@ -158,7 +159,7 @@ public class TestUserDAO {
         User user =
                 new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10",
                         "bsss@gmail.com", "64561", Sex.MALE,
-                        null, "jsjwe.txt", "1");
+                        null, "jsjwe.txt", Role.ADMIN);
         userDAO.create(user);
         int actual = userDAO.getAll().size();
         int expected = 4;
@@ -172,7 +173,7 @@ public class TestUserDAO {
         UserDAOImpl userDAO = new UserDAOImpl();
         User user = new User("Bobik", "Oleg", "Ponkin",
                 "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
-                Sex.MALE, null, "jsjwe.txt", "1");
+                Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
         userDAO.create(user);
         try (Connection connection = TestDBConnection.getConnection()) {
             try {
@@ -208,10 +209,36 @@ public class TestUserDAO {
     }
     
     @Test
+    public void testreadByKey() {
+    	UserDAOImpl dao = new UserDAOImpl();
+    	User user = dao.readByKey("1");
+    	assertNotNull(user);
+        assertEquals(user.getNick_name(), "BigBunny");
+        assertEquals(user.getFirst_name(), "Oleg");
+        assertEquals(user.getSecond_name(), "Pavliv");
+        assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
+        assertEquals(user.getE_mail(), "hgdf@gmail.com");
+        assertEquals(PasswordHelper.encrypt("kdfhgrr"),
+        		PasswordHelper.encrypt(user.getPassword()));
+        assertEquals(user.getSex(), "MALE");
+        assertEquals(user.getDate_of_birth(), "1992-02-02");
+        assertEquals(user.getAvatar(), null);
+        assertEquals(user.getRole(), "USER");
+        logger.info("test get by id");
+    }
+    
+    @Test
     public void testCountAllBySex() {
         UserDAOImpl user = new UserDAOImpl();
         int count = user.countAllBySex("MALE");
         assertEquals(2, count);
+    }
+    
+    @Test
+    public void testGetUsersByRole() {
+    	UserDAOImpl dao = new UserDAOImpl();
+    	List<User> list = dao.getUsersByRole(Role.USER);
+    	assertEquals(2, list.size());
     }
     
     @Test

@@ -13,6 +13,7 @@ public class Record {
     private String id_rec;
     private String user_name;
     private Timestamp created_time;
+    private String title;
     private String text;
     private String supplement;
     private Status visibility;
@@ -21,21 +22,22 @@ public class Record {
     
     }
     
-    public Record(String user_name, Timestamp created_time, String text,
-            String supplement, Status visibility) {
+    public Record(String user_name, Timestamp created_time, String title,
+    		String text, String supplement, Status visibility) {
         this.user_name = user_name;
         this.created_time = created_time;
+        this.title = title;
         this.text = text;
         this.supplement = supplement;
         this.visibility = visibility;
     }
     
     public Record(String id_rec, String user_name, Timestamp created_time,
-            String text, String supplement,
-            Status visibility) {
+    		 String title, String text, String supplement, Status visibility) {
         this.id_rec = id_rec;
         this.user_name = user_name;
         this.created_time = created_time;
+        this.title = title;
         this.text = text;
         this.supplement = supplement;
         this.visibility = visibility;
@@ -81,7 +83,17 @@ public class Record {
         this.supplement = supplement;
     }
     
-    public String getVisibility() {
+    
+    
+    public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getVisibility() {
         if (visibility == Status.PRIVATE) {
             return "PRIVATE";
         } else if (visibility == Status.PUBLIC) {
@@ -98,13 +110,15 @@ public class Record {
         } else
             this.visibility = null;
     }
+
+	@Override
+	public String toString() {
+		return "Record [id_rec=" + id_rec + ", user_name=" + user_name + 
+				", created_time=" + created_time + ", title="
+				+ title + ", text=" + text + ", supplement="
+				+ supplement + ", visibility=" + visibility + "]";
+	}
     
-    @Override
-    public String toString() {
-        return "Record [id_rec=" + id_rec + ", user_name=" + user_name
-                + ", created_time=" + created_time + ", text="
-                + text + ", supplement=" + supplement + ", visibility="
-                + visibility + "]";
-    }
+    
     
 }

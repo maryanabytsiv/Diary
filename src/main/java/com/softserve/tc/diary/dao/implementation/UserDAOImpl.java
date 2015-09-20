@@ -15,6 +15,7 @@ import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
+import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.log.Log;
@@ -72,7 +73,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                     ps.setString(8, object.getSex().toUpperCase());
                     ps.setString(9, object.getDate_of_birth());
                     ps.setString(10, object.getAvatar());
-                    ps.setString(11, object.getRole());
+                    ps.setString(11, object.getRole().toUpperCase());
                     ps.execute();
                     ps.close();
                     conn.commit();
@@ -94,7 +95,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 splitAddress[2], splitAddress[3]);
         AddressDAOImpl adressDAO = new AddressDAOImpl();
         
-        User userToUpdate = readByKey(object.getNick_name());
+        User userToUpdate = readByNickName(object.getNick_name());
         String addressUUID = "";
         try (Connection conn = TestDBConnection.getConnection()) {
             ps = conn.prepareStatement(
@@ -128,7 +129,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 ps.setString(6, object.getSex().toUpperCase());
                 ps.setString(7, object.getDate_of_birth());
                 ps.setString(8, object.getAvatar());
-                ps.setString(9, object.getRole());
+                ps.setString(9, object.getRole().toUpperCase());
                 ps.setString(10, object.getNick_name());
                 ps.execute();
                 conn.commit();
@@ -173,7 +174,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
-                        "select  * from user_card left join address on (address.id=user_card.address_id)");
+                        "select  * from user_card left join address on (address.id=user_card.address_id);");
                 rs = ps.executeQuery();
                 conn.commit();
             } catch (SQLException e) {
@@ -193,22 +194,46 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                         rs.getString("password"),
                         Sex.valueOf(rs.getString("Sex")),
                         rs.getString("date_of_birth"), rs.getString("avatar"),
-                        rs.getString("role")));
+                        Role.valueOf(rs.getString("role"))
+                       ));
             }
         } catch (SQLException e) {
             logger.error("select all failed", e);
         }
         return list;
     }
+
+    public User readByKey(String uuid) {
+    	String query = "select * from user_card left join address on (address.id=user_card.address_id)"
+    			+ " where uid like '" + uuid + "';";
+    	User user = null;
+        try (Connection conn = TestDBConnection.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                ps = conn.prepareStatement(query);
+                rs = ps.executeQuery();
+                user = resultSet(rs);
+                conn.commit();
+            } catch (SQLException e) {
+                logger.error("Error. Rollback changes", e);
+                conn.rollback();
+                conn.setAutoCommit(true);
+            }
+            conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            logger.error("read by key failed", e);
+        }
+        return user;
+    }
     
-    public User readByKey(String id) { // id as NICK_NAME
+    public User readByNickName(String nickName) { // id as NICK_NAME
         User user = null;
         try (Connection conn = TestDBConnection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
                         "select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-                ps.setString(1, id);
+                ps.setString(1, nickName);
                 rs = ps.executeQuery();
                 user = resultSet(rs);
                 conn.commit();
@@ -256,12 +281,50 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return usersByYear;
     }
     
+    public List<User> getUsersByRole(Role role) {
+    	List<User> list = new ArrayList<User>();
+    	String roleStr = role.toString();
+    	try (Connection conn = TestDBConnection.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                ps = conn.prepareStatement(
+                        "select  * from user_card left join address on (address.id=user_card.address_id)"
+                        + "where role like '" + roleStr + "'");
+                rs = ps.executeQuery();
+                conn.commit();
+            } catch (SQLException e) {
+                logger.error("Error. Rollback changes", e);
+                conn.rollback();
+                conn.setAutoCommit(true);
+            }
+            conn.setAutoCommit(true);
+            String address = "";
+            while (rs.next()) {
+                address = rs.getString("country") + ", " + rs.getString("city")
+                        + ", " + rs.getString("street") + ", "
+                        + rs.getString("build_number");
+                list.add(new User(rs.getString("nick_name"),
+                        rs.getString("first_name"), rs.getString("second_name"),
+                        address, rs.getString("e_mail"),
+                        rs.getString("password"),
+                        Sex.valueOf(rs.getString("Sex")),
+                        rs.getString("date_of_birth"), rs.getString("avatar"),
+                        Role.valueOf(rs.getString("role"))
+                       ));
+            }
+        } catch (SQLException e) {
+            logger.error("select all failed by role", e);
+        }
+        return list;
+    }
+    
     private User resultSet(ResultSet rs) {
         User user = null;
         
         try {
             while (rs.next()) {
                 user = new User();
+                user.setUuid(rs.getString("uid"));
                 user.setNick_name(rs.getString("nick_name"));
                 user.setFirst_name(rs.getString("first_name"));
                 user.setSecond_name(rs.getString("second_name"));
@@ -279,5 +342,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             logger.error("ResultSet failed", e);
         }
         return user;
+    }
+    
+    public static void main(String[] args) {
+    	UserDAOImpl dao = new UserDAOImpl();
+    	List<User> list = dao.getAll();
+    	System.out.println(list.size());
     }
 }

@@ -12,7 +12,7 @@ public class User {
     private Sex sex;
     private String date_of_birth;
     private String avatar;
-    private String role;
+    private Role role;
     
     public User() {
     
@@ -20,7 +20,23 @@ public class User {
     
     public User(String nick_name, String first_name, String second_name,
             String address, String e_mail, String password,
-            Sex sex, String date_of_birth, String avatar, String role) {
+            Sex sex, String date_of_birth, String avatar, Role role) {
+        this.nick_name = nick_name;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.address = address;
+        this.e_mail = e_mail;
+        this.password = password;
+        this.sex = sex;
+        this.date_of_birth = date_of_birth;
+        this.avatar = avatar;
+        this.role = role;
+    }
+    
+    public User(String uuid, String nick_name, String first_name, String second_name,
+            String address, String e_mail, String password,
+            Sex sex, String date_of_birth, String avatar, Role role) {
+    	this.uuid = uuid;
         this.nick_name = nick_name;
         this.first_name = first_name;
         this.second_name = second_name;
@@ -125,11 +141,23 @@ public class User {
     }
     
     public String getRole() {
-        return role;
-    }
+    	   if (role == Role.ADMIN) {
+               return "ADMIN";
+           } else if (role == Role.USER) {
+               return "USER";
+           } else {
+        	   throw new IllegalArgumentException();
+           }
+       }
     
     public void setRole(String role) {
-        this.role = role;
+        if (role.equals("ADMIN")) {
+            this.role = Role.ADMIN;
+        } else if (role.equals("USER")) {
+            this.role = Role.USER;
+        } else {
+     	   throw new IllegalArgumentException();
+        }
     }
     
     @Override

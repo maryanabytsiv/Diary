@@ -59,23 +59,22 @@ public class DBCreationManager {
     }
     
     public static void insertValue() throws SQLException {
-        String insertData = "insert into role values('1','Admin') ;"
-                + " insert into role values('2','User') ;"
-                + "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
+        String insertData = 
+                 "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
                 + "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
                 + "insert into address values('3','Poland', 'Warshav', 'Bog', 55);"
                 + "insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com',"
-                + "'kdfhgrr', 'MALE', '1992-02-02', null, '2');"
+                + "'kdfhgrr', 'MALE', '1992-02-02', null, 'USER');"
                 + "insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com',"
-                + "'vfjukiuu', 'FEMALE', '1990-03-08', null, '1');"
+                + "'vfjukiuu', 'FEMALE', '1990-03-08', null, 'ADMIN');"
                 + "insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com',"
-                + "'flgkjhlkftjt', 'MALE', '1989-02-20', null, '2');"
+                + "'flgkjhlkftjt', 'MALE', '1989-02-20', null, 'USER');"
                 + "insert into record_list values('1',null,'2015-02-23 00:00:00','#Hello my name is Bob. I am from #NewYork',"
-                + "'https://motivation/inUkraine/improveMySelf','PUBLIC');"
+                + "'null','https://motivation/inUkraine/improveMySelf','PUBLIC');"
                 + "insert into record_list values('2',null,'2015-05-20 12:00:56','That was #nice day. #Halloween so cool',"
-                + "'http:/bigBoss/works/perfectly','PRIVATE');"
+                + "'Halloween','http:/bigBoss/works/perfectly','PRIVATE');"
                 + "insert into record_list values('3',null,'2015-06-10 17:20:56','#HelloTeam, it is #nice to meet in NewYork',"
-                + "'http:/Lviv/theBest/Town/everSeen','PUBLIC');"
+                + "'New York','http:/Lviv/theBest/Town/everSeen','PUBLIC');"
                 + "insert into tag values('testkey1','#Hell');"
                 + "insert into tag values('testkey2','#Hello');"
                 + "insert into tag values('testkey3','#HelloWorld');"
@@ -103,7 +102,7 @@ public class DBCreationManager {
     public static void deleteAllFromTable() throws SQLException {
         String deleteData = "delete from tag_record;"
                 + "delete from record_list;" + "delete from user_card;"
-                + "delete from address;" + "delete from role;"
+                + "delete from address;"
                 + "delete from tag;";
         try (Connection connection = TestDBConnection.getConnection()) {
             connection.setAutoCommit(false);
@@ -127,7 +126,7 @@ public class DBCreationManager {
         String dropTable = "DROP TABLE IF EXISTS tag_record;"
                 + "DROP TABLE IF EXISTS record_list;"
                 + "DROP TABLE IF EXISTS user_card;"
-                + "DROP TABLE IF EXISTS address;" + "DROP TABLE IF EXISTS role;"
+                + "DROP TABLE IF EXISTS address;"
                 + "DROP TABLE IF EXISTS tag;";
         try (Connection connection = TestDBConnection.getConnection()) {
             try {

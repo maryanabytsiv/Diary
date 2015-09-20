@@ -20,14 +20,8 @@ import com.softserve.tc.log.Log;
 
 public class TagDAOImpl implements TagDAO {
     
-    // private static Connection conn;
     private static PreparedStatement ps;
     private Logger logger = Log.init(this.getClass().getName());
-    
-    public String getGeneratedId() {
-        UUID idOne = UUID.randomUUID();
-        return idOne.toString();
-    }
     
     public Tag getTagByMessage(String tagMessage) {
         Tag tag = null;
@@ -52,7 +46,7 @@ public class TagDAOImpl implements TagDAO {
         } else {
             try (Connection conn = TestDBConnection.getConnection()) {
                 ps = conn.prepareStatement("insert into tag values(?,?);");
-                String tagId = getGeneratedId();
+                String tagId = UUID.randomUUID().toString();
                 ps.setString(1, tagId);
                 ps.setString(2, object.getTagMessage());
                 ps.execute();
@@ -64,17 +58,26 @@ public class TagDAOImpl implements TagDAO {
     }
     
     public boolean checkIfTagExist(String tagMessage) {
-        List<Tag> list = getAll();
-        for (Tag tag : list) {
-            if (tag.getTagMessage().equals(tagMessage)) {
-                return true;
-            }
+        String query = "select COUNT(*) from tag where tag_message like '" + tagMessage + "';";
+        int count = 0;
+        try (Connection conn = TestDBConnection.getConnection()) {
+        	ps = conn.prepareStatement(query);
+        	ResultSet rs = ps.executeQuery();
+        	if (rs.next()) {
+        		count = rs.getInt(1);
+        	}
+        } catch (SQLException e) {
+        	e.printStackTrace();
+		}
+        if (count == 0) {
+        	return false;
+        } else {
+        	return true;
         }
-        return false;
     }
     
     public void createFromRecord(String recordId, String tagMessage) {
-        String tagId = getGeneratedId();
+        String tagId = UUID.randomUUID().toString();
         if (checkIfTagExist(tagMessage)) {
             logger.warn("Tag already exist");
         } else {
@@ -91,7 +94,7 @@ public class TagDAOImpl implements TagDAO {
     }
     
     public void insertValuesInTagRecord(String recordId, String tagId) {
-        String uuid_tr = getGeneratedId();
+        String uuid_tr = UUID.randomUUID().toString();
         String query = "Insert into tag_record values(?,?,?);";
         try (Connection conn = TestDBConnection.getConnection()) {
             ps = conn.prepareStatement(query);
@@ -192,12 +195,12 @@ public class TagDAOImpl implements TagDAO {
                 String rec_id = rs.getString(1);
                 String user_id_rec = rs.getString(2);
                 Timestamp created_time = rs.getTimestamp(3);
-                String text = rs.getString(4);
-                String supplement = rs.getString(5);
-                String visability = rs.getString(6);
-                Record rec = new Record(rec_id, user_id_rec, created_time, text,
-                        supplement,
-                        checkVisability(visability));
+                String title = rs.getString(4);
+                String text = rs.getString(5);
+                String supplement = rs.getString(6);
+                Status visability = Status.valueOf(rs.getString(7));
+                Record rec = new Record(rec_id, user_id_rec, created_time, title, text,
+                        supplement, visability);
                 listRecordsWithTag.add(rec);
             }
         } catch (SQLException e) {

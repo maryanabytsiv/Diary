@@ -2,13 +2,8 @@ DROP TABLE IF EXISTS tag_record;
 DROP TABLE IF EXISTS record_list;
 DROP TABLE IF EXISTS user_card;
 DROP TABLE IF EXISTS address;
-DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS tag;
 
-CREATE TABLE role (
-    role_id varchar(40) PRIMARY KEY,
-    name varchar(30) NOT NULL
-);
 
 CREATE TABLE  address (
     id varchar(40) PRIMARY KEY,
@@ -29,7 +24,7 @@ CREATE TABLE user_card (
     sex varchar(6),
     date_of_birth date,
     avatar varchar(150),
-    role varchar(40) references role(role_id) NOT NULL
+    role varchar(6) NOT NULL
 );
 
 
@@ -37,6 +32,7 @@ CREATE TABLE record_list (
     id_rec varchar(40) PRIMARY KEY,
     user_id_rec varchar(40) references user_card(uid),
     created_time timestamp without time zone,
+    title varchar(60) default 'default title',
     text text,
     supplement varchar(50),
     visibility varchar(10) NOT NULL 
@@ -44,7 +40,7 @@ CREATE TABLE record_list (
 
 CREATE TABLE tag (
     uuid varchar(40) PRIMARY KEY,
-    tag_message varchar(1000) UNIQUE
+    tag_message varchar(50) UNIQUE
 );
 
 CREATE TABLE tag_record (
