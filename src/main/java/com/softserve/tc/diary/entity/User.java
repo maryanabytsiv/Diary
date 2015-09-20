@@ -13,6 +13,7 @@ public class User {
     private String date_of_birth;
     private String avatar;
     private String role;
+    private String session;
     
     public User() {
     
@@ -132,14 +133,23 @@ public class User {
         this.role = role;
     }
     
+    public String getSession() {
+        return session;
+    }
+    
+    public void setSession(String session) {
+        this.session = session;
+    }
+    
     @Override
     public String toString() {
-        return "User [nick_name=" + nick_name + ", first_name=" + first_name
-                + ", second_name=" + second_name
-                + ", address =" + address + ", e_mail=" + e_mail + ", password="
-                + password + ", sex=" + sex
-                + ", date_of_birth=" + date_of_birth + ", avatar=" + avatar
-                + ", role=" + role + "]" + "\n";
+        return "User [uuid=" + uuid + ", nick_name=" + nick_name
+                + ", first_name=" + first_name + ", second_name="
+                + second_name + ", address=" + address + ", e_mail=" + e_mail
+                + ", password=" + password + ", sex="
+                + sex + ", date_of_birth=" + date_of_birth + ", avatar="
+                + avatar + ", role=" + role + ", session="
+                + session + "]";
     }
     
 }

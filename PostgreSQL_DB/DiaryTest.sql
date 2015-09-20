@@ -29,7 +29,8 @@ CREATE TABLE user_card (
     sex varchar(6),
     date_of_birth date,
     avatar varchar(150),
-    role varchar(40) references role(role_id) NOT NULL
+    role varchar(40) references role(role_id) NOT NULL,
+    session varchar(40)
 );
 
 
