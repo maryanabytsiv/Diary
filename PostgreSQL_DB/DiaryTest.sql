@@ -24,8 +24,8 @@ CREATE TABLE user_card (
     sex varchar(6),
     date_of_birth date,
     avatar varchar(150),
-    role varchar(6) NOT NULL
- /* session varchar(40)*/
+    role varchar(6) NOT NULL,
+ 	session varchar(40)
 );
 
 
