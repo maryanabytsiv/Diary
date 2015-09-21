@@ -68,8 +68,6 @@ public class TestTagDAO {
         try (Connection connection = TestDBConnection.getConnection()) {
             String query1 = "SELECT tag_message FROM tag "
                     + "WHERE tag_message Like '#HelloWorldWide';";
-            // String query2 = "SELECT tag_message FROM tag "
-            // + "WHERE tag_message Like '#HelloWorld';";
             ps = connection.prepareStatement(query1);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -82,8 +80,6 @@ public class TestTagDAO {
         assertNotNull(workingTag);
         assertEquals("#HelloWorldWide", workingTag.getTagMessage());
         
-        Tag tagAlreadyExist = new Tag("#HelloWorld");
-        tagDAO.create(tagAlreadyExist);
         logger.info("test create tag");
     }
     

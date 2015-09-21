@@ -24,7 +24,7 @@ public class DiaryServiceImpl implements DiaryService {
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
     
     public String logIn(String nickName, String password) {
-        User user = userDAO.findByNickName(nickName);
+        User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
                     nickName));
@@ -46,7 +46,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
     
     public boolean logOut(String nickName) {
-        User user = userDAO.findByNickName(nickName);
+        User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
                     nickName));
@@ -60,7 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     public boolean addRecord(String nickname, Status status, String record) {
-        User user = userDAO.findByNickName(nickname);
+        User user = userDAO.readByNickName(nickname);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
                     nickname));

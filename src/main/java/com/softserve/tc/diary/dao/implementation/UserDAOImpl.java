@@ -345,30 +345,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     }
     
     @Override
-    public User findByNickName(String nickName) {
-        User user = null;
-        try (Connection conn = TestDBConnection.getConnection()) {
-            try {
-                conn.setAutoCommit(false);
-                ps = conn.prepareStatement(
-                        "select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-                ps.setString(1, nickName);
-                rs = ps.executeQuery();
-                user = resultSet(rs);
-                conn.commit();
-            } catch (SQLException e) {
-                logger.error("Error. Rollback changes", e);
-                conn.rollback();
-                conn.setAutoCommit(true);
-            }
-            conn.setAutoCommit(true);
-        } catch (SQLException e) {
-            logger.error("read by key failed", e);
-        }
-        return user;
-    }
-    
-    @Override
     public void updateSessionByNickName(String nickName, String session) {
         
         try (Connection conn = TestDBConnection.getConnection()) {

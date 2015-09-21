@@ -10,7 +10,7 @@ public interface UserDAO extends BaseDAO<User> {
     
     List<User> getByYearOfBirth(String yearOfBirth);
     
-    User findByNickName(String nickName);
+    User readByNickName(String nickName);
     
     void updateSessionByNickName(String nickName, String session);
     
