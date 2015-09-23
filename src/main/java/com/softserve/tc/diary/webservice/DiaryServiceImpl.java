@@ -12,6 +12,7 @@ import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
+import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.User;
@@ -39,7 +40,10 @@ public class DiaryServiceImpl implements DiaryService {
                     
             return null;
         } else {
-            if (user.getPassword().equals(password)) {
+            String encryptedPassword =
+                    password != null ? PasswordHelper.encrypt(password) : null;
+                    
+            if (user.getPassword().equals(encryptedPassword)) {
                 String session = UUID.randomUUID().toString();
                 user.setSession(session);
                 userDAO.update(user);
