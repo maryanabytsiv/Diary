@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
 
 import org.apache.log4j.Logger;
 
