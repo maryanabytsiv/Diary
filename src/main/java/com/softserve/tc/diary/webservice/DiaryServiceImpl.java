@@ -40,7 +40,8 @@ public class DiaryServiceImpl implements DiaryService {
         } else {
             if (user.getPassword().equals(password)) {
                 String session = UUID.randomUUID().toString();
-                userDAO.updateSessionByNickName(nickName, session);
+                user.setSession(session);
+                userDAO.update(user);
                 
                 return session;
             }
@@ -60,7 +61,8 @@ public class DiaryServiceImpl implements DiaryService {
                     
             return false;
         }
-        userDAO.updateSessionByNickName(nickName, null);
+        user.setSession(null);
+        userDAO.update(user);
         
         return true;
     }
@@ -77,8 +79,9 @@ public class DiaryServiceImpl implements DiaryService {
             Timestamp createdTime =
                     new Timestamp(new java.util.Date().getTime());
                     
-            Record newRecord = new Record(user.getUuid(), createdTime, null, record,
-                    null, status);
+            Record newRecord =
+                    new Record(user.getUuid(), createdTime, null, record,
+                            null, status);
             recordDAOImpl.create(newRecord);
             
             return true;

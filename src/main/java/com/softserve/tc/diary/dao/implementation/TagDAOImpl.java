@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
