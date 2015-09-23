@@ -3,6 +3,7 @@ package com.softserve.tc.diary.webservice;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
@@ -23,11 +24,7 @@ public class DiaryServiceImpl implements DiaryService {
     private UserDAO userDAO = new UserDAOImpl();
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
     
-    @Override
-	public String sayHello(String name) {
-		return "Hello from WebService to " + name + "!";
-	}
-    
+    @WebMethod
     public String logIn(String nickName, String password) {
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
@@ -51,6 +48,7 @@ public class DiaryServiceImpl implements DiaryService {
         }
     }
     
+    @WebMethod
     public boolean logOut(String nickName) {
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
@@ -66,6 +64,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
     
     @Override
+    @WebMethod
     public boolean addRecord(String nickname, Status status, String record) {
         User user = userDAO.readByNickName(nickname);
         if (user == null) {

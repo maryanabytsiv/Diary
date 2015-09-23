@@ -31,7 +31,7 @@ CREATE TABLE user_card (
 
 CREATE TABLE record_list (
     id_rec varchar(40) PRIMARY KEY,
-    user_id_rec varchar(40) references user_card(uid),
+    user_id_rec varchar(40) references user_card(uid) NOT NULL,
     created_time timestamp without time zone,
     title varchar(60) default 'default title',
     text text,

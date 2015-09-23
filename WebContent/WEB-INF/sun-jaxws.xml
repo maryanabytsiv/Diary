@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
   <endpoint name="DiaryServiceImpl" implementation="com.softserve.tc.diary.webservice.DiaryServiceImpl"
-   url-pattern="/Ws" />
+   url-pattern="/DiaryService" />
 </endpoints>

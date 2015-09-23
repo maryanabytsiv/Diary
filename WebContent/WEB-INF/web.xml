@@ -21,6 +21,6 @@
 
  <servlet-mapping>
   <servlet-name>DiaryService</servlet-name>
-  <url-pattern>/Ws</url-pattern>
+  <url-pattern>/DiaryService</url-pattern>
  </servlet-mapping>
 </web-app>
