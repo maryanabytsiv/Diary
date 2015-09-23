@@ -1,4 +1,4 @@
-package com.softserve.tc.diary.connectmanager;
+package com.softserve.tc.diary.connectionmanager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.log.Log;
 
-public class TestDBConnection extends ConnectManager {
+public class TestDBConnection extends ConnectionManager {
     
     private static final BasicDataSource dataSourceTestDB =
             new BasicDataSource();

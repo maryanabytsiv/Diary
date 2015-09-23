@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.log.Log;
 
 /**

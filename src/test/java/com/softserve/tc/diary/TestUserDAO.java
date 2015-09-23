@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.softserve.tc.diary.connectmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Role;

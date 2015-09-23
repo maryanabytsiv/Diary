@@ -10,8 +10,8 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectmanager.ConnectManager;
-import com.softserve.tc.diary.connectmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.log.Log;
