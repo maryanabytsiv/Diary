@@ -1,13 +1,19 @@
 package com.softserve.tc.diary.webservice;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
 
 import com.softserve.tc.diary.entity.Status;
 
 @WebService
 public interface DiaryService {
     
-    String logIn(String nickName, String password);
+	@WebMethod
+	String sayHello(String name);
+	
+	String logIn(String nickName, String password);
     
     boolean logOut(String nickName);
     

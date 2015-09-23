@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
 
 import org.apache.log4j.Logger;
 
@@ -16,12 +18,17 @@ import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.log.Log;
 
-@WebService
+@WebService(endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
     private static Logger LOG = Log.init("DiaryServiceImpl");
     
     private UserDAO userDAO = new UserDAOImpl();
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
+    
+    @Override
+	public String sayHello(String name) {
+		return "Hello from WebService to " + name + "!";
+	}
     
     public String logIn(String nickName, String password) {
         User user = userDAO.readByNickName(nickName);
@@ -83,6 +90,7 @@ public class DiaryServiceImpl implements DiaryService {
         // TODO Ask about Record. and nickname(maybe there must be session?)
         return false;
     }
+
     
     // @Override
     // public List<Record> getAllRecords(String nickName, Date date) {
