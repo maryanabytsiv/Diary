@@ -17,12 +17,18 @@ import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.log.Log;
 
-@WebService(endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
+@WebService(
+        endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
     private static Logger LOG = Log.init("DiaryServiceImpl");
     
     private UserDAO userDAO = new UserDAOImpl();
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
+    
+    @Override
+    public String sayHello(String name) {
+        return "Hello from WebService to " + name + "!";
+    }
     
     @WebMethod
     public String logIn(String nickName, String password) {
@@ -90,7 +96,6 @@ public class DiaryServiceImpl implements DiaryService {
         // TODO Ask about Record. and nickname(maybe there must be session?)
         return false;
     }
-
     
     // @Override
     // public List<Record> getAllRecords(String nickName, Date date) {
