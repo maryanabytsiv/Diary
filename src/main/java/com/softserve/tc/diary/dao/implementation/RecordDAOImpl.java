@@ -164,8 +164,49 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         return list;
     }
     
-    public List<Record> getRecordByDate(String date) {
-        return null;
+    public List<Record> getRecordByDate(Timestamp date) {
+        List<Record> list = new ArrayList<Record>();
+        try (Connection conn = TestDBConnection.getConnection()) {
+            ps = conn.prepareStatement("SELECT * FROM record_list where created_time=?;");
+            ps.setTimestamp(1, date);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id_rec = rs.getString(1);
+                String user_id_rec = rs.getString(2);
+                Timestamp created_time = rs.getTimestamp(3);
+                String title = rs.getString(4);
+                String text = rs.getString(5);
+                String supplement = rs.getString(6);
+                Status status = Status.valueOf(rs.getString(7));
+                list.add(new Record(id_rec, user_id_rec, created_time, title, text, supplement, status));
+            }
+        } catch (SQLException e) {
+            logger.error("can't get all records", e);
+        }
+        return list;
+    }
+    
+    public List<Record> getRecordByNickNameAndDate(String userId,Timestamp date) {
+        List<Record> list = new ArrayList<Record>();
+        try (Connection conn = TestDBConnection.getConnection()) {
+            ps = conn.prepareStatement("SELECT * FROM record_list where user_id_rec=? and created_time=?;");
+            ps.setString(1, userId);
+            ps.setTimestamp(2, date);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id_rec = rs.getString(1);
+                String user_id_rec = rs.getString(2);
+                Timestamp created_time = rs.getTimestamp(3);
+                String title = rs.getString(4);
+                String text = rs.getString(5);
+                String supplement = rs.getString(6);
+                Status status = Status.valueOf(rs.getString(7));
+                list.add(new Record(id_rec, user_id_rec, created_time, title, text, supplement, status));
+            }
+        } catch (SQLException e) {
+            logger.error("can't get all records", e);
+        }
+        return list;
     }
     
     public List<Record> getRecordByVisibility(String visibility) {

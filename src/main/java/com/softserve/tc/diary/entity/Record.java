@@ -2,6 +2,10 @@ package com.softserve.tc.diary.entity;
 
 import java.sql.Timestamp;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.softserve.tc.diary.adapter.TimestampAdapter;
+
 /**
  * 
  * @author Mykola-
@@ -58,11 +62,10 @@ public class Record {
     public void setUser_name(String user_name) {
         this.user_name = user_name;
     }
-    
+    @XmlJavaTypeAdapter(TimestampAdapter.class)
     public Timestamp getCreated_time() {
         return created_time;
     }
-    
     public void setCreated_time(Timestamp created_time) {
         this.created_time = created_time;
     }

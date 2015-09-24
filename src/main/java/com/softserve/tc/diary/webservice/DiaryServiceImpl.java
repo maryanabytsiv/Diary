@@ -1,6 +1,9 @@
 package com.softserve.tc.diary.webservice;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.jws.WebMethod;
@@ -9,34 +12,38 @@ import javax.jws.WebService;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.dao.RecordDAO;
+import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
+import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 @WebService(
         endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
-	
+    
     private static Logger LOG = Log.init("DiaryServiceImpl");
     
     private UserDAO userDAO = new UserDAOImpl();
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
+    private TagDAOImpl tagDAOImpl = new TagDAOImpl();
     
     @Override
     public String sayHello(String name) {
-    	
+        
         return "Hello from WebService to " + name + "!";
-    
+        
     }
     
     @WebMethod
     public String logIn(String nickName, String password) {
-    	
+        
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -64,7 +71,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @WebMethod
     public boolean logOut(String nickName) {
-    	
+        
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -81,7 +88,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @WebMethod
     public boolean addRecord(String nickname, Status status, String record) {
-    	
+        
         User user = userDAO.readByNickName(nickname);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -102,24 +109,70 @@ public class DiaryServiceImpl implements DiaryService {
     }
     
     @Override
-    public boolean removeRecord(String nickname, String record) {
-    	
-        // TODO Ask about Record. and nickname(maybe there must be session?)
-        return false;
+    public boolean removeRecord(String nickname, String recordId) {
+        
+        User user = userDAO.readByNickName(nickname);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s",
+                    nickname));
+            return false;
+        }
+        Record record = recordDAOImpl.readByKey(recordId);
+        if (record == null) {
+            LOG.debug(String.format("Record was not found by id %s",
+                    recordId));
+            return false;
+        }
+        recordDAOImpl.delete(record);
+        return true;
     }
     
-    // @Override
-    // public List<Record> getAllRecords(String nickName, Date date) {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
-    //
-    // @Override
-    // public List<Record> getAllRecords(String nickName, String hashTag) {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
-    //
+    @Override
+    public List<Record> getAllRecordsByDate(String nickName, String date) {
+        // TODO Auto-generated method stub
+        List<Record> records = new ArrayList<>();
+        
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s",
+                    nickName));
+            return null;
+        }
+        Timestamp dateOfRecord =Timestamp.valueOf(date);
+        records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(),
+                dateOfRecord);
+        if (records.isEmpty()) {
+            LOG.debug(String.format("Record was not found by date %s",
+                    date));
+            return null;
+        }
+        
+        return records;
+    }
+    
+    @Override
+    public List<Record> getAllRecordsByHashTag(String nickName,
+            String hashTag) {
+        // TODO Auto-generated method stub
+        List<Record> records = new ArrayList<>();
+        
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s",
+                    nickName));
+            return null;
+        }
+        Tag tag = tagDAOImpl.getTagByMessage(hashTag);
+        records = tagDAOImpl.getListRecordsByTag(tag);
+        if (records.isEmpty()) {
+            LOG.debug(String.format("Record was not found by hashtag %s",
+                    hashTag));
+            return null;
+        }
+        
+        return records;
+    }
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
