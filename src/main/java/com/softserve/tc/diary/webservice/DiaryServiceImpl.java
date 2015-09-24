@@ -28,6 +28,7 @@ public class DiaryServiceImpl implements DiaryService {
     private RecordDAO recordDAOImpl = new RecordDAOImpl();
     
     @Override
+    @WebMethod
     public String sayHello(String name) {
     	
         return "Hello from WebService to " + name + "!";
