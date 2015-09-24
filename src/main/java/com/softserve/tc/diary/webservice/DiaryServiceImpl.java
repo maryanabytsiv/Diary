@@ -35,6 +35,7 @@ public class DiaryServiceImpl implements DiaryService {
     private TagDAOImpl tagDAOImpl = new TagDAOImpl();
     
     @Override
+    @WebMethod
     public String sayHello(String name) {
         
         return "Hello from WebService to " + name + "!";

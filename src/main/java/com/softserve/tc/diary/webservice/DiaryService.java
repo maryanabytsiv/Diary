@@ -2,7 +2,6 @@ package com.softserve.tc.diary.webservice;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
@@ -12,10 +11,9 @@ import com.softserve.tc.diary.entity.Status;
 @WebService
 public interface DiaryService {
     
-	@WebMethod
-	String sayHello(String name);
-	
-	String logIn(String nickName, String password);
+    String sayHello(String name);
+    
+    String logIn(String nickName, String password);
     
     boolean logOut(String nickName);
     
