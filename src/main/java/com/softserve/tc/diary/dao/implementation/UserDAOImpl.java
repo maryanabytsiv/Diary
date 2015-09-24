@@ -18,7 +18,7 @@ import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     // private static Connection conn = null;

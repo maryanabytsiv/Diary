@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 public class TestDBConnection extends ConnectionManager {
     

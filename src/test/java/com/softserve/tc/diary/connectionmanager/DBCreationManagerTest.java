@@ -1,4 +1,4 @@
-package com.softserve.tc.diary;
+package com.softserve.tc.diary.connectionmanager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,22 +10,20 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.TestDBConnection;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 /**
  * 
  * @author Mykola-
  *         
  */
-public class DBCreationManager {
+public class DBCreationManagerTest {
     
-    // protected static Connection connection = null;
     private static PreparedStatement ps = null;
     private static Logger logger = Log.init("SQL_Statement");
     
     public static void setUpBeforeClass() throws SQLException {
         
-        // BufferedReader br = null;
         String scriptSQL;
         String result = "";
         
@@ -59,6 +57,7 @@ public class DBCreationManager {
     }
     
     public static void insertValue() throws SQLException {
+    	
         String insertData =
                 "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
                         + "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"
@@ -105,6 +104,7 @@ public class DBCreationManager {
     }
     
     public static void deleteAllFromTable() throws SQLException {
+    	
         String deleteData = "delete from tag_record;"
                 + "delete from record_list;" + "delete from user_card;"
                 + "delete from address;"
@@ -128,6 +128,7 @@ public class DBCreationManager {
     }
     
     public static void DropTableIfExists() throws SQLException {
+    	
         String dropTable = "DROP TABLE IF EXISTS tag_record;"
                 + "DROP TABLE IF EXISTS record_list;"
                 + "DROP TABLE IF EXISTS user_card;"

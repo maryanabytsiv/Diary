@@ -1,4 +1,4 @@
-package com.softserve.tc.diary;
+package com.softserve.tc.diary.dao.implementation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,33 +17,34 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.entity.Address;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
-public class TestAddressDAO {
+public class AddressDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
     
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-        DBCreationManager.setUpBeforeClass();
+        DBCreationManagerTest.setUpBeforeClass();
     }
     
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-        DBCreationManager.DropTableIfExists();
+        DBCreationManagerTest.DropTableIfExists();
     }
     
     @Before
     public void beforeTest() throws SQLException {
-        DBCreationManager.insertValue();
+        DBCreationManagerTest.insertValue();
     }
     
     @After
     public void afterTest() throws SQLException {
-        DBCreationManager.deleteAllFromTable();
+        DBCreationManagerTest.deleteAllFromTable();
     }
     
     @Test

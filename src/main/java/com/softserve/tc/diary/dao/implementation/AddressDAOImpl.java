@@ -10,19 +10,18 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.TestDBConnection;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 public class AddressDAOImpl implements AddressDAO {
     
-    // private static Connection conn = null;
     private static PreparedStatement ps;
     private Logger logger = Log.init(this.getClass().getName());
     
     public void create(Address object) {
+    	
         logger.debug("Creating address");
         try (Connection conn = TestDBConnection.getConnection()) {
             ps = conn
@@ -42,6 +41,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
     
     public Address readByKey(String id) {
+    	
         Address address = null;
         logger.debug("Reading by key");
         try (Connection conn = TestDBConnection.getConnection()) {
@@ -60,6 +60,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
     
     public void update(Address object) {
+    	
         logger.debug("Updating address");
         try (Connection conn = TestDBConnection.getConnection()) {
             
@@ -89,6 +90,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
     
     public void delete(Address object) {
+    	
         try (Connection conn = TestDBConnection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
@@ -114,6 +116,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
     
     public List<Address> getAll() {
+    	
         List<Address> list = new ArrayList<Address>();
         logger.debug("Get all address records");
         try (Connection conn = TestDBConnection.getConnection()) {

@@ -17,7 +17,7 @@ import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 /**
  * 
@@ -27,7 +27,6 @@ import com.softserve.tc.log.Log;
 
 public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
-    // private static Connection conn = null;
     private static PreparedStatement ps = null;
     private static ResultSet rs = null;
     private Logger logger = Log.init(this.getClass().getName());
@@ -67,6 +66,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     }
     
     public Record readByKey(String id) {
+    	
         Record record = null;
         logger.debug("reading by key");
         try (Connection conn = TestDBConnection.getConnection()) {
@@ -85,6 +85,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     }
     
     public void update(Record object) {
+    	
         logger.debug("updating record");
         try (Connection conn = TestDBConnection.getConnection()) {
             try {
@@ -115,6 +116,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     }
     
     public void delete(Record object) {
+    	
         logger.debug("deleting record");
         try (Connection conn = TestDBConnection.getConnection()) {
             try {
@@ -138,6 +140,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     }
     
     public List<Record> getRecordByUserId(String user_id) {
+    	
         List<Record> list = new ArrayList<Record>();
         try (Connection conn = TestDBConnection.getConnection()) {
             ps = conn.prepareStatement(
@@ -174,6 +177,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     }
     
     public List<Record> getAll() {
+    	
         List<Record> list = new ArrayList<Record>();
         try (Connection conn = TestDBConnection.getConnection()) {
             ps = conn.prepareStatement("SELECT * FROM record_list;");

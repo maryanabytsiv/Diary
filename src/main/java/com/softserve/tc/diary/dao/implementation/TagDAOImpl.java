@@ -16,7 +16,7 @@ import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 public class TagDAOImpl implements TagDAO {
 
@@ -24,6 +24,7 @@ public class TagDAOImpl implements TagDAO {
 	private Logger logger = Log.init(this.getClass().getName());
 
 	public Tag getTagByMessage(String tagMessage) {
+		
 		Tag tag = null;
 		String query = "Select * from tag where tag_message like '" + tagMessage + "';";
 		try (Connection conn = TestDBConnection.getConnection()) {
@@ -39,6 +40,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public void create(Tag object) {
+		
 		String tagMessage = object.getTagMessage();
 		if (true == checkIfTagExist(tagMessage)) {
 			logger.warn("Tag already exist");
@@ -66,6 +68,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public boolean checkIfTagExist(String tagMessage) {
+		
 		String query = "select COUNT(*) from tag where tag_message like '" + tagMessage + "';";
 		int count = 0;
 		try (Connection conn = TestDBConnection.getConnection()) {
@@ -116,6 +119,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public void insertValuesInTagRecord(String recordId, String tagId) {
+		
 		String uuid_tr = UUID.randomUUID().toString();
 		String query = "Insert into tag_record values(?,?,?);";
 		try (Connection conn = TestDBConnection.getConnection()) {
@@ -139,6 +143,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public void delete(Tag object) {
+		
 		String uuid = object.getUuid();
 		deleteFromTagRecord(uuid);
 		String tagMessage = object.getTagMessage();
@@ -161,6 +166,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public void deleteFromTagRecord(String uuid) {
+		
 		String query = "DELETE FROM tag_record WHERE tag_uuid LIKE '" + uuid + "';";
 		try (Connection conn = TestDBConnection.getConnection()) {
 			try {
@@ -180,6 +186,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Tag> getListTagsByPrefix(String prefix) {
+		
 		List<Tag> list = new ArrayList<Tag>();
 		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '" + prefix + "%';";
@@ -195,6 +202,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Tag> getListTagsBySuffix(String suffix) {
+		
 		List<Tag> list = new ArrayList<Tag>();
 		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '%" + suffix + "%';";
@@ -210,6 +218,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Record> getListRecordsByTag(Tag object) {
+		
 		List<Record> listRecordsWithTag = new ArrayList<Record>();
 		String uuid = object.getUuid();
 		String query = "Select * from record_list where id_rec IN "
@@ -235,6 +244,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Tag> checkIfRecordHasTag(Record record) {
+		
 		String textRecord = record.getText();
 		List<Tag> list = new ArrayList<Tag>();
 		for (int i = 0; i < textRecord.length(); i++) {
@@ -259,6 +269,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Tag> getAll() {
+		
 		List<Tag> list = new ArrayList<Tag>();
 		String query = "SELECT * FROM tag;";
 		try (Connection conn = TestDBConnection.getConnection()) {
@@ -274,6 +285,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public Tag readByKey(String uuid) {
+		
 		Tag tag = null;
 		try (Connection conn = TestDBConnection.getConnection()) {
 			String query = "Select * from tag where uuid Like '" + uuid + "';";
@@ -289,6 +301,7 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Record> getListRecordsByListOfTags(List<Tag> listTags) {
+		
 		List<Record> finalList = new ArrayList<Record>();
 		for (Tag t : listTags) {
 			List<Record> forEachTagList = getListRecordsByTag(t);
@@ -300,6 +313,8 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public void update(Tag object) {
+		
 		logger.info("not supported");
+		
 	}
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 public final class DBConnection extends ConnectionManager {
     
@@ -22,7 +22,6 @@ public final class DBConnection extends ConnectionManager {
     }
     
     private DBConnection() {
-        // TODO Auto-generated constructor stub
     }
     
     public static Connection getConnection() throws SQLException {
@@ -34,6 +33,7 @@ public final class DBConnection extends ConnectionManager {
     }
     
     public void close() throws Exception {
+    	
         dataSource.close();
         logger.info("Connections are closed.");
     }

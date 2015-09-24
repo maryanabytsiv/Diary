@@ -15,11 +15,12 @@ import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.User;
-import com.softserve.tc.log.Log;
+import com.softserve.tc.diary.log.Log;
 
 @WebService(
         endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
+	
     private static Logger LOG = Log.init("DiaryServiceImpl");
     
     private UserDAO userDAO = new UserDAOImpl();
@@ -27,11 +28,14 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     public String sayHello(String name) {
+    	
         return "Hello from WebService to " + name + "!";
+    
     }
     
     @WebMethod
     public String logIn(String nickName, String password) {
+    	
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -56,6 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @WebMethod
     public boolean logOut(String nickName) {
+    	
         User user = userDAO.readByNickName(nickName);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -72,6 +77,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @WebMethod
     public boolean addRecord(String nickname, Status status, String record) {
+    	
         User user = userDAO.readByNickName(nickname);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
@@ -93,6 +99,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     public boolean removeRecord(String nickname, String record) {
+    	
         // TODO Ask about Record. and nickname(maybe there must be session?)
         return false;
     }
