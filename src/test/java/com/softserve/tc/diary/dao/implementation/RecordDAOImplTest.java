@@ -19,8 +19,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -35,6 +36,7 @@ import com.softserve.tc.diary.log.Log;
 public class RecordDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
+    private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
     
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
@@ -61,14 +63,14 @@ public class RecordDAOImplTest {
         
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
         
-        RecordDAOImpl RecordDAO = new RecordDAOImpl();
+        RecordDAOImpl RecordDAO = new RecordDAOImpl(conn);
         Record newRecord = new Record("1", createdTime, "sport", "#JUST DO IT!!!",
                 "http:/bigBoss/works/perfectly",
                 Status.PRIVATE);
         RecordDAO.create(newRecord);
         Record record = null;
         
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             ps = connection.prepareStatement(
                     "select * from record_list where user_id_rec ='1' and title like 'sport' "
                     + "and supplement like 'http:/bigBoss/works/perfectly' and visibility like 'PRIVATE';");
@@ -95,12 +97,12 @@ public class RecordDAOImplTest {
     public void testUpdateRecord() {
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
         
-        RecordDAOImpl recordDAO = new RecordDAOImpl();
+        RecordDAOImpl recordDAO = new RecordDAOImpl(conn);
         Record rec = new Record("1", createdTime, "work", "#Work HARD!!!",
                 "https://motivation/inUkraine/improveMySelf",
                 Status.PRIVATE);
         rec.setId_rec(UUID.randomUUID().toString());
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             try {
                 connection.setAutoCommit(false);
                 ps = connection.prepareStatement(
@@ -125,7 +127,7 @@ public class RecordDAOImplTest {
         }
         recordDAO.update(rec);
         Record record = null;
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             ps = connection.prepareStatement(
                     "select * from record_list where id_rec=?");
             ps.setString(1, rec.getId_rec());
@@ -150,7 +152,7 @@ public class RecordDAOImplTest {
     
     @Test
     public void testGetAll() {
-        RecordDAOImpl recordDAO = new RecordDAOImpl();
+        RecordDAOImpl recordDAO = new RecordDAOImpl(conn);
         List<Record> list = recordDAO.getAll();
         assertEquals(3, list.size());
         logger.info("test get all");
@@ -159,7 +161,7 @@ public class RecordDAOImplTest {
     @Test
     public void TestDeleteRecord() {
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
-        RecordDAOImpl recordDAO = new RecordDAOImpl();
+        RecordDAOImpl recordDAO = new RecordDAOImpl(conn);
         Record record = new Record("1", createdTime, "hello","#Hello, how are you??",
                 "http:/Lviv/theBest/Town",
                 Status.PRIVATE);

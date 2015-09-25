@@ -11,6 +11,9 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.dao.UserDAO;
@@ -29,10 +32,11 @@ import com.softserve.tc.diary.log.Log;
 public class DiaryServiceImpl implements DiaryService {
     
     private static Logger LOG = Log.init("DiaryServiceImpl");
+    private static ConnectionManager conn = DBConnectionManager.GetInstance();
     
-    private UserDAO userDAO = new UserDAOImpl();
-    private RecordDAO recordDAOImpl = new RecordDAOImpl();
-    private TagDAOImpl tagDAOImpl = new TagDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl(conn);
+    private RecordDAO recordDAOImpl = new RecordDAOImpl(conn);
+    private TagDAOImpl tagDAOImpl = new TagDAOImpl(conn);
     
     @Override
     @WebMethod

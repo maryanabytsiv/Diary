@@ -15,8 +15,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Role;
@@ -27,6 +28,7 @@ import com.softserve.tc.diary.log.Log;
 public class UserDAOImplTest {
 	private Logger logger = Log.init(this.getClass().getName());
 	private PreparedStatement ps = null;
+	private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws SQLException {
@@ -51,18 +53,18 @@ public class UserDAOImplTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateUserNullPointerException() {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		userDAO.create(new User(null, "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", null, "64561", Sex.FEMALE,
 				"1999-03-02", "folder/folder/image.png", null));
 	}
 
 	@Test
 	public void testCreateUser() {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		userDAO.create(new User("hary12", "Andriy", "Mural", "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561",
 				Sex.FEMALE, "1995-03-02", "folder/folder/image.png", Role.USER));
 		User userActual = new User();
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
@@ -96,7 +98,7 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testUpdateUser() {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		User user = new User("read", "Natalya", "Bolyk", "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
 				Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
 		userDAO.create(user);
@@ -105,7 +107,7 @@ public class UserDAOImplTest {
 		user.setAddress("Poland, Gdansk, Naberejna, 52");
 		userDAO.update(user);
 		User userActual = new User();
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
@@ -139,7 +141,7 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testDeleteUser() {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5", "bg@gmail.com", "64561", Sex.FEMALE, null,
 				"jfhfff.mvn", Role.ADMIN);
 		userDAO.create(user);
@@ -150,7 +152,7 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testGetAll() {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		User user = new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10", "bsss@gmail.com", "64561", Sex.MALE,
 				null, "jsjwe.txt", Role.ADMIN);
 		userDAO.create(user);
@@ -163,11 +165,11 @@ public class UserDAOImplTest {
 	@Test
 	public void testGetByNickName() {
 		User userActual = new User();
-		UserDAOImpl userDAO = new UserDAOImpl();
+		UserDAOImpl userDAO = new UserDAOImpl(conn);
 		User user = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
 				Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
 		userDAO.create(user);
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
@@ -201,7 +203,7 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testreadByKey() {
-		UserDAOImpl dao = new UserDAOImpl();
+		UserDAOImpl dao = new UserDAOImpl(conn);
 		User user = dao.readByKey("1");
 		assertNotNull(user);
 		assertEquals(user.getNick_name(), "BigBunny");
@@ -219,21 +221,21 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testCountAllBySex() {
-		UserDAOImpl user = new UserDAOImpl();
+		UserDAOImpl user = new UserDAOImpl(conn);
 		int count = user.countAllBySex("MALE");
 		assertEquals(2, count);
 	}
 
 	@Test
 	public void testGetUsersByRole() {
-		UserDAOImpl dao = new UserDAOImpl();
+		UserDAOImpl dao = new UserDAOImpl(conn);
 		List<User> list = dao.getUsersByRole(Role.USER);
 		assertEquals(2, list.size());
 	}
 
 	@Test
 	public void testGetByDateOfBirth() {
-		UserDAOImpl user = new UserDAOImpl();
+		UserDAOImpl user = new UserDAOImpl(conn);
 		List<User> list = user.getByYearOfBirth("1989");
 		int actual = list.size();
 		int expected = 1;
@@ -242,12 +244,12 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testGetUserByNickAndPassword() {
-		UserDAOImpl dao = new UserDAOImpl();
+		UserDAOImpl dao = new UserDAOImpl(conn);
 		User user1 = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
 				Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
 		dao.create(user1);
 		user1 = null;
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
@@ -286,12 +288,12 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testLogIn() {
-		UserDAOImpl dao = new UserDAOImpl();
+		UserDAOImpl dao = new UserDAOImpl(conn);
 		User user1 = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
 				Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
 		dao.create(user1);
 		user1 = null;
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
@@ -321,12 +323,12 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testLogOut() {
-		UserDAOImpl dao = new UserDAOImpl();
+		UserDAOImpl dao = new UserDAOImpl(conn);
 		User user1 = new User("Bobik", "Oleg", "Ponkin", "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
 				Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
 		dao.create(user1);
 		user1 = null;
-		try (Connection connection = TestDBConnection.getConnection()) {
+		try (Connection connection = conn.getConnection()) {
 			try {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(

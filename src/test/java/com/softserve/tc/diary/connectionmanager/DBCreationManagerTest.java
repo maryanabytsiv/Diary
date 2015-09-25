@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.log.Log;
 
 /**
@@ -21,7 +21,7 @@ public class DBCreationManagerTest {
     
     private static PreparedStatement ps = null;
     private static Logger logger = Log.init("SQL_Statement");
-    
+    private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
     public static void setUpBeforeClass() throws SQLException {
         
         String scriptSQL;
@@ -36,7 +36,7 @@ public class DBCreationManagerTest {
             logger.error("can't read from file", e);
         }
         
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             
             connection.setAutoCommit(false);
             try {
@@ -95,7 +95,7 @@ public class DBCreationManagerTest {
                         + '\n'
                         + "insert into tag_record values('rt6',3,'testkey5');"
                         + '\n';
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             ps = connection.prepareStatement(insertData);
             ps.execute();
         } catch (SQLException e) {
@@ -109,7 +109,7 @@ public class DBCreationManagerTest {
                 + "delete from record_list;" + "delete from user_card;"
                 + "delete from address;"
                 + "delete from tag;";
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             connection.setAutoCommit(false);
             try {
                 ps = connection.prepareStatement(deleteData);
@@ -134,7 +134,7 @@ public class DBCreationManagerTest {
                 + "DROP TABLE IF EXISTS user_card;"
                 + "DROP TABLE IF EXISTS address;"
                 + "DROP TABLE IF EXISTS tag;";
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             try {
                 connection.setAutoCommit(false);
                 ps = connection.prepareStatement(dropTable);

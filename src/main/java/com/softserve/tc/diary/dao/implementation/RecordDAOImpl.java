@@ -12,7 +12,9 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
@@ -30,10 +32,19 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     private static PreparedStatement ps = null;
     private static ResultSet rs = null;
     private Logger logger = Log.init(this.getClass().getName());
+    private static ConnectionManager connection = DBConnectionManager.GetInstance();
     
-    public void create(Record object) {
+    public RecordDAOImpl(ConnectionManager connection) {
+		this.connection = connection;
+	}
+  
+    public RecordDAOImpl() {
+
+	}
+
+	public void create(Record object) {
         logger.debug("creating record");
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 if ((object.getVisibility() == null)) {
@@ -69,7 +80,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     	
         Record record = null;
         logger.debug("reading by key");
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select * from record_list where id_rec=?;");
             rs = ps.executeQuery();
@@ -87,7 +98,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     public void update(Record object) {
     	
         logger.debug("updating record");
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -118,7 +129,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     public void delete(Record object) {
     	
         logger.debug("deleting record");
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -142,7 +153,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     public List<Record> getRecordByUserId(String user_id) {
     	
         List<Record> list = new ArrayList<Record>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select * from record_list where user_id_rec=?;");
             ps.setString(1, user_id);
@@ -166,7 +177,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
     public List<Record> getRecordByDate(Timestamp date) {
         List<Record> list = new ArrayList<Record>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement("SELECT * FROM record_list where created_time=?;");
             ps.setTimestamp(1, date);
             ResultSet rs = ps.executeQuery();
@@ -188,7 +199,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
     public List<Record> getRecordByNickNameAndDate(String userId,Timestamp date) {
         List<Record> list = new ArrayList<Record>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement("SELECT * FROM record_list where user_id_rec=? and created_time=?;");
             ps.setString(1, userId);
             ps.setTimestamp(2, date);
@@ -220,7 +231,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     public List<Record> getAll() {
     	
         List<Record> list = new ArrayList<Record>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement("SELECT * FROM record_list;");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

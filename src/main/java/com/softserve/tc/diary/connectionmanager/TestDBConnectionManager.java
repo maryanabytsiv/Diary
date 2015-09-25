@@ -8,14 +8,15 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.log.Log;
 
-public class TestDBConnection extends ConnectionManager {
+public class TestDBConnectionManager extends ConnectionManager {
     
     private static final BasicDataSource dataSourceTestDB =
             new BasicDataSource();
-            
-    private static Logger logger = Log.init(TestDBConnection.class.toString());
     
-    private TestDBConnection() {
+    private static TestDBConnectionManager testdbConnectionManagerInstance = null;
+    private static Logger logger = Log.init(TestDBConnectionManager.class.toString());
+    
+    private TestDBConnectionManager() {
     
     }
     
@@ -29,7 +30,14 @@ public class TestDBConnection extends ConnectionManager {
         // dataSourceTestDB.setMaxActive(100);
     }
     
-    public static Connection getConnection() throws SQLException {
+	public static TestDBConnectionManager GetInstance() {
+		if (testdbConnectionManagerInstance == null) {
+			testdbConnectionManagerInstance = new TestDBConnectionManager();
+		}
+		return testdbConnectionManagerInstance;
+	}
+    
+    public  Connection getConnection() throws SQLException {
         
         logger.info("Number of active connections: "
                 + dataSourceTestDB.getNumActive());

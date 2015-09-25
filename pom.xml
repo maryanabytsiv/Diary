@@ -4,9 +4,9 @@
 	<groupId>com.softserve.tc</groupId>
 	<artifactId>Diary</artifactId>
 	<properties>
-   <p.type>war</p.type>
-</properties>
-<packaging>${p.type}</packaging>
+		<p.type>war</p.type>
+	</properties>
+	<packaging>${p.type}</packaging>
 	<version>1</version>
 	<name>Diary Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -21,6 +21,12 @@
 			<artifactId>jaxws-rt</artifactId>
 			<version>2.1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -148,20 +154,20 @@
 					</executions>
 				</plugin>
 				<plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <executions>
-        <execution>
-          <id>make-a-jar</id>
-          <phase>compile</phase>
-          <goals>
-            <goal>jar</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>make-a-jar</id>
+							<phase>compile</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 </project>

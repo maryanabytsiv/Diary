@@ -11,7 +11,9 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -22,12 +24,21 @@ public class TagDAOImpl implements TagDAO {
 
 	private static PreparedStatement ps;
 	private Logger logger = Log.init(this.getClass().getName());
+	private static ConnectionManager connection = DBConnectionManager.GetInstance();
+    
+    public TagDAOImpl(ConnectionManager connection) {
+		this.connection = connection;
+	}
+    
+    public TagDAOImpl() {
+
+	}
 
 	public Tag getTagByMessage(String tagMessage) {
 		
 		Tag tag = null;
 		String query = "Select * from tag where tag_message like '" + tagMessage + "';";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -45,7 +56,7 @@ public class TagDAOImpl implements TagDAO {
 		if (true == checkIfTagExist(tagMessage)) {
 			logger.warn("Tag already exist");
 		} else {
-			try (Connection conn = TestDBConnection.getConnection()) {
+			try (Connection conn = connection.getConnection()) {
 				try {
 					conn.setAutoCommit(false);
 					ps = conn.prepareStatement("insert into tag values(?,?);");
@@ -71,7 +82,7 @@ public class TagDAOImpl implements TagDAO {
 		
 		String query = "select COUNT(*) from tag where tag_message like '" + tagMessage + "';";
 		int count = 0;
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
@@ -94,7 +105,7 @@ public class TagDAOImpl implements TagDAO {
 			logger.warn("Tag already exist");
 		} else {
 
-			try (Connection conn = TestDBConnection.getConnection()) {
+			try (Connection conn = connection.getConnection()) {
 				try {
 					conn.setAutoCommit(false);
 					ps = conn.prepareStatement("insert into tag values(?,?);");
@@ -122,7 +133,7 @@ public class TagDAOImpl implements TagDAO {
 		
 		String uuid_tr = UUID.randomUUID().toString();
 		String query = "Insert into tag_record values(?,?,?);";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			try {
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement(query);
@@ -148,7 +159,7 @@ public class TagDAOImpl implements TagDAO {
 		deleteFromTagRecord(uuid);
 		String tagMessage = object.getTagMessage();
 		String query = "DELETE FROM tag WHERE tag_message Like '" + tagMessage + "';";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			try {
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement(query);
@@ -168,7 +179,7 @@ public class TagDAOImpl implements TagDAO {
 	public void deleteFromTagRecord(String uuid) {
 		
 		String query = "DELETE FROM tag_record WHERE tag_uuid LIKE '" + uuid + "';";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			try {
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement(query);
@@ -188,7 +199,7 @@ public class TagDAOImpl implements TagDAO {
 	public List<Tag> getListTagsByPrefix(String prefix) {
 		
 		List<Tag> list = new ArrayList<Tag>();
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '" + prefix + "%';";
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
@@ -204,7 +215,7 @@ public class TagDAOImpl implements TagDAO {
 	public List<Tag> getListTagsBySuffix(String suffix) {
 		
 		List<Tag> list = new ArrayList<Tag>();
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			String query = "SELECT tag_message FROM tag " + "WHERE tag_message LIKE '%" + suffix + "%';";
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
@@ -223,7 +234,7 @@ public class TagDAOImpl implements TagDAO {
 		String uuid = object.getUuid();
 		String query = "Select * from record_list where id_rec IN "
 				+ "(Select record_uuid from tag_record where tag_uuid Like '" + uuid + "');";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -272,7 +283,7 @@ public class TagDAOImpl implements TagDAO {
 		
 		List<Tag> list = new ArrayList<Tag>();
 		String query = "SELECT * FROM tag;";
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -287,7 +298,7 @@ public class TagDAOImpl implements TagDAO {
 	public Tag readByKey(String uuid) {
 		
 		Tag tag = null;
-		try (Connection conn = TestDBConnection.getConnection()) {
+		try (Connection conn = connection.getConnection()) {
 			String query = "Select * from tag where uuid Like '" + uuid + "';";
 			ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();

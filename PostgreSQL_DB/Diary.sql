@@ -4,7 +4,7 @@ CREATE TABLE  address (
     country varchar(20),
     city varchar(20),
     street varchar(20),
-    build_number int
+    build_number varchar(20)
 );
 
 

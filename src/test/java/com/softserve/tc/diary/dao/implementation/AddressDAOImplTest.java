@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +18,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.log.Log;
@@ -26,6 +29,7 @@ import com.softserve.tc.diary.log.Log;
 public class AddressDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
+    private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
     
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
@@ -46,14 +50,14 @@ public class AddressDAOImplTest {
     public void afterTest() throws SQLException {
         DBCreationManagerTest.deleteAllFromTable();
     }
-    
+   
     @Test
     public void testCreateAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
         Address newAddress = new Address("Ukraine", "IF", "street", "12");
-        addressDAO.create(newAddress);
         Address address = null;
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
+        	addressDAO.create(newAddress);
             ps = connection.prepareStatement(
                     "select * from address where country = ? and city = ? and street = ? and build_number = ?");
             ps.setString(1, newAddress.getCountry());
@@ -80,10 +84,10 @@ public class AddressDAOImplTest {
     
     @Test
     public void testUpdateAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", "16");
         add.setId(UUID.randomUUID().toString());
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             try {
                 connection.setAutoCommit(false);
                 ps = connection.prepareStatement(
@@ -108,7 +112,7 @@ public class AddressDAOImplTest {
         addressDAO.update(add);
         
         Address address = null;
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
             ps = connection
                     .prepareStatement("select * from address where id=?");
             ps.setString(1, add.getId());
@@ -131,12 +135,13 @@ public class AddressDAOImplTest {
     
     @Test
     public void TestDeleteAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
         Address address = new Address("11111111", "Kiev", "Pasternaka", "15");
         addressDAO.create(address);
-        addressDAO.delete(address);
+        
         Address deleteAddress = null;
-        try (Connection connection = TestDBConnection.getConnection()) {
+        try (Connection connection = conn.getConnection()) {
+        	addressDAO.delete(address);
             ps = connection.prepareStatement(
                     "select * from address where country = ? and city = ? and street = ? and build_number = ?");
             ps.setString(1, address.getCountry());
@@ -158,7 +163,7 @@ public class AddressDAOImplTest {
     
     @Test
     public void TestGetAll() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
         Address address = new Address("Ukraine", "Odessa", "Pasternaka", "5");
         addressDAO.create(address);
         int actual = addressDAO.getAll().size();

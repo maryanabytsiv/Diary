@@ -10,7 +10,9 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.softserve.tc.diary.connectionmanager.TestDBConnection;
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
+import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
@@ -25,16 +27,24 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private static PreparedStatement ps = null;
     private static ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
+    private static ConnectionManager connection = DBConnectionManager.GetInstance();
+    
+    public UserDAOImpl(ConnectionManager connection) {
+		this.connection = connection;
+	}
+    
+    public UserDAOImpl() {
+	}
     
     public void create(User object) {
         String[] splitAddress = object.getAddress().split(", ");
         Address newAdress = new Address(splitAddress[0], splitAddress[1],
                 splitAddress[2], splitAddress[3]);
-        AddressDAOImpl adressDAO = new AddressDAOImpl();
+        AddressDAOImpl adressDAO = new AddressDAOImpl(connection);
         adressDAO.create(newAdress);
         
         Address getAddress = null;
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "SELECT * FROM address WHERE country = ? AND city = ? AND street = ? AND build_number = ?;");
             ps.setString(1, newAdress.getCountry());
@@ -51,7 +61,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             logger.error("create address failed", e);
         }
         
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 if ((object.getRole() == null) || (object.getE_mail() == null)
@@ -94,11 +104,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         String[] splitAddress = object.getAddress().split(", ");
         Address newAdress = new Address(splitAddress[0], splitAddress[1],
                 splitAddress[2], splitAddress[3]);
-        AddressDAOImpl adressDAO = new AddressDAOImpl();
+        AddressDAOImpl adressDAO = new AddressDAOImpl(connection);
         
         User userToUpdate = readByNickName(object.getNick_name());
         String addressUUID = "";
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select address_id from user_card where nick_name=?;");
             ps.setString(1, userToUpdate.getNick_name());
@@ -115,7 +125,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         newAdress.setId(addressUUID);
         adressDAO.update(newAdress);
         
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -148,7 +158,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     }
     
     public void delete(User object) {
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 logger.debug("Deleting user");
@@ -171,7 +181,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     
     public List<User> getAll() {
         List<User> list = new ArrayList<User>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -208,7 +218,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 "select * from user_card left join address on (address.id=user_card.address_id)"
                         + " where uid like '" + uuid + "';";
         User user = null;
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(query);
@@ -229,7 +239,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     
     public User readByNickName(String nickName) { // id as NICK_NAME
         User user = null;
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -252,7 +262,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     
     public int countAllBySex(String sex) {
         int users = 0;
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select COUNT(*) from user_card where sex =? group by sex;");
             ps.setString(1, sex.toUpperCase());
@@ -268,7 +278,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     
     public List<User> getByYearOfBirth(String yearOfBirth) {
         List<User> usersByYear = new ArrayList<User>();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select * from user_card where extract (year from date_of_birth)=CAST(? AS double precision); ");
             ps.setString(1, yearOfBirth);
@@ -285,7 +295,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     public List<User> getUsersByRole(Role role) {
         List<User> list = new ArrayList<User>();
         String roleStr = role.toString();
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
@@ -348,7 +358,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     public User getUserByNickAndPassword(String nickName, String password) {
         User user = null;
         String passEncript = PasswordHelper.encrypt(password);
-        try (Connection conn = TestDBConnection.getConnection()) {
+        try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select  * from user_card left join address on (address.id=user_card.address_id)"
                             + " where nick_name =?  and password =?;");
