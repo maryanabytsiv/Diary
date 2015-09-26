@@ -8,4 +8,6 @@ public abstract class ConnectionManager implements AutoCloseable {
     public Connection getConnection() throws SQLException {
         return null;
     }
+
+
 }

@@ -27,7 +27,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private static PreparedStatement ps = null;
     private static ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
-    private static ConnectionManager connection = DBConnectionManager.GetInstance();
+    private static ConnectionManager connection = DBConnectionManager.getInstance();
     
     public UserDAOImpl(ConnectionManager connection) {
 		this.connection = connection;
@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         String[] splitAddress = object.getAddress().split(", ");
         Address newAdress = new Address(splitAddress[0], splitAddress[1],
                 splitAddress[2], splitAddress[3]);
-        AddressDAOImpl adressDAO = new AddressDAOImpl(connection);
+        AddressDAOImpl adressDAO = new AddressDAOImpl();
         adressDAO.create(newAdress);
         
         Address getAddress = null;

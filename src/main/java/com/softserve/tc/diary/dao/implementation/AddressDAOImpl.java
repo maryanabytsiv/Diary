@@ -12,25 +12,29 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
+import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 public class AddressDAOImpl implements AddressDAO {
 
 	private static PreparedStatement ps;
 	private Logger logger = Log.init(this.getClass().getName());
-	private static ConnectionManager connection = DBConnectionManager.GetInstance();
+	private static ConnectionManager connectionManager = DBConnectionManager.getInstance();
+
 	public AddressDAOImpl(ConnectionManager connection) {
-		this.connection = connection;
+		this.connectionManager = connection;
 	}
-	public AddressDAOImpl(){}
+
+	public AddressDAOImpl() {
+		
+	}
 
 	public void create(Address object) {
 
 		logger.debug("Creating address");
-		try (Connection conn = connection.getConnection()) {
+		try (Connection conn = connectionManager.getConnection()) {
 			ps = conn
 					.prepareStatement("insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
 			ps.setString(1, UUID.randomUUID().toString());
@@ -50,7 +54,7 @@ public class AddressDAOImpl implements AddressDAO {
 
 		Address address = null;
 		logger.debug("Reading by key");
-		try (Connection conn = connection.getConnection()) {
+		try (Connection conn = connectionManager.getConnection()) {
 			ps = conn.prepareStatement("select * from address where id=?");
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -67,7 +71,7 @@ public class AddressDAOImpl implements AddressDAO {
 	public void update(Address object) {
 
 		logger.debug("Updating address");
-		try (Connection conn = connection.getConnection()) {
+		try (Connection conn = connectionManager.getConnection()) {
 
 			try {
 				conn.setAutoCommit(false);
@@ -96,7 +100,7 @@ public class AddressDAOImpl implements AddressDAO {
 
 	public void delete(Address object) {
 
-		try (Connection conn = connection.getConnection()) {
+		try (Connection conn = connectionManager.getConnection()) {
 			try {
 				conn.setAutoCommit(false);
 				logger.debug("Deleting address");
@@ -124,7 +128,7 @@ public class AddressDAOImpl implements AddressDAO {
 
 		List<Address> list = new ArrayList<Address>();
 		logger.debug("Get all address records");
-		try (Connection conn = connection.getConnection()) {
+		try (Connection conn = connectionManager.getConnection()) {
 			ps = conn.prepareStatement("select * from address;");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -135,8 +139,5 @@ public class AddressDAOImpl implements AddressDAO {
 		}
 		return list;
 	}
-	public static void main(String[] args) {
-		AddressDAOImpl dao = new AddressDAOImpl();
-		dao.create(new Address("Ukraine", "Dnepr", "Nova", "7"));
-	}
 }
+

@@ -32,7 +32,7 @@ import com.softserve.tc.diary.log.Log;
 public class DiaryServiceImpl implements DiaryService {
     
     private static Logger LOG = Log.init("DiaryServiceImpl");
-    private static ConnectionManager conn = DBConnectionManager.GetInstance();
+    private static ConnectionManager conn = DBConnectionManager.getInstance();
     
     private UserDAO userDAO = new UserDAOImpl(conn);
     private RecordDAO recordDAOImpl = new RecordDAOImpl(conn);

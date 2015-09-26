@@ -32,7 +32,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     private static PreparedStatement ps = null;
     private static ResultSet rs = null;
     private Logger logger = Log.init(this.getClass().getName());
-    private static ConnectionManager connection = DBConnectionManager.GetInstance();
+    private static ConnectionManager connection = DBConnectionManager.getInstance();
     
     public RecordDAOImpl(ConnectionManager connection) {
 		this.connection = connection;

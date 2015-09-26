@@ -21,7 +21,7 @@ public class DBCreationManagerTest {
     
     private static PreparedStatement ps = null;
     private static Logger logger = Log.init("SQL_Statement");
-    private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
+    private static ConnectionManager conn = TestDBConnectionManager.getInstance();
     public static void setUpBeforeClass() throws SQLException {
         
         String scriptSQL;

@@ -24,7 +24,7 @@ public class TagDAOImpl implements TagDAO {
 
 	private static PreparedStatement ps;
 	private Logger logger = Log.init(this.getClass().getName());
-	private static ConnectionManager connection = DBConnectionManager.GetInstance();
+	private static ConnectionManager connection = DBConnectionManager.getInstance();
     
     public TagDAOImpl(ConnectionManager connection) {
 		this.connection = connection;

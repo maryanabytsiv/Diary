@@ -13,31 +13,26 @@ public class TestDBConnectionManager extends ConnectionManager {
     private static final BasicDataSource dataSourceTestDB =
             new BasicDataSource();
     
-    private static TestDBConnectionManager testdbConnectionManagerInstance = null;
+	private static TestDBConnectionManager testDBConnectionManagerInstance = null;
     private static Logger logger = Log.init(TestDBConnectionManager.class.toString());
     
     private TestDBConnectionManager() {
     
     }
     
-    static {
-        dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
-        dataSourceTestDB
-                .setUrl("jdbc:postgresql://127.11.237.2:5432/diarytest");
-        dataSourceTestDB.setUsername("root");
-        dataSourceTestDB.setPassword("root");
-        
-        // dataSourceTestDB.setMaxActive(100);
-    }
-    
-	public static TestDBConnectionManager GetInstance() {
-		if (testdbConnectionManagerInstance == null) {
-			testdbConnectionManagerInstance = new TestDBConnectionManager();
+	public static TestDBConnectionManager getInstance() {
+		if (testDBConnectionManagerInstance == null) {
+			testDBConnectionManagerInstance = new TestDBConnectionManager();
+	        dataSourceTestDB.setDriverClassName("org.postgresql.Driver");
+	        dataSourceTestDB
+	                .setUrl("jdbc:postgresql://127.11.237.2:5432/diarytest");
+	        dataSourceTestDB.setUsername("root");
+	        dataSourceTestDB.setPassword("root");
 		}
-		return testdbConnectionManagerInstance;
+		return testDBConnectionManagerInstance;
 	}
     
-    public  Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         
         logger.info("Number of active connections: "
                 + dataSourceTestDB.getNumActive());

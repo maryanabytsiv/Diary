@@ -11,24 +11,22 @@ import com.softserve.tc.diary.log.Log;
 public final class DBConnectionManager extends ConnectionManager {
 
 	private static final BasicDataSource dataSource = new BasicDataSource();
-	private static DBConnectionManager dbConnectionManagerInstance = null;
+	private static DBConnectionManager dbConnectionManager = null;
 	private static Logger logger = Log.init(DBConnectionManager.class.toString());
 
-	static {
-		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/Diary");
-		dataSource.setUsername("root");
-		dataSource.setPassword("root");
-	}
-
 	private DBConnectionManager() {
+		
 	}
 
-	public static DBConnectionManager GetInstance() {
-		if (dbConnectionManagerInstance == null) {
-			dbConnectionManagerInstance = new DBConnectionManager();
+	public static ConnectionManager getInstance() {
+		if (dbConnectionManager == null) {
+			dbConnectionManager = new DBConnectionManager();
+			dataSource.setDriverClassName("org.postgresql.Driver");
+			dataSource.setUrl("jdbc:postgresql://localhost:5432/Diary");
+			dataSource.setUsername("root");
+			dataSource.setPassword("root");
 		}
-		return dbConnectionManagerInstance;
+		return dbConnectionManager;
 	}
 
 	public Connection getConnection() throws SQLException {

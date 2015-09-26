@@ -29,7 +29,7 @@ import com.softserve.tc.diary.log.Log;
 public class AddressDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private static ConnectionManager conn = TestDBConnectionManager.GetInstance();
+    private ConnectionManager conn = TestDBConnectionManager.getInstance();
     
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
