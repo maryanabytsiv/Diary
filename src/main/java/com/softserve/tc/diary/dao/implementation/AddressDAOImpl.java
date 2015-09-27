@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +16,6 @@ import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
-import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 public class AddressDAOImpl implements AddressDAO {

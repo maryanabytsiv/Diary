@@ -12,8 +12,5 @@ public interface UserDAO extends BaseDAO<User> {
     
     User readByNickName(String nickName);
     
-    String logIn(String nickName, String password);
-    
-    boolean logOut(String nickName);
     
 }

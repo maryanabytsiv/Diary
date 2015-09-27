@@ -355,47 +355,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return user;
     }
     
-    public User getUserByNickAndPassword(String nickName, String password) {
-        User user = null;
-        String passEncript = PasswordHelper.encrypt(password);
-        try (Connection conn = connection.getConnection()) {
-            ps = conn.prepareStatement(
-                    "select  * from user_card left join address on (address.id=user_card.address_id)"
-                            + " where nick_name =?  and password =?;");
-            ps.setString(1, nickName);
-            ps.setString(2, passEncript);
-            ResultSet rs = ps.executeQuery();
-            user = resultSet(rs);
-        } catch (SQLException e) {
-            logger.error("failed" + e);
-        }
-        return user;
-    }
+
     
-    @Override
-    public String logIn(String nickName, String password) {
-        User user = getUserByNickAndPassword(nickName, password);
-        if (user == null) {
-            return null; // if null - password or nickName in argument not
-                         // correct
-        } else {
-            String session = UUID.randomUUID().toString();
-            user.setSession(session);
-            update(user);
-            return session;
-        }
-    }
-    
-    @Override
-    public boolean logOut(String nickName) {
-        User user = readByNickName(nickName);
-        if (user == null) {
-            return false; // log out failed
-        } else {
-            user.setSession(null);
-            update(user);
-            return true; // log out done
-        }
-        
-    }
 }

@@ -15,7 +15,7 @@ import com.softserve.tc.diary.adapter.TimestampAdapter;
 public class Record {
     
     private String id_rec;
-    private String user_name;
+    private String user_id;
     private Timestamp created_time;
     private String title;
     private String text;
@@ -28,7 +28,7 @@ public class Record {
     
     public Record(String user_name, Timestamp created_time, String title,
     		String text, String supplement, Status visibility) {
-        this.user_name = user_name;
+        this.user_id = user_name;
         this.created_time = created_time;
         this.title = title;
         this.text = text;
@@ -39,7 +39,7 @@ public class Record {
     public Record(String id_rec, String user_name, Timestamp created_time,
     		 String title, String text, String supplement, Status visibility) {
         this.id_rec = id_rec;
-        this.user_name = user_name;
+        this.user_id = user_name;
         this.created_time = created_time;
         this.title = title;
         this.text = text;
@@ -55,13 +55,10 @@ public class Record {
         this.id_rec = id_rec;
     }
     
-    public String getUser_name() {
-        return user_name;
+    public String getUserId() {
+        return user_id;
     }
     
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
     @XmlJavaTypeAdapter(TimestampAdapter.class)
     public Timestamp getCreated_time() {
         return created_time;
@@ -85,8 +82,6 @@ public class Record {
     public void setSupplement(String supplement) {
         this.supplement = supplement;
     }
-    
-    
     
     public String getTitle() {
 		return title;
@@ -116,7 +111,7 @@ public class Record {
 
 	@Override
 	public String toString() {
-		return "Record [id_rec=" + id_rec + ", user_name=" + user_name + 
+		return "Record [id_rec=" + id_rec + ", user_name=" + user_id + 
 				", created_time=" + created_time + ", title="
 				+ title + ", text=" + text + ", supplement="
 				+ supplement + ", visibility=" + visibility + "]";

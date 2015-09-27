@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.softserve.tc.diary.entity.Record;
+import com.softserve.tc.diary.entity.Status;
 
 public interface RecordDAO extends BaseDAO<Record> {
 	
@@ -13,7 +14,7 @@ public interface RecordDAO extends BaseDAO<Record> {
     
     List<Record> getRecordByNickNameAndDate(String userID,Timestamp date);
     
-    List<Record> getRecordByVisibility(String visibility);
+    List<Record> getRecordByVisibility(String user_id, Status visibility);
     
     List<Record> getRecordTypeOfSupplement(String typeOfSupplement);
     

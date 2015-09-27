@@ -84,7 +84,7 @@ public class RecordDAOImplTest {
             logger.error("select failed", e);
         }
         assertNotNull(record);
-        assertEquals("1", record.getUser_name());
+        assertEquals("1", record.getUserId());
         assertEquals(newRecord.getCreated_time(), record.getCreated_time());
         assertEquals("sport", record.getTitle());
         assertEquals("#JUST DO IT!!!", record.getText());
@@ -108,7 +108,7 @@ public class RecordDAOImplTest {
                 ps = connection.prepareStatement(
                         "insert into record_list values(?,?,CAST(? AS DATE),?,?,?,?)");
                 ps.setString(1, rec.getId_rec());
-                ps.setString(2, rec.getUser_name());
+                ps.setString(2, rec.getUserId());
                 ps.setTimestamp(3, rec.getCreated_time());
                 ps.setString(4, rec.getTitle());
                 ps.setString(5, rec.getText());
@@ -145,7 +145,7 @@ public class RecordDAOImplTest {
     //    assertEquals(rec.getCreated_time(), record.getCreated_time());
         assertEquals(rec.getSupplement(), record.getSupplement());
         assertEquals(rec.getText(), record.getText());
-        assertEquals(rec.getUser_name(), record.getUser_name());
+        assertEquals(rec.getUserId(), record.getUserId());
         assertEquals(rec.getVisibility(), record.getVisibility());
         logger.info("test update record");
     }
@@ -162,12 +162,9 @@ public class RecordDAOImplTest {
     public void TestDeleteRecord() {
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
         RecordDAOImpl recordDAO = new RecordDAOImpl(conn);
-        Record record = new Record("1", createdTime, "hello","#Hello, how are you??",
-                "http:/Lviv/theBest/Town",
-                Status.PRIVATE);
-        recordDAO.create(record);
         List<Record> listBefore = recordDAO.getAll();
-        recordDAO.delete(record);
+        Record rec = recordDAO.readByKey("3");
+        recordDAO.delete(rec);
         List<Record> listAfter = recordDAO.getAll();
         assertEquals(listBefore.size() - 1, listAfter.size());
         logger.info("test delete record");
