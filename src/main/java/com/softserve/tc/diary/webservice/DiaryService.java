@@ -1,8 +1,6 @@
 package com.softserve.tc.diary.webservice;
 
-import java.util.Date;
 import java.util.List;
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import com.softserve.tc.diary.entity.Record;
@@ -23,7 +21,9 @@ public interface DiaryService {
     
     List<Record> getAllRecordsByDate(String nickName, String date);
     
-     List<Record> getAllRecordsByHashTag(String nickName, String hashTag);
+    List<Record> getAllRecordsByHashTag(String nickName, String hashTag);
+    
+    String getRoleByNickName(String nickName);
     
     // Statistics viewSiteStatistics(String nickNameOfAdmin);
     
