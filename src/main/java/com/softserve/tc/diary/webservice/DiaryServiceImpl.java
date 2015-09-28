@@ -2,7 +2,6 @@ package com.softserve.tc.diary.webservice;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,9 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.RecordDAO;
-import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
@@ -143,7 +140,7 @@ public class DiaryServiceImpl implements DiaryService {
                     nickName));
             return null;
         }
-        Timestamp dateOfRecord =Timestamp.valueOf(date);
+        Timestamp dateOfRecord = Timestamp.valueOf(date);
         records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(),
                 dateOfRecord);
         if (records.isEmpty()) {
@@ -176,6 +173,44 @@ public class DiaryServiceImpl implements DiaryService {
         }
         
         return records;
+    }
+
+	@Override
+	@WebMethod
+	public User getUserByNickName(String nickName) {
+		User user = userDAO.readByNickName(nickName);
+		if (user == null) {
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
+
+			return null;
+		} else {
+			return user;
+		}
+	}
+
+	@Override
+	@WebMethod
+	public List<User> getAllUsers() {
+		List<User> usersList = userDAO.getAll();
+		if (usersList == null) {
+			LOG.debug(String.format("Table is empty"));
+			return null;
+		} else {
+			return usersList;
+		}
+	}
+    
+    @Override
+    public String getRoleByNickName(String nickName) {
+        
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s",
+                    nickName));
+            return null;
+        }
+        
+        return user.getRole();
     }
     
     @Override
