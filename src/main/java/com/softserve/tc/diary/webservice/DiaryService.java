@@ -24,7 +24,11 @@ public interface DiaryService {
     List<Record> getAllRecordsByDate(String nickName, String date);
     
      List<Record> getAllRecordsByHashTag(String nickName, String hashTag);
+     
+    List<Record> getAllPublicRecords();
     
     // Statistics viewSiteStatistics(String nickNameOfAdmin);
+    
+    Record readByKey(String id);
     
 }

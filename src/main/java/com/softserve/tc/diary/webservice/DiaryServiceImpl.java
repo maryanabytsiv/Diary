@@ -178,6 +178,22 @@ public class DiaryServiceImpl implements DiaryService {
         return records;
     }
     
+    @Override
+    @WebMethod
+    public List<Record> getAllPublicRecords() {
+    	RecordDAOImpl dao = new RecordDAOImpl();
+    	List<Record> list = dao.getAllPublicRecords();
+    	return list;	
+    }
+
+	@Override
+	@WebMethod
+	public Record readByKey(String id) {
+		RecordDAOImpl dao = new RecordDAOImpl();
+		Record rec = dao.readByKey(id);
+		return rec;
+	}
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
