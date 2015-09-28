@@ -25,6 +25,8 @@ public interface DiaryService {
 
 	List<Record> getAllRecordsByHashTag(String nickName, String hashTag);
 
+	String getRoleByNickName(String nickName);
+
 	User getUserByNickName(String nickName);
 
 	List<User> getAllUsers();
