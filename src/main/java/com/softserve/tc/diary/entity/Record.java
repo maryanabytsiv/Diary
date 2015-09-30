@@ -37,7 +37,7 @@ public class Record {
     }
     
     public Record(String id_rec, String user_name, Timestamp created_time,
-    		 String title, String text, String supplement, Status visibility) {
+    		 String title,  String text, String supplement, Status visibility) {
         this.id_rec = id_rec;
         this.user_id = user_name;
         this.created_time = created_time;
@@ -83,14 +83,6 @@ public class Record {
         this.supplement = supplement;
     }
     
-    public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getVisibility() {
         if (visibility == Status.PRIVATE) {
             return "PRIVATE";
@@ -99,8 +91,18 @@ public class Record {
         } else
             return null;
     }
+	
+	
     
-    public void setVisibility(String visibility) {
+    public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setVisibility(String visibility) {
         if (visibility.equals("PRIVATE")) {
             this.visibility = Status.PRIVATE;
         } else if (visibility.equals("PUBLIC")) {
@@ -111,12 +113,11 @@ public class Record {
 
 	@Override
 	public String toString() {
-		return "Record [id_rec=" + id_rec + ", user_name=" + user_id + 
-				", created_time=" + created_time + ", title="
-				+ title + ", text=" + text + ", supplement="
-				+ supplement + ", visibility=" + visibility + "]";
+		return "Record [id_rec=" + id_rec + ", user_id=" + user_id + ", created_time=" + created_time + ", title="
+				+ title + ", text=" + text + ", supplement=" + supplement + ", visibility=" + visibility + "]";
 	}
-    
+
+
     
     
 }

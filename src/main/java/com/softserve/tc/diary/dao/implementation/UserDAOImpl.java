@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
@@ -27,14 +26,15 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private static PreparedStatement ps = null;
     private static ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
-    private static ConnectionManager connection = DBConnectionManager.getInstance();
-    
+    private static ConnectionManager connection =
+            DBConnectionManager.getInstance();
+            
     public UserDAOImpl(ConnectionManager connection) {
-		this.connection = connection;
-	}
+        this.connection = connection;
+    }
     
     public UserDAOImpl() {
-	}
+    }
     
     public void create(User object) {
         String[] splitAddress = object.getAddress().split(", ");
@@ -354,7 +354,5 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return user;
     }
-    
-
     
 }
