@@ -205,6 +205,23 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         return list;
     }
     
+    public int getUserAmountOfRecord(String user_id){
+        int num_of_records=0;
+        try (Connection conn = connection.getConnection()) {
+            ps = conn.prepareStatement(
+                    "select count(*) from record_list where user_id_rec=?;");
+            ps.setString(1, user_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                 num_of_records = rs.getInt(1);
+            }
+        } catch (SQLException error) {
+            logger.error("can't get record by name", error);
+        }
+        return num_of_records;
+        
+    }
+    
     public List<Record> getRecordByDate(Timestamp date) {
         List<Record> list = new ArrayList<Record>();
         try (Connection conn = connection.getConnection()) {

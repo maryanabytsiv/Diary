@@ -178,6 +178,17 @@ public class DiaryServiceImpl implements DiaryService {
         return records;
     }
     
+    public int getUserAmountOfRecords (String nickName) {
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s",
+                    nickName));
+            return 0;
+        }
+        int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
+        return numOfRecords;
+    }
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
