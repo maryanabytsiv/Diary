@@ -42,7 +42,7 @@ public class AddressDAOImpl implements AddressDAO {
 			ps.setString(2, object.getCountry());
 			ps.setString(3, object.getCity());
 			ps.setString(4, object.getStreet());
-			ps.setString(5, object.getBuild_number());
+			ps.setString(5, object.getBuildNumber());
 			ps.execute();
 			ps.close();
 			logger.debug("Address created");
@@ -81,8 +81,8 @@ public class AddressDAOImpl implements AddressDAO {
 				ps.setString(1, object.getCountry());
 				ps.setString(2, object.getCity());
 				ps.setString(3, object.getStreet());
-				ps.setString(4, object.getBuild_number());
-				ps.setString(5, object.getId());
+				ps.setString(4, object.getBuildNumber());
+				ps.setString(5, object.getUuid());
 				ps.execute();
 				ps.close();
 				logger.debug("Address updated");
@@ -110,7 +110,7 @@ public class AddressDAOImpl implements AddressDAO {
 				ps.setString(1, object.getCountry());
 				ps.setString(2, object.getCity());
 				ps.setString(3, object.getStreet());
-				ps.setString(4, object.getBuild_number());
+				ps.setString(4, object.getBuildNumber());
 				ps.execute();
 				logger.debug("Address deleted");
 				conn.commit();

@@ -54,12 +54,12 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                     throw new NullPointerException();
                 } else {
                     String uuid = UUID.randomUUID().toString();
-                    object.setId_rec(uuid);
+                    object.setUuid(uuid);
                     ps = conn.prepareStatement(
                             "insert into record_list values(?,?,?,?,?,?,?);");
                     ps.setString(1, uuid);
                     ps.setString(2, object.getUserId());
-                    ps.setTimestamp(3, object.getCreated_time());
+                    ps.setTimestamp(3, object.getCreatedTime());
                     ps.setString(4, object.getTitle());
                     ps.setString(5, object.getText());
                     ps.setString(6, object.getSupplement());
@@ -92,12 +92,12 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
 					if ((textRecord.charAt(j) == ' ')) {
 						tagMessage = textRecord.substring(i, j);
 						i = j;
-						dao.createFromRecord(record.getId_rec(), tagMessage);
+						dao.createFromRecord(record.getUuid(), tagMessage);
 						break;
 					}
 					if (j == (textRecord.length() - 1)) {
 						tagMessage = textRecord.substring(i);
-						dao.createFromRecord(record.getId_rec(), tagMessage);
+						dao.createFromRecord(record.getUuid(), tagMessage);
 					}
 				}
 			}
@@ -134,7 +134,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                         "update record_list set user_id_rec = ?, created_time = CAST(? AS TIMESTAMP), title = ?"
                         + "text = ?, supplement = ?, visibility = ? where user_id_rec = ?;");
                 ps.setString(1, object.getUserId());
-                ps.setTimestamp(2, object.getCreated_time());
+                ps.setTimestamp(2, object.getCreatedTime());
                 ps.setString(3, object.getTitle());
                 ps.setString(4, object.getText());
                 ps.setString(5, object.getSupplement());
@@ -164,8 +164,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                 ps = conn.prepareStatement(
                         "delete from tag_record where record_uuid =?;"
                         + "delete from record_list where id_rec=?;");
-                ps.setString(1, object.getId_rec());
-                ps.setString(2, object.getId_rec());
+                ps.setString(1, object.getUuid());
+                ps.setString(2, object.getUuid());
                 ps.execute();
                 logger.debug("record deleted");
                 conn.commit();

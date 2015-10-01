@@ -14,9 +14,9 @@ import com.softserve.tc.diary.adapter.TimestampAdapter;
 
 public class Record {
     
-    private String id_rec;
-    private String user_id;
-    private Timestamp created_time;
+    private String uuid;
+    private String userId;
+    private Timestamp createdTime;
     private String title;
     private String text;
     private String supplement;
@@ -26,45 +26,45 @@ public class Record {
     
     }
     
-    public Record(String user_name, Timestamp created_time, String title,
+    public Record(String userName, Timestamp createdTime, String title,
     		String text, String supplement, Status visibility) {
-        this.user_id = user_name;
-        this.created_time = created_time;
+        this.userId = userName;
+        this.createdTime = createdTime;
         this.title = title;
         this.text = text;
         this.supplement = supplement;
         this.visibility = visibility;
     }
     
-    public Record(String id_rec, String user_name, Timestamp created_time,
+    public Record(String uuid, String userName, Timestamp createdTime,
     		 String title,  String text, String supplement, Status visibility) {
-        this.id_rec = id_rec;
-        this.user_id = user_name;
-        this.created_time = created_time;
+        this.uuid = uuid;
+        this.userId = userName;
+        this.createdTime = createdTime;
         this.title = title;
         this.text = text;
         this.supplement = supplement;
         this.visibility = visibility;
     }
     
-    public String getId_rec() {
-        return id_rec;
+    public String getUuid() {
+        return uuid;
     }
     
-    public void setId_rec(String id_rec) {
-        this.id_rec = id_rec;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
     
     public String getUserId() {
-        return user_id;
+        return userId;
     }
     
     @XmlJavaTypeAdapter(TimestampAdapter.class)
-    public Timestamp getCreated_time() {
-        return created_time;
+    public Timestamp getCreatedTime() {
+        return createdTime;
     }
-    public void setCreated_time(Timestamp created_time) {
-        this.created_time = created_time;
+    public void setCreatedTime(Timestamp createdTime) {
+        this.createdTime = createdTime;
     }
     
     public String getText() {
@@ -113,7 +113,7 @@ public class Record {
 
 	@Override
 	public String toString() {
-		return "Record [id_rec=" + id_rec + ", user_id=" + user_id + ", created_time=" + created_time + ", title="
+		return "Record [uuid=" + uuid + ", user id=" + userId + ", created time=" + createdTime + ", title="
 				+ title + ", text=" + text + ", supplement=" + supplement + ", visibility=" + visibility + "]";
 	}
 

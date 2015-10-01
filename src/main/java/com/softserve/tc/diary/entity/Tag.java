@@ -34,7 +34,7 @@ public class Tag {
     
     @Override
     public String toString() {
-        return "Tag [u_u_id= " + uuid + ", tag=" + tag + "]";
+        return "Tag [uuid= " + uuid + ", tag=" + tag + "]";
     }
     
 }
