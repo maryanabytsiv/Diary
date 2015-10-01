@@ -85,7 +85,7 @@ public class RecordDAOImplTest {
         }
         assertNotNull(record);
         assertEquals("1", record.getUserId());
-        assertEquals(newRecord.getCreated_time(), record.getCreated_time());
+        assertEquals(newRecord.getCreatedTime(), record.getCreatedTime());
         assertEquals("sport", record.getTitle());
         assertEquals("#JUST DO IT!!!", record.getText());
         assertEquals("http:/bigBoss/works/perfectly", record.getSupplement());
@@ -101,15 +101,15 @@ public class RecordDAOImplTest {
         Record rec = new Record("1", createdTime, "work", "#Work HARD!!!",
                 "https://motivation/inUkraine/improveMySelf",
                 Status.PRIVATE);
-        rec.setId_rec(UUID.randomUUID().toString());
+        rec.setUuid(UUID.randomUUID().toString());
         try (Connection connection = conn.getConnection()) {
             try {
                 connection.setAutoCommit(false);
                 ps = connection.prepareStatement(
                         "insert into record_list values(?,?,CAST(? AS DATE),?,?,?,?)");
-                ps.setString(1, rec.getId_rec());
+                ps.setString(1, rec.getUuid());
                 ps.setString(2, rec.getUserId());
-                ps.setTimestamp(3, rec.getCreated_time());
+                ps.setTimestamp(3, rec.getCreatedTime());
                 ps.setString(4, rec.getTitle());
                 ps.setString(5, rec.getText());
                 ps.setString(6, rec.getSupplement());
@@ -130,7 +130,7 @@ public class RecordDAOImplTest {
         try (Connection connection = conn.getConnection()) {
             ps = connection.prepareStatement(
                     "select * from record_list where id_rec=?");
-            ps.setString(1, rec.getId_rec());
+            ps.setString(1, rec.getUuid());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 record = new Record(rs.getString(1),rs.getString(2), rs.getTimestamp(3),
@@ -141,7 +141,7 @@ public class RecordDAOImplTest {
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
-        assertEquals(rec.getId_rec(), record.getId_rec());
+        assertEquals(rec.getUuid(), record.getUuid());
     //    assertEquals(rec.getCreated_time(), record.getCreated_time());
         assertEquals(rec.getSupplement(), record.getSupplement());
         assertEquals(rec.getText(), record.getText());

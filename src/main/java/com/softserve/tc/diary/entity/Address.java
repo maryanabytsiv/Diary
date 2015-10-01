@@ -2,30 +2,30 @@ package com.softserve.tc.diary.entity;
 
 public class Address {
     
-    private String id;
+    private String uuid;
     private String country;
     private String city;
     private String street;
-    private String build_number;
+    private String buildNumber;
     
     public Address() {
     
     }
     
     public Address(String country, String city, String street,
-            String build_number) {
+            String buildNumber) {
         this.country = country;
         this.city = city;
         this.street = street;
-        this.build_number = build_number;
+        this.buildNumber = buildNumber;
     }
     
-    public String getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
     
-    public void setId(String id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
     
     public String getCountry() {
@@ -52,19 +52,19 @@ public class Address {
         this.street = street;
     }
     
-    public String getBuild_number() {
-        return build_number;
+    public String getBuildNumber() {
+        return buildNumber;
     }
     
-    public void setBuild_number(String build_number) {
-        this.build_number = build_number;
+    public void setBuildNumber(String buildNumber) {
+        this.buildNumber = buildNumber;
     }
     
     @Override
     public String toString() {
-        return "Address [id=" + id + ", country=" + country + ", city=" + city
+        return "Address [id=" + uuid + ", country=" + country + ", city=" + city
                 + ", street=" + street
-                + ", build_number=" + build_number + "]";
+                + ", build number=" + buildNumber + "]";
     }
     
 }

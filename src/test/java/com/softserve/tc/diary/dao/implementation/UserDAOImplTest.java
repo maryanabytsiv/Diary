@@ -82,15 +82,15 @@ public class UserDAOImplTest {
 			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
-		assertEquals("hary12", userActual.getNick_name());
-		assertEquals("Andriy", userActual.getFirst_name());
-		assertEquals("Mural", userActual.getSecond_name());
-		assertEquals("bg@gmail.com", userActual.getE_mail());
+		assertEquals("hary12", userActual.getNickName());
+		assertEquals("Andriy", userActual.getFirstName());
+		assertEquals("Mural", userActual.getSecondName());
+		assertEquals("bg@gmail.com", userActual.getEMail());
 		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
 		assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
-		assertEquals("1995-03-02", userActual.getDate_of_birth());
+		assertEquals("1995-03-02", userActual.getDateOfBirth());
 		assertEquals("folder/folder/image.png", userActual.getAvatar());
 		assertEquals("USER", userActual.getRole());
 		logger.info("test create user");
@@ -102,8 +102,8 @@ public class UserDAOImplTest {
 		User user = new User("read", "Natalya", "Bolyk", "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
 				Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
 		userDAO.create(user);
-		user.setFirst_name("IRA");
-		user.setSecond_name("BLLLLL");
+		user.setFirstName("IRA");
+		user.setSecondName("BLLLLL");
 		user.setAddress("Poland, Gdansk, Naberejna, 52");
 		userDAO.update(user);
 		User userActual = new User();
@@ -112,7 +112,7 @@ public class UserDAOImplTest {
 				connection.setAutoCommit(false);
 				ps = connection.prepareStatement(
 						"select  * from user_card left join address on (address.id=user_card.address_id) where user_card.nick_name =?;");
-				ps.setString(1, user.getNick_name());
+				ps.setString(1, user.getNickName());
 				ResultSet rs = ps.executeQuery();
 				userActual = resultSet(rs);
 				connection.commit();
@@ -126,14 +126,14 @@ public class UserDAOImplTest {
 			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
-		assertEquals("read", userActual.getNick_name());
-		assertEquals("IRA", userActual.getFirst_name());
-		assertEquals("BLLLLL", userActual.getSecond_name());
-		assertEquals("bg@gmail.com", userActual.getE_mail());
+		assertEquals("read", userActual.getNickName());
+		assertEquals("IRA", userActual.getFirstName());
+		assertEquals("BLLLLL", userActual.getSecondName());
+		assertEquals("bg@gmail.com", userActual.getEMail());
 		assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
 		assertEquals("64561", userActual.getPassword());
 		assertEquals("FEMALE", userActual.getSex());
-		assertEquals("1999-10-10", userActual.getDate_of_birth());
+		assertEquals("1999-10-10", userActual.getDateOfBirth());
 		assertEquals("some.jpeg", userActual.getAvatar());
 		assertEquals("ADMIN", userActual.getRole());
 		logger.info("test update user");
@@ -188,14 +188,14 @@ public class UserDAOImplTest {
 			logger.error("select failed", e);
 		}
 		assertNotNull(userActual);
-		assertEquals(user.getNick_name(), userActual.getNick_name());
-		assertEquals(user.getFirst_name(), userActual.getFirst_name());
-		assertEquals(user.getSecond_name(), userActual.getSecond_name());
-		assertEquals(user.getE_mail(), userActual.getE_mail());
+		assertEquals(user.getNickName(), userActual.getNickName());
+		assertEquals(user.getFirstName(), userActual.getFirstName());
+		assertEquals(user.getSecondName(), userActual.getSecondName());
+		assertEquals(user.getEMail(), userActual.getEMail());
 		assertEquals(user.getAddress(), userActual.getAddress());
 		assertEquals(PasswordHelper.encrypt(user.getPassword()), userActual.getPassword());
 		assertEquals(user.getSex(), userActual.getSex());
-		assertEquals(user.getDate_of_birth(), userActual.getDate_of_birth());
+		assertEquals(user.getDateOfBirth(), userActual.getDateOfBirth());
 		assertEquals(user.getAvatar(), userActual.getAvatar());
 		assertEquals(user.getRole(), userActual.getRole());
 		logger.info("test get by nickname");
@@ -206,14 +206,14 @@ public class UserDAOImplTest {
 		UserDAOImpl dao = new UserDAOImpl(conn);
 		User user = dao.readByKey("1");
 		assertNotNull(user);
-		assertEquals(user.getNick_name(), "BigBunny");
-		assertEquals(user.getFirst_name(), "Oleg");
-		assertEquals(user.getSecond_name(), "Pavliv");
+		assertEquals(user.getNickName(), "BigBunny");
+		assertEquals(user.getFirstName(), "Oleg");
+		assertEquals(user.getSecondName(), "Pavliv");
 		assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
-		assertEquals(user.getE_mail(), "hgdf@gmail.com");
+		assertEquals(user.getEMail(), "hgdf@gmail.com");
 		assertEquals(PasswordHelper.encrypt("kdfhgrr"), PasswordHelper.encrypt(user.getPassword()));
 		assertEquals(user.getSex(), "MALE");
-		assertEquals(user.getDate_of_birth(), "1992-02-02");
+		assertEquals(user.getDateOfBirth(), "1992-02-02");
 		assertEquals(user.getAvatar(), null);
 		assertEquals(user.getRole(), "USER");
 		logger.info("test get by id");
@@ -247,15 +247,15 @@ public class UserDAOImplTest {
 		try {
 			while (rs.next()) {
 				user = new User();
-				user.setNick_name(rs.getString("nick_name"));
-				user.setFirst_name(rs.getString("first_name"));
-				user.setSecond_name(rs.getString("second_name"));
+				user.setNickName(rs.getString("nick_name"));
+				user.setFirstName(rs.getString("first_name"));
+				user.setSecondName(rs.getString("second_name"));
 				user.setAddress(rs.getString("country") + ", " + rs.getString("city") + ", " + rs.getString("street")
 						+ ", " + rs.getString("build_number"));
-				user.setE_mail(rs.getString("e_mail"));
+				user.setEMail(rs.getString("e_mail"));
 				user.setPassword(rs.getString("password"));
 				user.setSex(rs.getString("Sex"));
-				user.setDate_of_birth(rs.getString("date_of_birth"));
+				user.setDateOfBirth(rs.getString("date_of_birth"));
 				user.setAvatar(rs.getString("avatar"));
 				user.setRole(rs.getString("role"));
 				user.setSession(rs.getString("session"));

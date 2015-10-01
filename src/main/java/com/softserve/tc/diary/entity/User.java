@@ -3,14 +3,14 @@ package com.softserve.tc.diary.entity;
 public class User {
     
     private String uuid;
-    private String nick_name;
-    private String first_name;
-    private String second_name;
+    private String nickName;
+    private String firstName;
+    private String secondName;
     private String address;
-    private String e_mail;
+    private String eMail;
     private String password;
     private Sex sex;
-    private String date_of_birth;
+    private String dateOfBirth;
     private String avatar;
     private Role role;
     private String session;
@@ -20,33 +20,33 @@ public class User {
     
     }
     
-    public User(String nick_name, String first_name, String second_name,
-            String address, String e_mail, String password,
-            Sex sex, String date_of_birth, String avatar, Role role) {
-        this.nick_name = nick_name;
-        this.first_name = first_name;
-        this.second_name = second_name;
+    public User(String nickName, String firstName, String secondName,
+            String address, String eMail, String password,
+            Sex sex, String dateOfBirth, String avatar, Role role) {
+        this.nickName = nickName;
+        this.firstName = firstName;
+        this.secondName = secondName;
         this.address = address;
-        this.e_mail = e_mail;
+        this.eMail = eMail;
         this.password = password;
         this.sex = sex;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
         this.avatar = avatar;
         this.role = role;
     }
     
-    public User(String uuid, String nick_name, String first_name, String second_name,
-            String address, String e_mail, String password,
-            Sex sex, String date_of_birth, String avatar, Role role) {
+    public User(String uuid, String nickName, String firstName, String secondName,
+            String address, String eMail, String password,
+            Sex sex, String dateOfBirth, String avatar, Role role) {
     	this.uuid = uuid;
-        this.nick_name = nick_name;
-        this.first_name = first_name;
-        this.second_name = second_name;
+        this.nickName = nickName;
+        this.firstName = firstName;
+        this.secondName = secondName;
         this.address = address;
-        this.e_mail = e_mail;
+        this.eMail = eMail;
         this.password = password;
         this.sex = sex;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
         this.avatar = avatar;
         this.role = role;
     }
@@ -59,28 +59,28 @@ public class User {
         this.uuid = uuid;
     }
     
-    public String getNick_name() {
-        return nick_name;
+    public String getNickName() {
+        return nickName;
     }
     
-    public void setNick_name(String nick_name) {
-        this.nick_name = nick_name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
     
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
     
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
     
-    public String getSecond_name() {
-        return second_name;
+    public String getSecondName() {
+        return secondName;
     }
     
-    public void setSecond_name(String second_name) {
-        this.second_name = second_name;
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
     
     public String getAddress() {
@@ -92,12 +92,12 @@ public class User {
         this.address = address;
     }
     
-    public String getE_mail() {
-        return e_mail;
+    public String getEMail() {
+        return eMail;
     }
     
-    public void setE_mail(String e_mail) {
-        this.e_mail = e_mail;
+    public void setEMail(String eMail) {
+        this.eMail = eMail;
     }
     
     public String getPassword() {
@@ -126,12 +126,12 @@ public class User {
             this.sex = null;
     }
     
-    public String getDate_of_birth() {
-        return date_of_birth;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
     
-    public void setDate_of_birth(String date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
     
     public String getAvatar() {
@@ -172,11 +172,11 @@ public class User {
     
     @Override
     public String toString() {
-        return "User [uuid=" + uuid + ", nick_name=" + nick_name
-                + ", first_name=" + first_name + ", second_name="
-                + second_name + ", address=" + address + ", e_mail=" + e_mail
+        return "User [uuid=" + uuid + ", nickname=" + nickName
+                + ", first name=" + firstName + ", second name="
+                + secondName + ", address=" + address + ", email=" + eMail
                 + ", password=" + password + ", sex="
-                + sex + ", date_of_birth=" + date_of_birth + ", avatar="
+                + sex + ", date of birth=" + dateOfBirth + ", avatar="
                 + avatar + ", role=" + role + ", session="
                 + session + "]";
     }

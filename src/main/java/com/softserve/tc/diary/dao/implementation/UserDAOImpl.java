@@ -50,12 +50,12 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             ps.setString(1, newAdress.getCountry());
             ps.setString(2, newAdress.getCity());
             ps.setString(3, newAdress.getStreet());
-            ps.setString(4, newAdress.getBuild_number());
+            ps.setString(4, newAdress.getBuildNumber());
             rs = ps.executeQuery();
             if (rs.next()) {
                 getAddress = new Address(rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5));
-                getAddress.setId(rs.getString(1));
+                getAddress.setUuid(rs.getString(1));
             }
         } catch (SQLException e) {
             logger.error("create address failed", e);
@@ -64,8 +64,8 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
-                if ((object.getRole() == null) || (object.getE_mail() == null)
-                        || (object.getNick_name() == null)) {
+                if ((object.getRole() == null) || (object.getEMail() == null)
+                        || (object.getNickName() == null)) {
                     logger.error("You not enter nickname, e-mail or role");
                     throw new IllegalArgumentException();
                 } else {
@@ -73,15 +73,15 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                     ps = conn.prepareStatement(
                             "insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?,?);");
                     ps.setString(1, UUID.randomUUID().toString());
-                    ps.setString(2, object.getNick_name());
-                    ps.setString(3, object.getFirst_name());
-                    ps.setString(4, object.getSecond_name());
-                    ps.setString(5, getAddress.getId());
-                    ps.setString(6, object.getE_mail());
+                    ps.setString(2, object.getNickName());
+                    ps.setString(3, object.getFirstName());
+                    ps.setString(4, object.getSecondName());
+                    ps.setString(5, getAddress.getUuid());
+                    ps.setString(6, object.getEMail());
                     ps.setString(7,
                             PasswordHelper.encrypt(object.getPassword()));
                     ps.setString(8, object.getSex().toUpperCase());
-                    ps.setString(9, object.getDate_of_birth());
+                    ps.setString(9, object.getDateOfBirth());
                     ps.setString(10, object.getAvatar());
                     ps.setString(11, object.getRole().toUpperCase());
                     ps.setString(12, null);
@@ -106,12 +106,12 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 splitAddress[2], splitAddress[3]);
         AddressDAOImpl adressDAO = new AddressDAOImpl(connection);
         
-        User userToUpdate = readByNickName(object.getNick_name());
+        User userToUpdate = readByNickName(object.getNickName());
         String addressUUID = "";
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
                     "select address_id from user_card where nick_name=?;");
-            ps.setString(1, userToUpdate.getNick_name());
+            ps.setString(1, userToUpdate.getNickName());
             ps.execute();
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -122,7 +122,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             logger.error("create address failed", e);
         }
         
-        newAdress.setId(addressUUID);
+        newAdress.setUuid(addressUUID);
         adressDAO.update(newAdress);
         
         try (Connection conn = connection.getConnection()) {
@@ -132,16 +132,16 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                         "update user_card set first_name=?,"
                                 + " second_name=?, e_mail=?, password=?, sex=?,"
                                 + " date_of_birth=CAST(? AS DATE), avatar=?,role=?, session = ? where nick_name=?;");
-                ps.setString(1, object.getFirst_name());
-                ps.setString(2, object.getSecond_name());
-                ps.setString(3, object.getE_mail());
+                ps.setString(1, object.getFirstName());
+                ps.setString(2, object.getSecondName());
+                ps.setString(3, object.getEMail());
                 ps.setString(4, object.getPassword());
                 ps.setString(5, object.getSex().toUpperCase());
-                ps.setString(6, object.getDate_of_birth());
+                ps.setString(6, object.getDateOfBirth());
                 ps.setString(7, object.getAvatar());
                 ps.setString(8, object.getRole().toUpperCase());
                 ps.setString(9, object.getSession());
-                ps.setString(10, object.getNick_name());
+                ps.setString(10, object.getNickName());
                 ps.execute();
                 conn.commit();
                 logger.debug("User updated");
@@ -164,7 +164,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 logger.debug("Deleting user");
                 ps = conn.prepareStatement(
                         "delete from user_card where nick_name=?");
-                ps.setString(1, object.getNick_name());
+                ps.setString(1, object.getNickName());
                 ps.execute();
                 conn.commit();
             } catch (SQLException e) {
@@ -335,16 +335,16 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             while (rs.next()) {
                 user = new User();
                 user.setUuid(rs.getString("uid"));
-                user.setNick_name(rs.getString("nick_name"));
-                user.setFirst_name(rs.getString("first_name"));
-                user.setSecond_name(rs.getString("second_name"));
+                user.setNickName(rs.getString("nick_name"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setSecondName(rs.getString("second_name"));
                 user.setAddress(rs.getString("country") + ", "
                         + rs.getString("city") + ", " + rs.getString("street")
                         + ", " + rs.getString("build_number"));
-                user.setE_mail(rs.getString("e_mail"));
+                user.setEMail(rs.getString("e_mail"));
                 user.setPassword(rs.getString("password"));
                 user.setSex(rs.getString("Sex"));
-                user.setDate_of_birth(rs.getString("date_of_birth"));
+                user.setDateOfBirth(rs.getString("date_of_birth"));
                 user.setAvatar(rs.getString("avatar"));
                 user.setRole(rs.getString("role"));
                 user.setSession(rs.getString("session"));
