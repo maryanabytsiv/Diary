@@ -1,5 +1,7 @@
 package com.softserve.tc.diary.entity;
 
+import com.softserve.tc.diary.dao.util.PasswordHelper;
+
 public class User {
     
     private String uuid;
@@ -105,7 +107,7 @@ public class User {
     }
     
     public void setPassword(String password) {
-        this.password = password;
+        this.password =PasswordHelper.encrypt(password);
     }
     
     public String getSex() {
