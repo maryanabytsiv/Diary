@@ -247,9 +247,18 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     public List<Record> getRecordByNickNameAndDate(String userId,Timestamp date) {
         List<Record> list = new ArrayList<Record>();
         try (Connection conn = connection.getConnection()) {
-            ps = conn.prepareStatement("SELECT * FROM record_list where user_id_rec=? and created_time=?;");
+            ps = conn.prepareStatement("SELECT * FROM record_list "
+            		+ "where user_id_rec=? and created_time BETWEEN ? AND ?;");
             ps.setString(1, userId);
+            // Notes per day from 00:00:00 to 23:59:59
+    		date.setHours(0);
+    		date.setMinutes(0);
+    		date.setSeconds(0);
             ps.setTimestamp(2, date);
+    		date.setHours(23);
+    		date.setMinutes(59);
+    		date.setSeconds(59);
+            ps.setTimestamp(3, date);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String id_rec = rs.getString(1);

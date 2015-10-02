@@ -141,6 +141,7 @@ public class DiaryServiceImpl implements DiaryService {
             return null;
         }
         Timestamp dateOfRecord = Timestamp.valueOf(date);
+        
         records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(),
                 dateOfRecord);
         if (records.isEmpty()) {
