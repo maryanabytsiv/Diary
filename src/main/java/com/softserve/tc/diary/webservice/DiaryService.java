@@ -32,6 +32,8 @@ public interface DiaryService {
 	List<User> getAllUsers();
 
 	List<Record> getAllPublicRecords();
+	
+	List<Record> getAllPublicRecordsByHashTag(String hashTag);
 
 	Record readByKey(String id);
 

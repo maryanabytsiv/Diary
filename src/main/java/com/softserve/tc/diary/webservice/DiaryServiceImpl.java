@@ -230,6 +230,13 @@ public class DiaryServiceImpl implements DiaryService {
 		userDAO.delete(user);
 	}
 
+	@Override
+	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
+		TagDAOImpl dao = new TagDAOImpl();
+		List<Record> list = dao.getListRecordsByTag(new Tag(hashTag));
+		return list;
+	}
+
 	// @Override
 	// public Statistics viewSiteStatistics(String nickNameOfAdmin) {
 	// // TODO Auto-generated method stub

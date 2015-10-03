@@ -9,11 +9,13 @@ public class TimestampAdapter extends XmlAdapter<String, Timestamp>{
 
     @Override
     public String marshal(Timestamp v) throws Exception {
+    	System.out.println(v);
         return v.toString();
     }
 
     @Override
     public Timestamp unmarshal(String v) throws Exception {
+
         return new Timestamp(Long.parseLong(v));
     }
 
