@@ -1,6 +1,10 @@
 package com.softserve.tc.diary.dao.implementation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,9 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
-import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
@@ -28,8 +31,9 @@ import com.softserve.tc.diary.log.Log;
 public class TagDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private ConnectionManager conn = TestDBConnectionManager.getInstance();
-    
+    private final ConnectionManager conn =
+            DBConnectionManagerNew.getInstance(false);
+            
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
         DBCreationManagerTest.setUpBeforeClass();
@@ -230,11 +234,11 @@ public class TagDAOImplTest {
         logger.info("test get list record by tag");
     }
     
-//    @Test
-//    public void testGetListRecordByListTag() {
-//         TagDAOImpl tagDAO = new TagDAOImpl();
-//         List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
-//         List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
-//         assertEquals(listRecord.size(), 1);
-//    }
+    // @Test
+    // public void testGetListRecordByListTag() {
+    // TagDAOImpl tagDAO = new TagDAOImpl();
+    // List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
+    // List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
+    // assertEquals(listRecord.size(), 1);
+    // }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
@@ -22,18 +22,17 @@ import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
-    // private static Connection conn = null;
-    private static PreparedStatement ps = null;
-    private static ResultSet rs;
+    private PreparedStatement ps = null;
+    private ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
-    private static ConnectionManager connection =
-            DBConnectionManager.getInstance();
-            
-    public UserDAOImpl(ConnectionManager connection) {
-        this.connection = connection;
-    }
+    private ConnectionManager connection = null;
     
     public UserDAOImpl() {
+        this.connection = DBConnectionManagerNew.getInstance(true);
+    }
+    
+    public UserDAOImpl(ConnectionManager conn) {
+        this.connection = conn;
     }
     
     public void create(User object) {
@@ -104,7 +103,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         String[] splitAddress = object.getAddress().split(", ");
         Address newAdress = new Address(splitAddress[0], splitAddress[1],
                 splitAddress[2], splitAddress[3]);
-        AddressDAOImpl adressDAO = new AddressDAOImpl(connection);
+        AddressDAOImpl adressDAO = new AddressDAOImpl();
         
         User userToUpdate = readByNickName(object.getNickName());
         String addressUUID = "";
