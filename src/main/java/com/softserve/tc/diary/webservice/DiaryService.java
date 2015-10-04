@@ -36,6 +36,10 @@ public interface DiaryService {
 	Record readByKey(String id);
 	
 	int getUserAmountOfRecords (String nickName);
+	
+	void updateUser(User user);
+	
+	void deleteUser(User user);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 

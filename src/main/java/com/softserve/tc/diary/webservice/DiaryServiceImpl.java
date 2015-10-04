@@ -239,6 +239,18 @@ public class DiaryServiceImpl implements DiaryService {
         int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
         return numOfRecords;
     }
+
+	@Override
+	public void updateUser(User user) {
+		userDAO.update(user);
+		
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		userDAO.delete(user);
+		
+	}
     
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {

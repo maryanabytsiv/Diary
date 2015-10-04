@@ -64,7 +64,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         try (Connection conn = connection.getConnection()) {
             try {
                 conn.setAutoCommit(false);
-                if ((object.getRole() == null) || (object.getEMail() == null)
+                if ((object.getRole() == null) || (object.geteMail() == null)
                         || (object.getNickName() == null)) {
                     logger.error("You not enter nickname, e-mail or role");
                     throw new IllegalArgumentException();
@@ -77,7 +77,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                     ps.setString(3, object.getFirstName());
                     ps.setString(4, object.getSecondName());
                     ps.setString(5, getAddress.getUuid());
-                    ps.setString(6, object.getEMail());
+                    ps.setString(6, object.geteMail());
                     ps.setString(7,
                             PasswordHelper.encrypt(object.getPassword()));
                     ps.setString(8, object.getSex().toUpperCase());
@@ -134,7 +134,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                                 + " date_of_birth=CAST(? AS DATE), avatar=?,role=?, session = ? where nick_name=?;");
                 ps.setString(1, object.getFirstName());
                 ps.setString(2, object.getSecondName());
-                ps.setString(3, object.getEMail());
+                ps.setString(3, object.geteMail());
                 ps.setString(4, object.getPassword());
                 ps.setString(5, object.getSex().toUpperCase());
                 ps.setString(6, object.getDateOfBirth());
@@ -341,7 +341,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 user.setAddress(rs.getString("country") + ", "
                         + rs.getString("city") + ", " + rs.getString("street")
                         + ", " + rs.getString("build_number"));
-                user.setEMail(rs.getString("e_mail"));
+                user.seteMail(rs.getString("e_mail"));
                 user.setPassword(rs.getString("password"));
                 user.setSex(rs.getString("Sex"));
                 user.setDateOfBirth(rs.getString("date_of_birth"));
