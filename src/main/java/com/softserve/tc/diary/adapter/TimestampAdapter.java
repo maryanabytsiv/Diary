@@ -1,6 +1,7 @@
 package com.softserve.tc.diary.adapter;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
