@@ -90,7 +90,7 @@ public class UserDAOImplTest {
         assertEquals("hary12", userActual.getNickName());
         assertEquals("Andriy", userActual.getFirstName());
         assertEquals("Mural", userActual.getSecondName());
-        assertEquals("bg@gmail.com", userActual.getEMail());
+        assertEquals("bg@gmail.com", userActual.geteMail());
         assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
         assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
         assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
@@ -135,7 +135,7 @@ public class UserDAOImplTest {
         assertEquals("read", userActual.getNickName());
         assertEquals("IRA", userActual.getFirstName());
         assertEquals("BLLLLL", userActual.getSecondName());
-        assertEquals("bg@gmail.com", userActual.getEMail());
+        assertEquals("bg@gmail.com", userActual.geteMail());
         assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
         assertEquals("64561", userActual.getPassword());
         assertEquals("FEMALE", userActual.getSex());
@@ -201,7 +201,7 @@ public class UserDAOImplTest {
         assertEquals(user.getNickName(), userActual.getNickName());
         assertEquals(user.getFirstName(), userActual.getFirstName());
         assertEquals(user.getSecondName(), userActual.getSecondName());
-        assertEquals(user.getEMail(), userActual.getEMail());
+        assertEquals(user.geteMail(), userActual.geteMail());
         assertEquals(user.getAddress(), userActual.getAddress());
         assertEquals(PasswordHelper.encrypt(user.getPassword()),
                 userActual.getPassword());
@@ -221,7 +221,7 @@ public class UserDAOImplTest {
         assertEquals(user.getFirstName(), "Oleg");
         assertEquals(user.getSecondName(), "Pavliv");
         assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
-        assertEquals(user.getEMail(), "hgdf@gmail.com");
+        assertEquals(user.geteMail(), "hgdf@gmail.com");
         assertEquals(PasswordHelper.encrypt("kdfhgrr"),
                 PasswordHelper.encrypt(user.getPassword()));
         assertEquals(user.getSex(), "MALE");
@@ -265,7 +265,7 @@ public class UserDAOImplTest {
                 user.setAddress(rs.getString("country") + ", "
                         + rs.getString("city") + ", " + rs.getString("street")
                         + ", " + rs.getString("build_number"));
-                user.setEMail(rs.getString("e_mail"));
+                user.seteMail(rs.getString("e_mail"));
                 user.setPassword(rs.getString("password"));
                 user.setSex(rs.getString("Sex"));
                 user.setDateOfBirth(rs.getString("date_of_birth"));
