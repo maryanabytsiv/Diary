@@ -2,6 +2,9 @@ package com.softserve.tc.diary.webservice;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -199,6 +202,12 @@ public class DiaryServiceImpl implements DiaryService {
 	public List<Record> getAllPublicRecords() {
 		RecordDAOImpl dao = new RecordDAOImpl();
 		List<Record> list = dao.getAllPublicRecords();
+		Collections.sort(list,  new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getCreatedTime().getTime()>o1.getCreatedTime().getTime()?1:-1;
+            }
+        });
 		return list;
 	}
 
@@ -233,7 +242,20 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
 		TagDAOImpl dao = new TagDAOImpl();
-		List<Record> list = dao.getListRecordsByTag(new Tag(hashTag));
+		boolean existTag = dao.checkIfTagExist(hashTag);
+		if (existTag == false) {
+			List<Record> list2 = new ArrayList<Record>();
+			return list2;
+		}
+		Tag tag = dao.getTagByMessage(hashTag);
+		List<Record> list = dao.getListRecordsByTag(tag);
+		Iterator<Record> it = list.iterator();
+		while (it.hasNext()) {
+			Record r = it.next();
+			if (r.getVisibility().equals(Status.PRIVATE)) {
+				it.remove();
+			}
+		}
 		return list;
 	}
 

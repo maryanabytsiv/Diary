@@ -103,7 +103,10 @@ public class TagDAOImpl implements TagDAO {
 		String tagId = UUID.randomUUID().toString();
 		if (checkIfTagExist(tagMessage)) {
 			logger.warn("Tag already exist");
-		} else {
+			Tag tag = getTagByMessage(tagMessage);
+			insertValuesInTagRecord(recordId, tag.getUuid());
+		}
+		 else {
 
 			try (Connection conn = connection.getConnection()) {
 				try {
@@ -229,7 +232,6 @@ public class TagDAOImpl implements TagDAO {
 	}
 
 	public List<Record> getListRecordsByTag(Tag object) {
-		
 		List<Record> listRecordsWithTag = new ArrayList<Record>();
 		String uuid = object.getUuid();
 		String query = "Select * from record_list where id_rec IN "

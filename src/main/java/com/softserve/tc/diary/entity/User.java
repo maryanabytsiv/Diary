@@ -94,11 +94,11 @@ public class User {
         this.address = address;
     }
     
-    public String getEMail() {
+    public String geteMail() {
         return eMail;
     }
     
-    public void setEMail(String eMail) {
+    public void seteMail(String eMail) {
         this.eMail = eMail;
     }
     
