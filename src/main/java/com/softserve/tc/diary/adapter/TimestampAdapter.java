@@ -6,18 +6,19 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class TimestampAdapter extends XmlAdapter<String, Timestamp>{
-
+public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
+    
     @Override
     public String marshal(Timestamp v) throws Exception {
         return v.toString();
     }
-
+    
     @Override
     public Timestamp unmarshal(String v) throws Exception {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date parsedDate = dateFormat.parse(v);
         return new Timestamp(parsedDate.getTime());
     }
-
+    
 }

@@ -2,7 +2,6 @@ package com.softserve.tc.diary.dao.implementation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,9 +19,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.connectionmanager.TestDBConnectionManager;
-import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.log.Log;
@@ -30,14 +28,15 @@ import com.softserve.tc.diary.log.Log;
 /**
  * 
  * @author Mykola-
- *        
+ *         
  */
 
 public class RecordDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private ConnectionManager conn = TestDBConnectionManager.getInstance();
-    
+    private final ConnectionManager conn =
+            DBConnectionManagerNew.getInstance(false);
+            
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
         DBCreationManagerTest.setUpBeforeClass();
@@ -64,20 +63,23 @@ public class RecordDAOImplTest {
         Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
         
         RecordDAOImpl RecordDAO = new RecordDAOImpl(conn);
-        Record newRecord = new Record("1", createdTime, "sport", "#JUST DO IT!!!",
-                "http:/bigBoss/works/perfectly",
-                Status.PRIVATE);
+        Record newRecord =
+                new Record("1", createdTime, "sport", "#JUST DO IT!!!",
+                        "http:/bigBoss/works/perfectly",
+                        Status.PRIVATE);
         RecordDAO.create(newRecord);
         Record record = null;
         
         try (Connection connection = conn.getConnection()) {
             ps = connection.prepareStatement(
                     "select * from record_list where user_id_rec ='1' and title like 'sport' "
-                    + "and supplement like 'http:/bigBoss/works/perfectly' and visibility like 'PRIVATE';");
+                            + "and supplement like 'http:/bigBoss/works/perfectly' and visibility like 'PRIVATE';");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                record = new Record(rs.getString(1), rs.getString(2), rs.getTimestamp(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6), Status.valueOf(rs.getString(7)));
+                record = new Record(rs.getString(1), rs.getString(2),
+                        rs.getTimestamp(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6),
+                        Status.valueOf(rs.getString(7)));
             }
             
         } catch (SQLException e) {
@@ -133,8 +135,9 @@ public class RecordDAOImplTest {
             ps.setString(1, rec.getUuid());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                record = new Record(rs.getString(1),rs.getString(2), rs.getTimestamp(3),
-                        rs.getString(4),rs.getString(5), rs.getString(6),
+                record = new Record(rs.getString(1), rs.getString(2),
+                        rs.getTimestamp(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6),
                         Status.valueOf(rs.getString(7)));
             }
             
@@ -142,7 +145,7 @@ public class RecordDAOImplTest {
             logger.error("select failed", e);
         }
         assertEquals(rec.getUuid(), record.getUuid());
-    //    assertEquals(rec.getCreated_time(), record.getCreated_time());
+        // assertEquals(rec.getCreated_time(), record.getCreated_time());
         assertEquals(rec.getSupplement(), record.getSupplement());
         assertEquals(rec.getText(), record.getText());
         assertEquals(rec.getUserId(), record.getUserId());
