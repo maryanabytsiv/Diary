@@ -13,7 +13,10 @@ public class PasswordHelper {
             byte[] digested = md.digest(passBytes);
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < digested.length; i++) {
-                sb.append(Integer.toHexString(0xff & digested[i]));
+            	String hex = Integer.toHexString(0xff & digested[i]);
+            	if(hex.length()==1)
+            		sb.append('0');
+                sb.append(hex);
             }
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {

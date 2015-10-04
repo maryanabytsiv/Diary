@@ -10,7 +10,7 @@ import com.softserve.tc.diary.entity.User;
 
 @WebService
 public interface DiaryService {
-    
+
 	String sayHello(String name);
 
 	String logIn(String nickName, String password);
@@ -30,18 +30,17 @@ public interface DiaryService {
 	User getUserByNickName(String nickName);
 
 	List<User> getAllUsers();
-	
+
 	List<Record> getAllPublicRecords();
-	 
+
 	Record readByKey(String id);
-	
-	int getUserAmountOfRecords (String nickName);
-	
+
+	int getUserAmountOfRecords(String nickName);
+
 	void updateUser(User user);
-	
+
 	void deleteUser(User user);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
-
 
 }

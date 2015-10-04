@@ -14,7 +14,9 @@ public class TimestampAdapter extends XmlAdapter<String, Timestamp>{
 
     @Override
     public Timestamp unmarshal(String v) throws Exception {
-        return new Timestamp(Long.parseLong(v));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date parsedDate = dateFormat.parse(v);
+        return new Timestamp(parsedDate.getTime());
     }
 
 }
