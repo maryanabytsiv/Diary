@@ -22,7 +22,7 @@ public class User {
     
     }
     
-    public User(String nickName, String firstName, String secondName,
+	public User(String nickName, String firstName, String secondName,
             String address, String eMail, String password,
             Sex sex, String dateOfBirth, String avatar, Role role) {
         this.nickName = nickName;
@@ -95,19 +95,19 @@ public class User {
     }
     
     public String geteMail() {
-        return eMail;
-    }
-    
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
+		return eMail;
+	}
+
+	public void seteMail(String eMail) {
+		this.eMail = eMail;
+	}
     
     public String getPassword() {
         return password;
     }
     
     public void setPassword(String password) {
-        this.password =PasswordHelper.encrypt(password);
+        this.password =password;
     }
     
     public String getSex() {
