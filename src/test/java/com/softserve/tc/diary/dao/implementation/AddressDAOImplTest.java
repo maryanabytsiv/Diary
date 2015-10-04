@@ -63,7 +63,7 @@ public class AddressDAOImplTest {
             ps.setString(1, newAddress.getCountry());
             ps.setString(2, newAddress.getCity());
             ps.setString(3, newAddress.getStreet());
-            ps.setString(4, newAddress.getBuild_number());
+            ps.setString(4, newAddress.getBuildNumber());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3),
@@ -78,7 +78,7 @@ public class AddressDAOImplTest {
         assertEquals("Ukraine", address.getCountry());
         assertEquals("IF", address.getCity());
         assertEquals("street", address.getStreet());
-        assertEquals("12", address.getBuild_number());
+        assertEquals("12", address.getBuildNumber());
         logger.info("Test create address");
     }
     
@@ -86,17 +86,17 @@ public class AddressDAOImplTest {
     public void testUpdateAddress() {
         AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", "16");
-        add.setId(UUID.randomUUID().toString());
+        add.setUuid(UUID.randomUUID().toString());
         try (Connection connection = conn.getConnection()) {
             try {
                 connection.setAutoCommit(false);
                 ps = connection.prepareStatement(
                         "insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
-                ps.setString(1, add.getId());
+                ps.setString(1, add.getUuid());
                 ps.setString(2, add.getCountry());
                 ps.setString(3, add.getCity());
                 ps.setString(4, add.getStreet());
-                ps.setString(5, add.getBuild_number());
+                ps.setString(5, add.getBuildNumber());
                 ps.execute();
                 ps.close();
                 connection.commit();
@@ -115,12 +115,12 @@ public class AddressDAOImplTest {
         try (Connection connection = conn.getConnection()) {
             ps = connection
                     .prepareStatement("select * from address where id=?");
-            ps.setString(1, add.getId());
+            ps.setString(1, add.getUuid());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 address = new Address(rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5));
-                address.setId(rs.getString(1));
+                address.setUuid(rs.getString(1));
             }
             
         } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class AddressDAOImplTest {
         assertEquals(add.getCountry(), address.getCountry());
         assertEquals(add.getCity(), address.getCity());
         assertEquals(add.getStreet(), address.getStreet());
-        assertEquals(add.getBuild_number(), address.getBuild_number());
+        assertEquals(add.getBuildNumber(), address.getBuildNumber());
         logger.info("Test update address");
     }
     
@@ -147,12 +147,12 @@ public class AddressDAOImplTest {
             ps.setString(1, address.getCountry());
             ps.setString(2, address.getCity());
             ps.setString(3, address.getStreet());
-            ps.setString(4, address.getBuild_number());
+            ps.setString(4, address.getBuildNumber());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 deleteAddress = new Address(rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5));
-                deleteAddress.setId(rs.getString(1));
+                deleteAddress.setUuid(rs.getString(1));
             }
         } catch (SQLException e) {
             logger.error("select failed", e);

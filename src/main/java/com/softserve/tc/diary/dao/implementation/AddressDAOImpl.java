@@ -15,7 +15,11 @@ import org.apache.log4j.Logger;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.AddressDAO;
+import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
+import com.softserve.tc.diary.entity.Role;
+import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 public class AddressDAOImpl implements AddressDAO {
@@ -42,7 +46,7 @@ public class AddressDAOImpl implements AddressDAO {
 			ps.setString(2, object.getCountry());
 			ps.setString(3, object.getCity());
 			ps.setString(4, object.getStreet());
-			ps.setString(5, object.getBuild_number());
+			ps.setString(5, object.getBuildNumber());
 			ps.execute();
 			ps.close();
 			logger.debug("Address created");
@@ -81,8 +85,8 @@ public class AddressDAOImpl implements AddressDAO {
 				ps.setString(1, object.getCountry());
 				ps.setString(2, object.getCity());
 				ps.setString(3, object.getStreet());
-				ps.setString(4, object.getBuild_number());
-				ps.setString(5, object.getId());
+				ps.setString(4, object.getBuildNumber());
+				ps.setString(5, object.getUuid());
 				ps.execute();
 				ps.close();
 				logger.debug("Address updated");
@@ -110,7 +114,7 @@ public class AddressDAOImpl implements AddressDAO {
 				ps.setString(1, object.getCountry());
 				ps.setString(2, object.getCity());
 				ps.setString(3, object.getStreet());
-				ps.setString(4, object.getBuild_number());
+				ps.setString(4, object.getBuildNumber());
 				ps.execute();
 				logger.debug("Address deleted");
 				conn.commit();
@@ -140,5 +144,7 @@ public class AddressDAOImpl implements AddressDAO {
 		}
 		return list;
 	}
+	
+	
 }
 
