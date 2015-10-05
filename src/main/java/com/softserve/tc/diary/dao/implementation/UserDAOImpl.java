@@ -333,23 +333,21 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         
         try {
             while (rs.next()) {
-                String nick = rs.getString("nick_name");
-                String firstName = rs.getString("first_name");
-                String secondName = rs.getString("second_name");
-                String address = rs.getString("country") + ", "
+            	user = new User();
+                user.setUuid(rs.getString("uid"));
+                user.setNickName(rs.getString("nick_name"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setSecondName(rs.getString("second_name"));
+                user.setAddress(rs.getString("country") + ", "
                         + rs.getString("city") + ", " + rs.getString("street")
-                        + ", " + rs.getString("build_number");
-                String mail = rs.getString("e_mail");
-                String password = rs.getString("password");
-                String sex = rs.getString("Sex");
-                String birthDate = rs.getString("date_of_birth");
-                String avatar = rs.getString("avatar");
-                String role = rs.getString("role");
-                String session = rs.getString("session");
-                user = new User(nick, firstName, secondName, address, mail,
-                        password, Sex.valueOf(sex), birthDate, avatar,
-                        Role.valueOf(role));
-                user.setSession(session);
+                        + ", " + rs.getString("build_number"));
+                user.seteMail(rs.getString("e_mail"));
+                user.setPassword(rs.getString("password"));
+                user.setSex(rs.getString("Sex"));
+                user.setDateOfBirth(rs.getString("date_of_birth"));
+                user.setAvatar(rs.getString("avatar"));
+                user.setRole(rs.getString("role"));
+                user.setSession(rs.getString("session"));
             }
         } catch (SQLException e) {
             logger.error("ResultSet failed", e);

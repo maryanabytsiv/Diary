@@ -107,7 +107,7 @@ public class User {
     }
     
     public void setPassword(String password) {
-        this.password =PasswordHelper.encrypt(password);
+        this.password =password;
     }
     
     public String getSex() {
