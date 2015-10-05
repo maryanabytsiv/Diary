@@ -351,7 +351,7 @@ public class TagDAOImpl implements TagDAO {
             String query = "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            String uuid="testkey5" ;
+            String uuid="" ;
             int i=0;
             while (rs.next()) {
                 i++;

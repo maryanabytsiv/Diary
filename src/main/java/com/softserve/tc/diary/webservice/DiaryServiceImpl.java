@@ -282,6 +282,12 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 		return list;
     }
+    public int[] getSexStatistic(){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        int[] sexStatistic = userDAOImpl.getSexStatistic();
+        return sexStatistic;
+    }
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub

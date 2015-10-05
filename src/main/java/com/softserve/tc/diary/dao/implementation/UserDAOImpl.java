@@ -361,12 +361,60 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             String query = "select count(*),user_id_rec from record_list group by user_id_rec having count(*)>1";
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            String uuid = rs.getString(2);
+            String uuid="" ;
+            int i=0;
+            while (rs.next()) {
+                i++;
+                uuid = rs.getString(2);
+                if(i==1){
+                    break;
+                }
+            }
             UserDAOImpl userDAOImpl=new UserDAOImpl();
             user = userDAOImpl.readByKey(uuid);
         } catch (SQLException e) {
             logger.error("fail get most popular tag", e);
         }
         return user;
+    }
+    
+    public int[] getSexStatistic(){
+        int[] sexStatistic = new int[3];
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "select count(*) from user_card where sex='MALE'";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            int male =0;
+            int i =0;
+            while(rs.next()){
+                i++;
+                male = rs.getInt(1);
+                if (i==1){
+                    break;
+                }
+            }
+            String query2 = "select count(*) from user_card where sex='FEMALE'";
+            ps = conn.prepareStatement(query2);
+            ResultSet rs2 = ps.executeQuery();
+            int female =0;
+            i = 0;
+            while(rs2.next()){
+                i++;
+                female = rs2.getInt(1);
+                if (i==1){
+                    break;
+                }
+            }
+           
+            sexStatistic[0]=male;
+            sexStatistic[1]=female;
+                   
+            
+        } catch (SQLException e) {
+            logger.error("fail get sex stats", e);
+        }
+      
+        return sexStatistic;
     }
 }

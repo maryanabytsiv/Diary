@@ -47,6 +47,8 @@ public interface DiaryService {
 	Tag getMostPopularTag();
 	
 	User getMostActiveUser();
+	
+	int[] getSexStatistic();
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 
