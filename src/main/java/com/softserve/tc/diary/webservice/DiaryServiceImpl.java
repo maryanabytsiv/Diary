@@ -88,14 +88,14 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     @WebMethod
-    public boolean addRecord(String nickname, String title, String text, String status) {
+    public Record addRecord(String nickname, String title, String text, String status) {
         
         User user = userDAO.readByNickName(nickname);
         if (user == null) {
             LOG.debug(String.format("User was not found by nickname %s",
                     nickname));
                     
-            return false;
+            return null;
         } else {
             Timestamp createdTime =
                     new Timestamp(new java.util.Date().getTime());
@@ -104,7 +104,7 @@ public class DiaryServiceImpl implements DiaryService {
                     text, null, Status.valueOf(status));
             recordDAOImpl.create(newRecord);
             
-            return true;
+            return newRecord;
         }
     }
     

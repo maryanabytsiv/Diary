@@ -17,7 +17,7 @@ public interface DiaryService {
 
 	boolean logOut(String nickName);
 
-	boolean addRecord(String nickname, String title, String text, String status);
+	Record addRecord(String nickname, String title, String text, String status);
 
 	boolean removeRecord(String nickname, String recordId);
 
