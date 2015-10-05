@@ -108,6 +108,7 @@ public class UserDAOImplTest {
                 "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
                 Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
         userDAO.create(user);
+        user = userDAO.readByNickName("read");
         user.setFirstName("IRA");
         user.setSecondName("BLLLLL");
         user.setAddress("Poland, Gdansk, Naberejna, 52");
@@ -137,7 +138,8 @@ public class UserDAOImplTest {
         assertEquals("BLLLLL", userActual.getSecondName());
         assertEquals("bg@gmail.com", userActual.geteMail());
         assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
-        assertEquals("64561", userActual.getPassword());
+        assertEquals("0f48c1a86197adb6ff5cd52cd3b4843f",
+                userActual.getPassword());
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDateOfBirth());
         assertEquals("some.jpeg", userActual.getAvatar());
@@ -222,8 +224,8 @@ public class UserDAOImplTest {
         assertEquals(user.getSecondName(), "Pavliv");
         assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
         assertEquals(user.geteMail(), "hgdf@gmail.com");
-        assertEquals(PasswordHelper.encrypt("kdfhgrr"),
-                PasswordHelper.encrypt(user.getPassword()));
+        assertEquals("kdfhgrr",
+                user.getPassword());
         assertEquals(user.getSex(), "MALE");
         assertEquals(user.getDateOfBirth(), "1992-02-02");
         assertEquals(user.getAvatar(), null);
@@ -258,25 +260,29 @@ public class UserDAOImplTest {
         User user = null;
         try {
             while (rs.next()) {
-                user = new User();
-                user.setNickName(rs.getString("nick_name"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setSecondName(rs.getString("second_name"));
-                user.setAddress(rs.getString("country") + ", "
+                String nick = rs.getString("nick_name");
+                String firstName = rs.getString("first_name");
+                String secondName = rs.getString("second_name");
+                String address = rs.getString("country") + ", "
                         + rs.getString("city") + ", " + rs.getString("street")
-                        + ", " + rs.getString("build_number"));
-                user.seteMail(rs.getString("e_mail"));
-                user.setPassword(rs.getString("password"));
-                user.setSex(rs.getString("Sex"));
-                user.setDateOfBirth(rs.getString("date_of_birth"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setRole(rs.getString("role"));
-                user.setSession(rs.getString("session"));
+                        + ", " + rs.getString("build_number");
+                String mail = rs.getString("e_mail");
+                String password = rs.getString("password");
+                System.out.println(password);
+                String sex = rs.getString("Sex");
+                String birthDate = rs.getString("date_of_birth");
+                String avatar = rs.getString("avatar");
+                String role = rs.getString("role");
+                String session = rs.getString("session");
+                user = new User(nick, firstName, secondName, address, mail,
+                        password, Sex.valueOf(sex), birthDate, avatar,
+                        Role.valueOf(role));
+                user.setSession(session);
             }
         } catch (SQLException e) {
             logger.error("ResultSet failed", e);
         }
         return user;
     }
-
+    
 }
