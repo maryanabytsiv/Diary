@@ -251,6 +251,10 @@ public class DiaryServiceImpl implements DiaryService {
         userDAO.delete(user);
     }
     
+    public void createUser(User user) {
+        userDAO.create(user);
+    }
+    
     @Override
 	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
 		TagDAOImpl dao = new TagDAOImpl();

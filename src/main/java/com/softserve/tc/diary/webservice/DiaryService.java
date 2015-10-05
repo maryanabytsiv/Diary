@@ -43,6 +43,8 @@ public interface DiaryService {
 
 	void deleteUser(User user);
 
+    void createUser(User user);
+
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 
 }
