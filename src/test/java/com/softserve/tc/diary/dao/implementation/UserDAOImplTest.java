@@ -18,7 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Role;
@@ -30,7 +30,7 @@ public class UserDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
     private final ConnectionManager conn =
-            DBConnectionManagerNew.getInstance(false);
+            DBConnectionManager.getInstance(false);
             
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {

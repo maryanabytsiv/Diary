@@ -11,13 +11,13 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.log.Log;
 
-public final class DBConnectionManagerNew extends ConnectionManager {
+public final class DBConnectionManager extends ConnectionManager {
     private static final BasicDataSource dataSource = new BasicDataSource();
-    private static DBConnectionManagerNew dbConnectionManager = null;
+    private static DBConnectionManager dbConnectionManager = null;
     private static Logger logger =
-            Log.init(DBConnectionManagerNew.class.toString());
+            Log.init(DBConnectionManager.class.toString());
             
-    private DBConnectionManagerNew() {
+    private DBConnectionManager() {
     }
     
     public static ConnectionManager getInstance(boolean isRealDB) {
@@ -26,7 +26,7 @@ public final class DBConnectionManagerNew extends ConnectionManager {
         Properties property = new Properties();
         
         if (dbConnectionManager == null) {
-            dbConnectionManager = new DBConnectionManagerNew();
+            dbConnectionManager = new DBConnectionManager();
             try {
                 ClassLoader classloader =
                         Thread.currentThread().getContextClassLoader();
@@ -50,32 +50,6 @@ public final class DBConnectionManagerNew extends ConnectionManager {
             dataSource.setUsername(property.getProperty("UserName"));
             dataSource.setPassword(property.getProperty("Password"));
         }
-        //
-        // read from propsDB
-        // or
-        // read from propsDBTest
-        
-        //
-        //
-        // dataSource.setUsername("root");
-        // dataSource.setPassword("root");
-        //
-        
-        // ;
-        // dataSource.setDriverClassName("org.postgresql.Driver");
-        // if (isRealDB) {
-        //
-        // dataSource.setUrl("jdbc:postgresql://localhost:5432/Diary");
-        //
-        // } else {
-        // logger.info("Creating TestDB DBConnectionManagerNew");
-        // dataSource.setUrl(
-        // "jdbc:postgresql://127.11.237.2:5432/diarytest");
-        // }
-        //
-        // dataSource.setUsername("root");
-        // dataSource.setPassword("root");
-        // }
         
         return dbConnectionManager;
     }

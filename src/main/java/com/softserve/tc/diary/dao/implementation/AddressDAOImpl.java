@@ -11,7 +11,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.log.Log;
@@ -22,7 +22,7 @@ public class AddressDAOImpl implements AddressDAO {
     private ConnectionManager connectionManager = null;
     
     public AddressDAOImpl() {
-        this.connectionManager = DBConnectionManagerNew.getInstance(true);
+        this.connectionManager = DBConnectionManager.getInstance(true);
     }
     
     public AddressDAOImpl(ConnectionManager conn) {

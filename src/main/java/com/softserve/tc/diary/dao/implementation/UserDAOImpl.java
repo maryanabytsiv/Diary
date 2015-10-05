@@ -11,7 +11,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
@@ -29,7 +29,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private ConnectionManager connection = null;
     
     public UserDAOImpl() {
-        this.connection = DBConnectionManagerNew.getInstance(true);
+        this.connection = DBConnectionManager.getInstance(true);
     }
     
     public UserDAOImpl(ConnectionManager conn) {

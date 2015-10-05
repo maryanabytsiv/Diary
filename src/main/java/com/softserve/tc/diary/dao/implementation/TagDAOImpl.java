@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -28,7 +28,7 @@ public class TagDAOImpl implements TagDAO {
     public TagDAOImpl() {
 
         this.connection =
-                DBConnectionManagerNew.getInstance(true);
+                DBConnectionManager.getInstance(true);
     }
     
     public TagDAOImpl(ConnectionManager conn) {
