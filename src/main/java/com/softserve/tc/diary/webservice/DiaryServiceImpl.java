@@ -88,7 +88,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     @WebMethod
-    public boolean addRecord(String nickname, Status status, String record) {
+    public boolean addRecord(String nickname, String title, String text, String status) {
         
         User user = userDAO.readByNickName(nickname);
         if (user == null) {
@@ -100,8 +100,8 @@ public class DiaryServiceImpl implements DiaryService {
             Timestamp createdTime =
                     new Timestamp(new java.util.Date().getTime());
                     
-            Record newRecord = new Record(user.getUuid(), createdTime, null,
-                    record, null, status);
+            Record newRecord = new Record(user.getUuid(), createdTime, title,
+                    text, null, Status.valueOf(status));
             recordDAOImpl.create(newRecord);
             
             return true;
