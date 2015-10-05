@@ -242,6 +242,17 @@ public class DiaryServiceImpl implements DiaryService {
         userDAO.delete(user);
     }
     
+    public Tag getMostPopularTag(){
+        TagDAOImpl tagDAOImpl = new TagDAOImpl();
+        Tag tag = tagDAOImpl.getMostPopularTag();
+        return tag;
+    }
+    
+    public User getMostActiveUser(){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        User user = userDAOImpl.getMostActiveUser();
+        return user;
+    }
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub

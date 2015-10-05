@@ -6,6 +6,7 @@ import javax.jws.WebService;
 
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 
 @WebService
@@ -40,6 +41,10 @@ public interface DiaryService {
 	void updateUser(User user);
 
 	void deleteUser(User user);
+	
+	Tag getMostPopularTag();
+	
+	User getMostActiveUser();
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 

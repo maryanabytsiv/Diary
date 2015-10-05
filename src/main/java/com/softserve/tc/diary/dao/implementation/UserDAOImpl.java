@@ -18,6 +18,7 @@ import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
@@ -353,5 +354,19 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return user;
     }
-    
+    public User getMostActiveUser() {
+        User user = null;
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "select count(*),user_id_rec from record_list group by user_id_rec having count(*)>1";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            String uuid = rs.getString(2);
+            UserDAOImpl userDAOImpl=new UserDAOImpl();
+            user = userDAOImpl.readByKey(uuid);
+        } catch (SQLException e) {
+            logger.error("fail get most popular tag", e);
+        }
+        return user;
+    }
 }

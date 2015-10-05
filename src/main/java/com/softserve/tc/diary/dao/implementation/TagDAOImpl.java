@@ -337,4 +337,20 @@ public class TagDAOImpl implements TagDAO {
         logger.info("not supported");
         
     }
+    
+    public Tag getMostPopularTag (){
+        Tag tag = null;
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            String uuid = rs.getString(2);
+            TagDAOImpl tagDAOImpl=new TagDAOImpl();
+            tag = tagDAOImpl.readByKey(uuid);
+        } catch (SQLException e) {
+            logger.error("fail get most popular tag", e);
+        }
+        return tag;
+    }
 }
