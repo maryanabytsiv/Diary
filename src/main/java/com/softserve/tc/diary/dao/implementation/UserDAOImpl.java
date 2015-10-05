@@ -11,13 +11,14 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
+import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
@@ -28,7 +29,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private ConnectionManager connection = null;
     
     public UserDAOImpl() {
-        this.connection = DBConnectionManagerNew.getInstance(true);
+        this.connection = DBConnectionManager.getInstance(true);
     }
     
     public UserDAOImpl(ConnectionManager conn) {
@@ -353,5 +354,67 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return user;
     }
+    public User getMostActiveUser() {
+        User user = null;
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "select count(*),user_id_rec from record_list group by user_id_rec having count(*)>1";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            String uuid="" ;
+            int i=0;
+            while (rs.next()) {
+                i++;
+                uuid = rs.getString(2);
+                if(i==1){
+                    break;
+                }
+            }
+            UserDAOImpl userDAOImpl=new UserDAOImpl();
+            user = userDAOImpl.readByKey(uuid);
+        } catch (SQLException e) {
+            logger.error("fail get most popular tag", e);
+        }
+        return user;
+    }
     
+    public int[] getSexStatistic(){
+        int[] sexStatistic = new int[3];
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "select count(*) from user_card where sex='MALE'";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            int male =0;
+            int i =0;
+            while(rs.next()){
+                i++;
+                male = rs.getInt(1);
+                if (i==1){
+                    break;
+                }
+            }
+            String query2 = "select count(*) from user_card where sex='FEMALE'";
+            ps = conn.prepareStatement(query2);
+            ResultSet rs2 = ps.executeQuery();
+            int female =0;
+            i = 0;
+            while(rs2.next()){
+                i++;
+                female = rs2.getInt(1);
+                if (i==1){
+                    break;
+                }
+            }
+           
+            sexStatistic[0]=male;
+            sexStatistic[1]=female;
+                   
+            
+        } catch (SQLException e) {
+            logger.error("fail get sex stats", e);
+        }
+      
+        return sexStatistic;
+    }
 }
