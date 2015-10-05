@@ -351,7 +351,15 @@ public class TagDAOImpl implements TagDAO {
             String query = "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            String uuid = rs.getString(2);
+            String uuid="testkey5" ;
+            int i=0;
+            while (rs.next()) {
+                i++;
+                uuid = rs.getString(2);
+                if(i==1){
+                    break;
+                }
+            }
             TagDAOImpl tagDAOImpl=new TagDAOImpl();
             tag = tagDAOImpl.readByKey(uuid);
         } catch (SQLException e) {
