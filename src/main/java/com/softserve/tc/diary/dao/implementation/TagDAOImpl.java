@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -28,7 +28,7 @@ public class TagDAOImpl implements TagDAO {
     public TagDAOImpl() {
 
         this.connection =
-                DBConnectionManagerNew.getInstance(true);
+                DBConnectionManager.getInstance(true);
     }
     
     public TagDAOImpl(ConnectionManager conn) {
@@ -342,5 +342,29 @@ public class TagDAOImpl implements TagDAO {
         
         logger.info("not supported");
         
+    }
+    
+    public Tag getMostPopularTag (){
+        Tag tag = null;
+        
+        try (Connection conn = connection.getConnection()) {
+            String query = "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
+            ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            String uuid="" ;
+            int i=0;
+            while (rs.next()) {
+                i++;
+                uuid = rs.getString(2);
+                if(i==1){
+                    break;
+                }
+            }
+            TagDAOImpl tagDAOImpl=new TagDAOImpl();
+            tag = tagDAOImpl.readByKey(uuid);
+        } catch (SQLException e) {
+            logger.error("fail get most popular tag", e);
+        }
+        return tag;
     }
 }

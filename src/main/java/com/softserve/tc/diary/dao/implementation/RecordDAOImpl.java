@@ -13,7 +13,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
+import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
@@ -35,7 +35,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
     public RecordDAOImpl() {
         this.connection =
-                DBConnectionManagerNew.getInstance(true);
+                DBConnectionManager.getInstance(true);
     }
     
     public RecordDAOImpl(ConnectionManager conn) {

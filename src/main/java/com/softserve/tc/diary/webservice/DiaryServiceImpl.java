@@ -251,6 +251,23 @@ public class DiaryServiceImpl implements DiaryService {
         userDAO.delete(user);
     }
     
+
+    public void createUser(User user) {
+        userDAO.create(user);
+    }
+    
+    public Tag getMostPopularTag(){
+        TagDAOImpl tagDAOImpl = new TagDAOImpl();
+        Tag tag = tagDAOImpl.getMostPopularTag();
+        return tag;
+    }
+    
+    public User getMostActiveUser(){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        User user = userDAOImpl.getMostActiveUser();
+        return user;
+    }
+    
     @Override
 	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
 		TagDAOImpl dao = new TagDAOImpl();
@@ -270,6 +287,12 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 		return list;
     }
+    public int[] getSexStatistic(){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        int[] sexStatistic = userDAOImpl.getSexStatistic();
+        return sexStatistic;
+    }
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
