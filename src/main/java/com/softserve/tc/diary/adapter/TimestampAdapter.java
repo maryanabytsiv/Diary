@@ -19,6 +19,7 @@ public class TimestampAdapter extends XmlAdapter<String, Timestamp> {
                 new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date parsedDate = dateFormat.parse(v);
         return new Timestamp(parsedDate.getTime());
+
     }
     
 }

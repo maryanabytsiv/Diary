@@ -26,6 +26,7 @@ public class TagDAOImpl implements TagDAO {
     private ConnectionManager connection = null;
     
     public TagDAOImpl() {
+
         this.connection =
                 DBConnectionManagerNew.getInstance(true);
     }
@@ -105,6 +106,11 @@ public class TagDAOImpl implements TagDAO {
         String tagId = UUID.randomUUID().toString();
         if (checkIfTagExist(tagMessage)) {
             logger.warn("Tag already exist");
+            if (checkIfTagExist(tagMessage)) {
+    			logger.warn("Tag already exist");
+    			Tag tag = getTagByMessage(tagMessage);
+    			insertValuesInTagRecord(recordId, tag.getUuid());
+    		}
         } else {
             
             try (Connection conn = connection.getConnection()) {

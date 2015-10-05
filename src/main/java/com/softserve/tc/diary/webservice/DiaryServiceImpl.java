@@ -2,6 +2,9 @@ package com.softserve.tc.diary.webservice;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +28,7 @@ import com.softserve.tc.diary.log.Log;
 @WebService(
         endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
-    
+
     private static Logger LOG = Log.init("DiaryServiceImpl");
     
     private UserDAO userDAO = new UserDAOImpl();
@@ -85,7 +88,7 @@ public class DiaryServiceImpl implements DiaryService {
     
     @Override
     @WebMethod
-    public boolean addRecord(String nickname, Status status, String record) {
+    public boolean addRecord(String nickname, String title, String text, String status) {
         
         User user = userDAO.readByNickName(nickname);
         if (user == null) {
@@ -97,8 +100,8 @@ public class DiaryServiceImpl implements DiaryService {
             Timestamp createdTime =
                     new Timestamp(new java.util.Date().getTime());
                     
-            Record newRecord = new Record(user.getUuid(), createdTime, null,
-                    record, null, status);
+            Record newRecord = new Record(user.getUuid(), createdTime, title,
+                    text, null, Status.valueOf(status));
             recordDAOImpl.create(newRecord);
             
             return true;
@@ -208,9 +211,15 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @WebMethod
     public List<Record> getAllPublicRecords() {
-        RecordDAOImpl dao = new RecordDAOImpl();
-        List<Record> list = dao.getAllPublicRecords();
-        return list;
+		RecordDAOImpl dao = new RecordDAOImpl();
+		List<Record> list = dao.getAllPublicRecords();
+		Collections.sort(list,  new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getCreatedTime().getTime()>o1.getCreatedTime().getTime()?1:-1;
+            }
+        });
+		return list;
     }
     
     @Override
@@ -253,6 +262,26 @@ public class DiaryServiceImpl implements DiaryService {
         User user = userDAOImpl.getMostActiveUser();
         return user;
     }
+    
+    @Override
+	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
+		TagDAOImpl dao = new TagDAOImpl();
+		boolean existTag = dao.checkIfTagExist(hashTag);
+		if (existTag == false) {
+			List<Record> list2 = new ArrayList<Record>();
+			return list2;
+		}
+		Tag tag = dao.getTagByMessage(hashTag);
+		List<Record> list = dao.getListRecordsByTag(tag);
+		Iterator<Record> it = list.iterator();
+		while (it.hasNext()) {
+			Record r = it.next();
+			if (r.getVisibility().equals(Status.PRIVATE)) {
+				it.remove();
+			}
+		}
+		return list;
+    }
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
@@ -260,3 +289,4 @@ public class DiaryServiceImpl implements DiaryService {
     // }
     
 }
+

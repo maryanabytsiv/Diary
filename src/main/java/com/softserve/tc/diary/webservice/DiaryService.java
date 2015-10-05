@@ -18,7 +18,7 @@ public interface DiaryService {
 
 	boolean logOut(String nickName);
 
-	boolean addRecord(String nickname, Status status, String record);
+	boolean addRecord(String nickname, String title, String text, String status);
 
 	boolean removeRecord(String nickname, String recordId);
 
@@ -33,6 +33,8 @@ public interface DiaryService {
 	List<User> getAllUsers();
 
 	List<Record> getAllPublicRecords();
+	
+	List<Record> getAllPublicRecordsByHashTag(String hashTag);
 
 	Record readByKey(String id);
 

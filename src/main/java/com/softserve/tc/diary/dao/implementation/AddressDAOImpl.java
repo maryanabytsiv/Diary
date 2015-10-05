@@ -13,15 +13,10 @@ import org.apache.log4j.Logger;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManagerNew;
 import com.softserve.tc.diary.dao.AddressDAO;
-import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
-import com.softserve.tc.diary.entity.Role;
-import com.softserve.tc.diary.entity.Sex;
-import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 
 public class AddressDAOImpl implements AddressDAO {
-    
     private PreparedStatement ps;
     private Logger logger = Log.init(this.getClass().getName());
     private ConnectionManager connectionManager = null;
@@ -145,5 +140,4 @@ public class AddressDAOImpl implements AddressDAO {
         }
         return list;
     }
-    
 }
