@@ -20,11 +20,11 @@ import org.junit.Test;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
-import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
