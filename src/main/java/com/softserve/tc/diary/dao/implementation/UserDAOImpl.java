@@ -14,13 +14,13 @@ import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
-import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private PreparedStatement ps = null;

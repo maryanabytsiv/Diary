@@ -1,6 +1,6 @@
 package com.softserve.tc.diary.entity;
 
-import com.softserve.tc.diary.dao.util.PasswordHelper;
+import com.softserve.tc.diary.util.PasswordHelper;
 
 public class User {
     
