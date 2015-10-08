@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.webservice;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,8 +54,12 @@ public class DiaryServiceImpl implements DiaryService {
                     
             return null;
         } else {
-            String encryptedPassword =
-                    password != null ? PasswordHelper.encrypt(password) : null;
+            String encryptedPassword = "";
+			try {
+				encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
                     
             if (user.getPassword().equals(encryptedPassword)) {
                 String session = UUID.randomUUID().toString();

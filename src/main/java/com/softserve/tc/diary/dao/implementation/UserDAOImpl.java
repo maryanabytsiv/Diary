@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.dao.implementation;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -78,8 +79,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                     ps.setString(4, object.getSecondName());
                     ps.setString(5, getAddress.getUuid());
                     ps.setString(6, object.geteMail());
-                    ps.setString(7,
-                            PasswordHelper.encrypt(object.getPassword()));
+                    try {
+						ps.setString(7,
+						        PasswordHelper.encrypt(object.getPassword()));
+					} catch (NoSuchAlgorithmException e) {
+						e.printStackTrace();
+						logger.error("No such algorithm exception!", e);
+					}
                     ps.setString(8, object.getSex().toUpperCase());
                     ps.setString(9, object.getDateOfBirth());
                     ps.setString(10, object.getAvatar());

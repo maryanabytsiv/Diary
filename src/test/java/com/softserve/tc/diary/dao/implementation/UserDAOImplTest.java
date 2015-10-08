@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,9 +92,12 @@ public class UserDAOImplTest {
         assertEquals("Andriy", userActual.getFirstName());
         assertEquals("Mural", userActual.getSecondName());
         assertEquals("bg@gmail.com", userActual.geteMail());
-        assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
+        try {
+			assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
         assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
-        assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1995-03-02", userActual.getDateOfBirth());
         assertEquals("folder/folder/image.png", userActual.getAvatar());
@@ -203,8 +207,12 @@ public class UserDAOImplTest {
         assertEquals(user.getSecondName(), userActual.getSecondName());
         assertEquals(user.geteMail(), userActual.geteMail());
         assertEquals(user.getAddress(), userActual.getAddress());
-        assertEquals(PasswordHelper.encrypt(user.getPassword()),
-                userActual.getPassword());
+        try {
+			assertEquals(PasswordHelper.encrypt(user.getPassword()),
+			        userActual.getPassword());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
         assertEquals(user.getSex(), userActual.getSex());
         assertEquals(user.getDateOfBirth(), userActual.getDateOfBirth());
         assertEquals(user.getAvatar(), userActual.getAvatar());
@@ -222,8 +230,12 @@ public class UserDAOImplTest {
         assertEquals(user.getSecondName(), "Pavliv");
         assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
         assertEquals(user.geteMail(), "hgdf@gmail.com");
-        assertEquals(PasswordHelper.encrypt("kdfhgrr"),
-        		PasswordHelper.encrypt(user.getPassword()));
+        try {
+			assertEquals(PasswordHelper.encrypt("kdfhgrr"),
+					PasswordHelper.encrypt(user.getPassword()));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
         assertEquals(user.getSex(), "MALE");
         assertEquals(user.getDateOfBirth(), "1992-02-02");
         assertEquals(user.getAvatar(), null);
