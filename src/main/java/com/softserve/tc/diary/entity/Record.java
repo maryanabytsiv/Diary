@@ -25,6 +25,15 @@ public class Record {
     public Record() {
     
     }
+
+    public Record(String userName, String title,
+            String text, String supplement, Status visibility) {
+        this.userId = userName;
+        this.title = title;
+        this.text = text;
+        this.supplement = supplement;
+        this.visibility = visibility;
+    }
     
     public Record(String userName, Timestamp createdTime, String title,
     		String text, String supplement, Status visibility) {

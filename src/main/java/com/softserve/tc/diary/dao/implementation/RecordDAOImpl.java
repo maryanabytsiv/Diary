@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-// import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,14 +54,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                     String uuid = UUID.randomUUID().toString();
                     object.setUuid(uuid);
                     ps = conn.prepareStatement(
-                            "insert into record_list values(?,?,?,?,?,?,?);");
+       "insert into record_list(id_rec, user_id_rec, title, text, supplement, visibility) values(?,?,?,?,?,?);");
                     ps.setString(1, uuid);
                     ps.setString(2, object.getUserId());
-                    ps.setTimestamp(3, object.getCreatedTime());
-                    ps.setString(4, object.getTitle());
-                    ps.setString(5, object.getText());
-                    ps.setString(6, object.getSupplement());
-                    ps.setString(7, object.getVisibility());
+                    ps.setString(3, object.getTitle());
+                    ps.setString(4, object.getText());
+                    ps.setString(5, object.getSupplement());
+                    ps.setString(6, object.getVisibility());
                     ps.execute();
                     ps.close();
                 }

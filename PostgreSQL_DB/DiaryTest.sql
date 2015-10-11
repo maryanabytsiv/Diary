@@ -32,7 +32,7 @@ CREATE TABLE user_card (
 CREATE TABLE record_list (
     id_rec varchar(40) PRIMARY KEY,
     user_id_rec varchar(40) references user_card(uid) NOT NULL,
-    created_time timestamp without time zone,
+    created_time timestamp without time zone default current_timestamp,
     title varchar(60) default 'default title',
     text text,
     supplement varchar(50),

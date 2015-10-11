@@ -5,6 +5,7 @@ insert into address values('3','Poland', 'Warshav', 'Bog', 55);
 insert into user_card values('1','BigBunny', 'Oleg', 'Pavliv', '2', 'hgdf@gmail.com', 'b59c67bf196a4758191e42f76670ceba', 'MALE', '1992-02-02', null, 'USER', null);
 insert into user_card values('2','Sonic', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'b59c67bf196a4758191e42f76670ceba', 'FEMALE', '1990-03-08', null, 'ADMIN', null);
 insert into user_card values('3','TreeTree', 'Sergey', 'Gontar', '3', 'jhfcjfdf@gmail.com', 'b59c67bf196a4758191e42f76670ceba', 'MALE', '1989-02-20', null, 'USER', null);
+insert into user_card values('4','admin', 'Ira', 'Dub', '1', 'dfhfght@gmail.com', 'b0baee9d279d34fa1dfd71aadb908c3f', 'FEMALE', '1990-03-08', null, 'ADMIN', null);
 insert into record_list values('1','1','2015-02-23 00:00:00', 'bob' ,'#Hello my name is Bob. I am from #NewYork', 'https://motivation/inUkraine/improveMySelf','PUBLIC');
 insert into record_list values('2','1','2015-05-20 12:00:56', 'Halloween', 'That was #nice day. #Halloween so cool', 'http:/bigBoss/works/perfectly','PRIVATE');
 insert into record_list values('3','2','2015-06-10 17:20:56', 'Team', '#HelloTeam, it is #nice to meet in NewYork', 'http:/Lviv/theBest/Town/everSeen','PUBLIC');
