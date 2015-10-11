@@ -51,6 +51,8 @@ public interface DiaryService {
 	int[] getSexStatistic();
 
     void createUser(User user);
+    
+    List<Tag> getListTagsByPrefix(String prefix);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 

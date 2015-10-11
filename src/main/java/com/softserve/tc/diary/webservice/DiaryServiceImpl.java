@@ -292,6 +292,13 @@ public class DiaryServiceImpl implements DiaryService {
         int[] sexStatistic = userDAOImpl.getSexStatistic();
         return sexStatistic;
     }
+
+	@Override
+	public List<Tag> getListTagsByPrefix(String prefix) {
+		TagDAOImpl dao = new TagDAOImpl();
+		List<Tag> list = dao.getListTagsByPrefix(prefix);
+		return list;
+	}
     
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
