@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.dao.implementation;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,13 +15,13 @@ import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
-import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private PreparedStatement ps = null;
@@ -78,8 +79,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                     ps.setString(4, object.getSecondName());
                     ps.setString(5, getAddress.getUuid());
                     ps.setString(6, object.geteMail());
-                    ps.setString(7,
-                            PasswordHelper.encrypt(object.getPassword()));
+                    try {
+						ps.setString(7,
+						        PasswordHelper.encrypt(object.getPassword()));
+					} catch (NoSuchAlgorithmException e) {
+						e.printStackTrace();
+						logger.error("No such algorithm exception!", e);
+					}
                     ps.setString(8, object.getSex().toUpperCase());
                     ps.setString(9, object.getDateOfBirth());
                     ps.setString(10, object.getAvatar());

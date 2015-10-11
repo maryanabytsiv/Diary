@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.webservice;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,12 +19,12 @@ import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
-import com.softserve.tc.diary.dao.util.PasswordHelper;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.PasswordHelper;
 
 @WebService(
         endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
@@ -53,8 +54,12 @@ public class DiaryServiceImpl implements DiaryService {
                     
             return null;
         } else {
-            String encryptedPassword =
-                    password != null ? PasswordHelper.encrypt(password) : null;
+            String encryptedPassword = "";
+			try {
+				encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
                     
             if (user.getPassword().equals(encryptedPassword)) {
                 String session = UUID.randomUUID().toString();
