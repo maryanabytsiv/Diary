@@ -81,9 +81,9 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
@@ -129,9 +129,9 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
@@ -195,9 +195,9 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
