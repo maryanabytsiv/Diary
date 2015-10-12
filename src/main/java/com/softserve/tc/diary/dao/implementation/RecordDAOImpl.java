@@ -67,9 +67,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
             checkIfRecordHasTag(object);
             logger.debug("record created");
         } catch (SQLException e) {
@@ -145,9 +145,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("can't update record", e);
         }
@@ -170,9 +170,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("can't delete record", e);
         }

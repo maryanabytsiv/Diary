@@ -69,9 +69,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("create user failed", e);
         }
@@ -125,9 +125,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("Update user failed", e);
         }
@@ -147,9 +147,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("delete user failed", e);
         }
@@ -168,9 +168,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
             String address = "";
             while (rs.next()) {
                 address = rs.getString("country") + ", " + rs.getString("city")
@@ -205,9 +205,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("read by key failed", e);
         }
@@ -228,9 +228,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("read by key failed", e);
         }
@@ -283,9 +283,9 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
             String address = "";
             while (rs.next()) {
                 address = rs.getString("country") + ", " + rs.getString("city")
