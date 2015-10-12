@@ -38,29 +38,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     }
     
     public void create(User object) {
-        String[] splitAddress = object.getAddress().split(", ");
-        Address newAdress = new Address(splitAddress[0], splitAddress[1],
-                splitAddress[2], splitAddress[3]);
-        AddressDAOImpl adressDAO = new AddressDAOImpl();
-        adressDAO.create(newAdress);
-        
-        Address getAddress = null;
-        try (Connection conn = connection.getConnection()) {
-            ps = conn.prepareStatement(
-                    "SELECT * FROM address WHERE country = ? AND city = ? AND street = ? AND build_number = ?;");
-            ps.setString(1, newAdress.getCountry());
-            ps.setString(2, newAdress.getCity());
-            ps.setString(3, newAdress.getStreet());
-            ps.setString(4, newAdress.getBuildNumber());
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                getAddress = new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5));
-                getAddress.setUuid(rs.getString(1));
-            }
-        } catch (SQLException e) {
-            logger.error("create address failed", e);
-        }
         
         try (Connection conn = connection.getConnection()) {
             try {
@@ -72,25 +49,19 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
                 } else {
                     logger.debug("Creating user");
                     ps = conn.prepareStatement(
-                            "insert into user_card values(?,?,?,?,?,?,?,?,CAST(? AS DATE),?,?,?);");
+                            "insert into user_card(uid,nick_name,e_mail,password,role,sex) values(?,?,?,?,?,?);");
                     ps.setString(1, UUID.randomUUID().toString());
                     ps.setString(2, object.getNickName());
-                    ps.setString(3, object.getFirstName());
-                    ps.setString(4, object.getSecondName());
-                    ps.setString(5, getAddress.getUuid());
-                    ps.setString(6, object.geteMail());
+                    ps.setString(3, object.geteMail());
                     try {
-						ps.setString(7,
+						ps.setString(4,
 						        PasswordHelper.encrypt(object.getPassword()));
 					} catch (NoSuchAlgorithmException e) {
 						e.printStackTrace();
 						logger.error("No such algorithm exception!", e);
 					}
-                    ps.setString(8, object.getSex().toUpperCase());
-                    ps.setString(9, object.getDateOfBirth());
-                    ps.setString(10, object.getAvatar());
-                    ps.setString(11, object.getRole().toUpperCase());
-                    ps.setString(12, null);
+                    ps.setString(5, object.getRole().toUpperCase());
+                    ps.setString(6, "MALE");
                     ps.execute();
                     ps.close();
                     conn.commit();
