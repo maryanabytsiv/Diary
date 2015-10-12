@@ -2,6 +2,8 @@ package com.softserve.tc.diary.webservice;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -297,6 +299,14 @@ public class DiaryServiceImpl implements DiaryService {
         int[] sexStatistic = userDAOImpl.getSexStatistic();
         return sexStatistic;
     }
+
+	@Override
+	public List<LocalDateTime> getDatesWithRecordsPerMonth(String nickName, LocalDateTime Date) {
+		RecordDAOImpl recordDAOImpl = new RecordDAOImpl();
+		User user = userDAO.readByNickName(nickName);
+		List<LocalDateTime> listOfDates = recordDAOImpl.getDatesWichHaveRecordsPerMonth(user.getUuid(), Date);
+		return listOfDates;
+	}
     
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {

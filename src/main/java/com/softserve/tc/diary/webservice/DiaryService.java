@@ -1,5 +1,7 @@
 package com.softserve.tc.diary.webservice;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -51,6 +53,8 @@ public interface DiaryService {
 	int[] getSexStatistic();
 
     void createUser(User user);
+    
+    List<LocalDateTime> getDatesWithRecordsPerMonth(String nickName, LocalDateTime Date);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 
