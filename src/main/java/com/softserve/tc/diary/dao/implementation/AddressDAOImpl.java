@@ -15,6 +15,7 @@ import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.AddressDAO;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.Constant.Addresss;
 
 public class AddressDAOImpl implements AddressDAO {
     private PreparedStatement ps;
@@ -58,8 +59,8 @@ public class AddressDAOImpl implements AddressDAO {
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                address = new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5));
+                address = new Address(rs.getString(Addresss.COUNTRY), rs.getString(Addresss.CITY),
+                        rs.getString(Addresss.STREET), rs.getString(Addresss.BUILDNUMBER));
             }
             logger.debug("ReadByKey done");
         } catch (SQLException e) {
@@ -132,8 +133,8 @@ public class AddressDAOImpl implements AddressDAO {
             ps = conn.prepareStatement("select * from address;");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5)));
+                list.add(new Address(rs.getString(Addresss.COUNTRY), rs.getString(Addresss.CITY),
+                        rs.getString(Addresss.STREET), rs.getString(Addresss.BUILDNUMBER)));
             }
         } catch (SQLException e) {
             logger.error("Can't getAll address", e);

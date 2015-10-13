@@ -55,11 +55,11 @@ public class DiaryServiceImpl implements DiaryService {
             return null;
         } else {
             String encryptedPassword = "";
-			try {
-				encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
+            try {
+                encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
                     
             if (user.getPassword().equals(encryptedPassword)) {
                 String session = UUID.randomUUID().toString();
@@ -216,15 +216,15 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @WebMethod
     public List<Record> getAllPublicRecords() {
-		RecordDAOImpl dao = new RecordDAOImpl();
-		List<Record> list = dao.getAllPublicRecords();
-		Collections.sort(list,  new Comparator<Record>() {
+        RecordDAOImpl dao = new RecordDAOImpl();
+        List<Record> list = dao.getAllPublicRecords();
+        Collections.sort(list,  new Comparator<Record>() {
             @Override
             public int compare(Record o1, Record o2) {
                 return o2.getCreatedTime().getTime()>o1.getCreatedTime().getTime()?1:-1;
             }
         });
-		return list;
+        return list;
     }
     
     @Override
@@ -274,23 +274,23 @@ public class DiaryServiceImpl implements DiaryService {
     }
     
     @Override
-	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
-		TagDAOImpl dao = new TagDAOImpl();
-		boolean existTag = dao.checkIfTagExist(hashTag);
-		if (existTag == false) {
-			List<Record> list2 = new ArrayList<Record>();
-			return list2;
-		}
-		Tag tag = dao.getTagByMessage(hashTag);
-		List<Record> list = dao.getListRecordsByTag(tag);
-		Iterator<Record> it = list.iterator();
-		while (it.hasNext()) {
-			Record r = it.next();
-			if (r.getVisibility().equals(Status.PRIVATE)) {
-				it.remove();
-			}
-		}
-		return list;
+    public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
+        TagDAOImpl dao = new TagDAOImpl();
+        boolean existTag = dao.checkIfTagExist(hashTag);
+        if (existTag == false) {
+            List<Record> list2 = new ArrayList<Record>();
+            return list2;
+        }
+        Tag tag = dao.getTagByMessage(hashTag);
+        List<Record> list = dao.getListRecordsByTag(tag);
+        Iterator<Record> it = list.iterator();
+        while (it.hasNext()) {
+            Record r = it.next();
+            if (r.getVisibility().equals(Status.PRIVATE)) {
+                it.remove();
+            }
+        }
+        return list;
     }
     public int[] getSexStatistic(){
         UserDAOImpl userDAOImpl = new UserDAOImpl();
@@ -298,12 +298,12 @@ public class DiaryServiceImpl implements DiaryService {
         return sexStatistic;
     }
 
-	@Override
-	public List<Tag> getListTagsByPrefix(String prefix) {
-		TagDAOImpl dao = new TagDAOImpl();
-		List<Tag> list = dao.getListTagsByPrefix(prefix);
-		return list;
-	}
+    @Override
+    public List<Tag> getListTagsByPrefix(String prefix) {
+        TagDAOImpl dao = new TagDAOImpl();
+        List<Tag> list = dao.getListTagsByPrefix(prefix);
+        return list;
+    }
     
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {

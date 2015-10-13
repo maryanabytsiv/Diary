@@ -21,6 +21,9 @@ import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.Constant.Addresss;
+import com.softserve.tc.diary.util.Constant.RecordList;
+import com.softserve.tc.diary.util.Constant.UserCard;
 import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
@@ -87,12 +90,12 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         String addressUUID = "";
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
-                    "select address_id from user_card where nick_name=?;");
+                    "select address_id AS id from user_card where nick_name=?;");
             ps.setString(1, userToUpdate.getNickName());
             ps.execute();
             rs = ps.executeQuery();
             if (rs.next()) {
-                addressUUID = rs.getString(1);
+                addressUUID = rs.getString(Addresss.ID);
             }
             
         } catch (SQLException e) {
@@ -173,16 +176,16 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             }
             String address = "";
             while (rs.next()) {
-                address = rs.getString("country") + ", " + rs.getString("city")
-                        + ", " + rs.getString("street") + ", "
-                        + rs.getString("build_number");
-                list.add(new User(rs.getString("nick_name"),
-                        rs.getString("first_name"), rs.getString("second_name"),
-                        address, rs.getString("e_mail"),
-                        rs.getString("password"),
-                        Sex.valueOf(rs.getString("Sex")),
-                        rs.getString("date_of_birth"), rs.getString("avatar"),
-                        Role.valueOf(rs.getString("role"))));
+                address = rs.getString(Addresss.COUNTRY) + ", " + rs.getString(Addresss.CITY)
+                        + ", " + rs.getString(Addresss.STREET) + ", "
+                        + rs.getString(Addresss.BUILDNUMBER);
+                list.add(new User(rs.getString(UserCard.NICKNAME),
+                        rs.getString(UserCard.FIRSTNAME), rs.getString(UserCard.SECONDNAME),
+                        address, rs.getString(UserCard.EMAIL),
+                        rs.getString(UserCard.PASSWORD),
+                        Sex.valueOf(rs.getString(UserCard.SEX)),
+                        rs.getString(UserCard.DATEOFBIRTH), rs.getString(UserCard.AVATAR),
+                        Role.valueOf(rs.getString(UserCard.ROLE))));
             }
         } catch (SQLException e) {
             logger.error("select all failed", e);
@@ -241,11 +244,11 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         int users = 0;
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
-                    "select COUNT(*) from user_card where sex =? group by sex;");
+                    "select COUNT(*) AS uid from user_card where sex =? group by sex;");
             ps.setString(1, sex.toUpperCase());
             rs = ps.executeQuery();
             while (rs.next()) {
-                users = rs.getInt(1);
+                users = rs.getInt(UserCard.UID);
             }
         } catch (SQLException e) {
             logger.error("Sorry, I can't count all by sex ;(", e);
@@ -288,16 +291,16 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             }
             String address = "";
             while (rs.next()) {
-                address = rs.getString("country") + ", " + rs.getString("city")
-                        + ", " + rs.getString("street") + ", "
-                        + rs.getString("build_number");
-                list.add(new User(rs.getString("nick_name"),
-                        rs.getString("first_name"), rs.getString("second_name"),
-                        address, rs.getString("e_mail"),
-                        rs.getString("password"),
-                        Sex.valueOf(rs.getString("Sex")),
-                        rs.getString("date_of_birth"), rs.getString("avatar"),
-                        Role.valueOf(rs.getString("role"))));
+                address = rs.getString(Addresss.COUNTRY) + ", " + rs.getString(Addresss.CITY)
+                        + ", " + rs.getString(Addresss.STREET) + ", "
+                        + rs.getString(Addresss.BUILDNUMBER);
+                list.add(new User(rs.getString(UserCard.NICKNAME),
+                        rs.getString(UserCard.FIRSTNAME), rs.getString(UserCard.SECONDNAME),
+                        address, rs.getString(UserCard.EMAIL),
+                        rs.getString(UserCard.PASSWORD),
+                        Sex.valueOf(rs.getString(UserCard.SEX)),
+                        rs.getString(UserCard.DATEOFBIRTH), rs.getString(UserCard.AVATAR),
+                        Role.valueOf(rs.getString(UserCard.ROLE))));
             }
         } catch (SQLException e) {
             logger.error("select all failed by role", e);
@@ -311,20 +314,20 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         try {
             while (rs.next()) {
             	user = new User();
-                user.setUuid(rs.getString("uid"));
-                user.setNickName(rs.getString("nick_name"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setSecondName(rs.getString("second_name"));
-                user.setAddress(rs.getString("country") + ", "
-                        + rs.getString("city") + ", " + rs.getString("street")
-                        + ", " + rs.getString("build_number"));
-                user.seteMail(rs.getString("e_mail"));
-                user.setPassword(rs.getString("password"));
-                user.setSex(rs.getString("Sex"));
-                user.setDateOfBirth(rs.getString("date_of_birth"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setRole(rs.getString("role"));
-                user.setSession(rs.getString("session"));
+                user.setUuid(rs.getString(UserCard.UID));
+                user.setNickName(rs.getString(UserCard.NICKNAME));
+                user.setFirstName(rs.getString(UserCard.FIRSTNAME));
+                user.setSecondName(rs.getString(UserCard.SECONDNAME));
+                user.setAddress(rs.getString(Addresss.COUNTRY) + ", "
+                        + rs.getString(Addresss.CITY) + ", " + rs.getString(Addresss.STREET)
+                        + ", " + rs.getString(Addresss.BUILDNUMBER));
+                user.seteMail(rs.getString(UserCard.EMAIL));
+                user.setPassword(rs.getString(UserCard.PASSWORD));
+                user.setSex(rs.getString(UserCard.SEX));
+                user.setDateOfBirth(rs.getString(UserCard.DATEOFBIRTH));
+                user.setAvatar(rs.getString(UserCard.AVATAR));
+                user.setRole(rs.getString(UserCard.ROLE));
+                user.setSession(rs.getString(UserCard.SESSION));
             }
         } catch (SQLException e) {
             logger.error("ResultSet failed", e);
@@ -342,7 +345,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             int i=0;
             while (rs.next()) {
                 i++;
-                uuid = rs.getString(2);
+                uuid = rs.getString(RecordList.USERIDREC);
                 if(i==1){
                     break;
                 }
@@ -359,26 +362,26 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         int[] sexStatistic = new int[3];
         
         try (Connection conn = connection.getConnection()) {
-            String query = "select count(*) from user_card where sex='MALE'";
+            String query = "select count(*) AS uid from user_card where sex='MALE'";
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             int male =0;
             int i =0;
             while(rs.next()){
                 i++;
-                male = rs.getInt(1);
+                male = rs.getInt(UserCard.UID);
                 if (i==1){
                     break;
                 }
             }
-            String query2 = "select count(*) from user_card where sex='FEMALE'";
+            String query2 = "select count(*) AS uid from user_card where sex='FEMALE'";
             ps = conn.prepareStatement(query2);
             ResultSet rs2 = ps.executeQuery();
             int female =0;
             i = 0;
             while(rs2.next()){
                 i++;
-                female = rs2.getInt(1);
+                female = rs2.getInt(UserCard.UID);
                 if (i==1){
                     break;
                 }

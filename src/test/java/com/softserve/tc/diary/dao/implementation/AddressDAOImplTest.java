@@ -22,6 +22,7 @@ import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.Constant.Addresss;
 
 public class AddressDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
@@ -64,8 +65,8 @@ public class AddressDAOImplTest {
             ps.setString(4, newAddress.getBuildNumber());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                address = new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5));
+                address = new Address(rs.getString(Addresss.COUNTRY), rs.getString(Addresss.CITY),
+                        rs.getString(Addresss.STREET), rs.getString(Addresss.BUILDNUMBER));
             }
             ps.close();
         } catch (SQLException e) {
@@ -116,9 +117,9 @@ public class AddressDAOImplTest {
             ps.setString(1, add.getUuid());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                address = new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5));
-                address.setUuid(rs.getString(1));
+                address = new Address(rs.getString(Addresss.COUNTRY), rs.getString(Addresss.CITY),
+                        rs.getString(Addresss.STREET), rs.getString(Addresss.BUILDNUMBER));
+                address.setUuid(rs.getString(Addresss.ID));
             }
             
         } catch (SQLException e) {
@@ -148,9 +149,9 @@ public class AddressDAOImplTest {
             ps.setString(4, address.getBuildNumber());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                deleteAddress = new Address(rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5));
-                deleteAddress.setUuid(rs.getString(1));
+                deleteAddress = new Address(rs.getString(Addresss.COUNTRY), rs.getString(Addresss.CITY),
+                        rs.getString(Addresss.STREET), rs.getString(Addresss.BUILDNUMBER));
+                deleteAddress.setUuid(rs.getString(Addresss.ID));
             }
         } catch (SQLException e) {
             logger.error("select failed", e);
