@@ -72,9 +72,9 @@ public class TagDAOImpl implements TagDAO {
                 } catch (SQLException e) {
                     logger.error("can't create tag", e);
                     conn.rollback();
-                    conn.setAutoCommit(true);
+                }finally{
+                    conn.setAutoCommit(true);              
                 }
-                conn.setAutoCommit(true);
             } catch (SQLException e) {
                 logger.error("can't create tag", e);
             }
@@ -127,10 +127,9 @@ public class TagDAOImpl implements TagDAO {
                 } catch (SQLException e) {
                     logger.error("can't create from record", e);
                     conn.rollback();
-                    conn.setAutoCommit(true);
+                }finally{
+                    conn.setAutoCommit(true);              
                 }
-                
-                conn.setAutoCommit(true);
             } catch (SQLException e) {
                 logger.error("can't create from record", e);
             }
@@ -154,9 +153,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("insert failed", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("can't insert into tag_record", e);
         }
@@ -178,9 +177,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("delete failed", e);
         }
@@ -199,9 +198,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("delete from tag_record failed", e);
         }

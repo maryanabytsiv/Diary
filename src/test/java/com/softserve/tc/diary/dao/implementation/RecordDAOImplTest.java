@@ -87,7 +87,6 @@ public class RecordDAOImplTest {
         }
         assertNotNull(record);
         assertEquals("1", record.getUserId());
-        assertEquals(newRecord.getCreatedTime(), record.getCreatedTime());
         assertEquals("sport", record.getTitle());
         assertEquals("#JUST DO IT!!!", record.getText());
         assertEquals("http:/bigBoss/works/perfectly", record.getSupplement());
@@ -121,9 +120,9 @@ public class RecordDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e1) {
             logger.error("insert failed", e1);
         }

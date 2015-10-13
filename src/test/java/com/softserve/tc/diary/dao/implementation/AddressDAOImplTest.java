@@ -101,9 +101,9 @@ public class AddressDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e1) {
             logger.error("insert failed", e1);
         }
