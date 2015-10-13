@@ -26,9 +26,9 @@ public class Record {
     
     }
     
-    public Record(String userName, Timestamp createdTime, String title,
+    public Record(String userId, Timestamp createdTime, String title,
     		String text, String supplement, Status visibility) {
-        this.userId = userName;
+        this.userId = userId;
         this.createdTime = createdTime;
         this.title = title;
         this.text = text;
@@ -36,10 +36,10 @@ public class Record {
         this.visibility = visibility;
     }
     
-    public Record(String uuid, String userName, Timestamp createdTime,
+    public Record(String uuid, String userId, Timestamp createdTime,
     		 String title,  String text, String supplement, Status visibility) {
         this.uuid = uuid;
-        this.userId = userName;
+        this.userId = userId;
         this.createdTime = createdTime;
         this.title = title;
         this.text = text;
