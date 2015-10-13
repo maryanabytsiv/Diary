@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -355,5 +356,27 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         }
         return list;
     }
+    
+	public List<String> getDatesWichHaveRecordsPerMonth(String userId, LocalDateTime date) {
+		List<String> list = new ArrayList<String>();
+
+		try (Connection conn = connection.getConnection()) {
+			ps = conn.prepareStatement("SELECT distinct CAST(created_time as date)"
+					+ "  FROM record_list where user_id_rec=? and created_time"
+					+ " BETWEEN ? AND ?;");
+			ps.setString(1, userId);
+			// Notes per month from 00:00:00 to 23:59:59
+			ps.setTimestamp(2, Timestamp.valueOf(date));
+			ps.setTimestamp(3, Timestamp.valueOf(date.plusMonths(1).minusSeconds(1)));
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				LocalDateTime created_time = rs.getTimestamp(1).toLocalDateTime();
+				list.add(created_time.toString());
+			}
+		} catch (SQLException e) {
+			logger.error("can't get all records", e);
+		}
+		return list;
+	}
     
 }

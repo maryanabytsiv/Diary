@@ -2,10 +2,10 @@ package com.softserve.tc.diary.webservice;
 
 import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import com.softserve.tc.diary.entity.Record;
-import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 
@@ -33,7 +33,7 @@ public interface DiaryService {
 	List<User> getAllUsers();
 
 	List<Record> getAllPublicRecords();
-	
+
 	List<Record> getAllPublicRecordsByHashTag(String hashTag);
 
 	Record readByKey(String id);
@@ -43,16 +43,18 @@ public interface DiaryService {
 	void updateUser(User user);
 
 	void deleteUser(User user);
-	
+
 	Tag getMostPopularTag();
-	
+
 	User getMostActiveUser();
-	
+
 	int[] getSexStatistic();
 
-    void createUser(User user);
-    
-    List<Tag> getListTagsByPrefix(String prefix);
+	void createUser(User user);
+
+	List<String> getDatesWithRecordsPerMonth(String nickName, String date);
+
+	List<Tag> getListTagsByPrefix(String prefix);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 
