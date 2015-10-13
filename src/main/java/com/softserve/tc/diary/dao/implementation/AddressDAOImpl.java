@@ -89,9 +89,9 @@ public class AddressDAOImpl implements AddressDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
             
         } catch (SQLException e) {
             logger.error("Can't update address", e);
@@ -116,9 +116,9 @@ public class AddressDAOImpl implements AddressDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-                conn.setAutoCommit(true);
+            }finally{
+                conn.setAutoCommit(true);              
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("Can't delete address", e);
         }

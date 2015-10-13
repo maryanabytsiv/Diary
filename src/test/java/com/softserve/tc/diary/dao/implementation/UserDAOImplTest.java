@@ -67,7 +67,7 @@ public class UserDAOImplTest {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
         userDAO.create(new User("hary12", "Andriy", "Mural",
                 "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1995-03-02", "folder/folder/image.png",
+                Sex.MALE, "1995-03-02", "folder/folder/image.png",
                 Role.USER));
         User userActual = new User();
         try (Connection connection = conn.getConnection()) {
@@ -81,26 +81,21 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
         assertEquals("hary12", userActual.getNickName());
-        assertEquals("Andriy", userActual.getFirstName());
-        assertEquals("Mural", userActual.getSecondName());
         assertEquals("bg@gmail.com", userActual.geteMail());
         try {
-			assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-        assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
-        assertEquals("FEMALE", userActual.getSex());
-        assertEquals("1995-03-02", userActual.getDateOfBirth());
-        assertEquals("folder/folder/image.png", userActual.getAvatar());
+            assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        assertEquals("MALE", userActual.getSex());
         assertEquals("USER", userActual.getRole());
         logger.info("test create user");
     }
@@ -108,9 +103,13 @@ public class UserDAOImplTest {
     @Test
     public void testUpdateUser() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
-        User user = new User("read", "Natalya", "Bolyk",
-                "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
+        User user = new User();
+        user.setNickName("Test");
+        user.setPassword("Test");
+        user.seteMail("mail@mail.com");
+        user.setSex("FEMALE");
+        user.setRole("USER");
+        user.setDateOfBirth("1999-10-10");
         userDAO.create(user);
         user.setFirstName("IRA");
         user.setSecondName("BLLLLL");
@@ -129,23 +128,21 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
-        assertEquals("read", userActual.getNickName());
+        assertEquals("Test", userActual.getNickName());
         assertEquals("IRA", userActual.getFirstName());
         assertEquals("BLLLLL", userActual.getSecondName());
-        assertEquals("bg@gmail.com", userActual.geteMail());
-        assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
-        assertEquals("64561", userActual.getPassword());;
+        assertEquals("mail@mail.com", userActual.geteMail());
+        assertEquals("Test", userActual.getPassword());;
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDateOfBirth());
-        assertEquals("some.jpeg", userActual.getAvatar());
-        assertEquals("ADMIN", userActual.getRole());
+        assertEquals("USER", userActual.getRole());
         logger.info("test update user");
     }
     
@@ -195,27 +192,22 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
         assertEquals(user.getNickName(), userActual.getNickName());
-        assertEquals(user.getFirstName(), userActual.getFirstName());
-        assertEquals(user.getSecondName(), userActual.getSecondName());
         assertEquals(user.geteMail(), userActual.geteMail());
-        assertEquals(user.getAddress(), userActual.getAddress());
         try {
-			assertEquals(PasswordHelper.encrypt(user.getPassword()),
-			        userActual.getPassword());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+            assertEquals(PasswordHelper.encrypt(user.getPassword()),
+                    userActual.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         assertEquals(user.getSex(), userActual.getSex());
-        assertEquals(user.getDateOfBirth(), userActual.getDateOfBirth());
-        assertEquals(user.getAvatar(), userActual.getAvatar());
         assertEquals(user.getRole(), userActual.getRole());
         logger.info("test get by nickname");
     }
@@ -231,11 +223,11 @@ public class UserDAOImplTest {
         assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
         assertEquals(user.geteMail(), "hgdf@gmail.com");
         try {
-			assertEquals(PasswordHelper.encrypt("kdfhgrr"),
-					PasswordHelper.encrypt(user.getPassword()));
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+            assertEquals(PasswordHelper.encrypt("kdfhgrr"),
+                    PasswordHelper.encrypt(user.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         assertEquals(user.getSex(), "MALE");
         assertEquals(user.getDateOfBirth(), "1992-02-02");
         assertEquals(user.getAvatar(), null);
@@ -270,7 +262,7 @@ public class UserDAOImplTest {
         User user = null;
         try {
             while (rs.next()) {
-            	 user = new User();
+                 user = new User();
                  user.setNickName(rs.getString("nick_name"));
                  user.setFirstName(rs.getString("first_name"));
                  user.setSecondName(rs.getString("second_name"));
