@@ -25,6 +25,7 @@ public class TagDAOImpl implements TagDAO {
     private Logger logger = Log.init(this.getClass().getName());
     private ConnectionManager connection = null;
     
+    
     public TagDAOImpl() {
 
         this.connection =

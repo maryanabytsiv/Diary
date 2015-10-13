@@ -1,7 +1,6 @@
 package com.softserve.tc.diary.entity;
 
 public class Tag {
-    
     private String uuid;
     private String tag;
     
