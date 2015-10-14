@@ -1,5 +1,8 @@
 package com.softserve.tc.diary.webservice;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -11,8 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
@@ -232,10 +233,45 @@ public class DiaryServiceImpl implements DiaryService {
         int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
         return numOfRecords;
     }
-
+    
     @Override
-    public void updateUser(User user) {
+    public void updateUserWithoutImage(User user) {
+        LOG.info("Udate user");
         userDAO.update(user);
+        LOG.info("Udate user successfull");
+    }
+    
+    @Override
+    public void updateUser(User user, byte[] file, String fileName) {
+        LOG.info("Udate user");
+        File serverFile = null;
+        if (file!=null) {
+            try {
+                // Creating the directory to store file
+                String rootPath = System.getProperty("catalina.home");
+                File dir = new File(rootPath + File.separator + "tmpFiles");
+                if (!dir.exists())
+                    dir.mkdirs();
+                // Create the file on server
+                serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + fileName);
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(file);
+                stream.close();
+                LOG.info("You successfully uploaded file=" + fileName);
+                
+            } catch (Exception e) {
+                LOG.error("You failed to upload " + fileName + " => "
+                        + e.getMessage());
+            }
+        } else {
+            LOG.error("You failed to upload " + fileName
+                    + " because the file was empty.");
+        }
+        user.setAvatar(fileName);
+        userDAO.update(user);
+        LOG.info("Udate user successfull");
     }
 
     @Override

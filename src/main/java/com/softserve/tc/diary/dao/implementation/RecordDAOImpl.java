@@ -43,7 +43,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         this.connection = conn;
     }
     
-    public void create(Record object) {
+    public String create(Record object) {
+        String uuid=UUID.randomUUID().toString();
         logger.debug("creating record");
         try (Connection conn = connection.getConnection()) {
             try {
@@ -53,7 +54,6 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                             "Please, enter your visibility (PUBLIC / PRIVATE)");
                     throw new NullPointerException();
                 } else {
-                    String uuid = UUID.randomUUID().toString();
                     object.setUuid(uuid);
                     ps = conn.prepareStatement(
        "insert into record_list(id_rec, user_id_rec, title, text, supplement, visibility) values(?,?,?,?,?,?);");
@@ -77,6 +77,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         } catch (SQLException e) {
             logger.error("record create failed", e);
         }
+        return uuid;
     }
     
     public void checkIfRecordHasTag(Record record) {
@@ -131,8 +132,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
-                        "update record_list set user_id_rec = ?, created_time = CAST(? AS TIMESTAMP), title = ?"
-                                + "text = ?, supplement = ?, visibility = ? where user_id_rec = ?;");
+                        "update record_list set user_id_rec = ?, created_time = CAST(? AS TIMESTAMP), title = ?,"
+                                + " text = ?, supplement = ?, visibility = ? where user_id_rec = ?;");
                 ps.setString(1, object.getUserId());
                 ps.setTimestamp(2, object.getCreatedTime());
                 ps.setString(3, object.getTitle());

@@ -30,14 +30,14 @@ public class AddressDAOImpl implements AddressDAO {
         this.connectionManager = conn;
     }
     
-    public void create(Address object) {
-        
+    public String create(Address object) {
         logger.debug("Creating address");
+        String uuid=UUID.randomUUID().toString();
         try (Connection conn = connectionManager.getConnection()) {
             ps = conn
                     .prepareStatement(
                             "insert into address(id, country, city, street, build_number) values(?,?,?,?,?)");
-            ps.setString(1, UUID.randomUUID().toString());
+            ps.setString(1, uuid);
             ps.setString(2, object.getCountry());
             ps.setString(3, object.getCity());
             ps.setString(4, object.getStreet());
@@ -48,6 +48,7 @@ public class AddressDAOImpl implements AddressDAO {
         } catch (SQLException e) {
             logger.error("Creating address failed", e);
         }
+        return uuid;
     }
     
     public Address readByKey(String id) {
