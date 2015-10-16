@@ -293,6 +293,12 @@ public class DiaryServiceImpl implements DiaryService {
         return sexStatistic;
     }
     
+    public String updateSession(String nickName){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        String session = userDAOImpl.updateSession(nickName);
+        return session;
+    }
+    
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub

@@ -51,6 +51,8 @@ public interface DiaryService {
 	int[] getSexStatistic();
 
     void createUser(User user);
+    
+    String updateSession(String nickName);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 
