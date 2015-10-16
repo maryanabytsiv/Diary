@@ -18,6 +18,9 @@ import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.Constant.RecordList;
+import com.softserve.tc.diary.util.Constant.TagRecord;
+import com.softserve.tc.diary.util.Constant.Tagg;
 
 public class TagDAOImpl implements TagDAO {
     
@@ -26,7 +29,7 @@ public class TagDAOImpl implements TagDAO {
     private ConnectionManager connection = null;
     
     public TagDAOImpl() {
-
+        
         this.connection =
                 DBConnectionManager.getInstance(true);
     }
@@ -44,7 +47,8 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                tag = new Tag(rs.getString(1), rs.getString(2));
+                tag = new Tag(rs.getString(Tagg.UUID),
+                        rs.getString(Tagg.TAGMESSAGE));
             }
         } catch (SQLException e) {
             logger.error("can't get tag by message", e);
@@ -52,8 +56,8 @@ public class TagDAOImpl implements TagDAO {
         return tag;
     }
     
-    public void create(Tag object) {
-        
+    public String create(Tag object) {
+        String uuid = UUID.randomUUID().toString();
         String tagMessage = object.getTagMessage();
         if (true == checkIfTagExist(tagMessage)) {
             logger.warn("Tag already exist");
@@ -62,8 +66,7 @@ public class TagDAOImpl implements TagDAO {
                 try {
                     conn.setAutoCommit(false);
                     ps = conn.prepareStatement("insert into tag values(?,?);");
-                    String tagId = UUID.randomUUID().toString();
-                    ps.setString(1, tagId);
+                    ps.setString(1, uuid);
                     ps.setString(2, object.getTagMessage());
                     ps.execute();
                     ps.close();
@@ -71,25 +74,27 @@ public class TagDAOImpl implements TagDAO {
                 } catch (SQLException e) {
                     logger.error("can't create tag", e);
                     conn.rollback();
+                } finally {
                     conn.setAutoCommit(true);
                 }
-                conn.setAutoCommit(true);
             } catch (SQLException e) {
                 logger.error("can't create tag", e);
             }
         }
+        return uuid;
     }
     
     public boolean checkIfTagExist(String tagMessage) {
         
-        String query = "select COUNT(*) from tag where tag_message like '"
-                + tagMessage + "';";
+        String query =
+                "select COUNT(*) AS uuid from tag where tag_message like '"
+                        + tagMessage + "';";
         int count = 0;
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                count = rs.getInt(1);
+                count = rs.getInt(Tagg.UUID);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,10 +112,10 @@ public class TagDAOImpl implements TagDAO {
         if (checkIfTagExist(tagMessage)) {
             logger.warn("Tag already exist");
             if (checkIfTagExist(tagMessage)) {
-    			logger.warn("Tag already exist");
-    			Tag tag = getTagByMessage(tagMessage);
-    			insertValuesInTagRecord(recordId, tag.getUuid());
-    		}
+                logger.warn("Tag already exist");
+                Tag tag = getTagByMessage(tagMessage);
+                insertValuesInTagRecord(recordId, tag.getUuid());
+            }
         } else {
             
             try (Connection conn = connection.getConnection()) {
@@ -126,10 +131,9 @@ public class TagDAOImpl implements TagDAO {
                 } catch (SQLException e) {
                     logger.error("can't create from record", e);
                     conn.rollback();
+                } finally {
                     conn.setAutoCommit(true);
                 }
-                
-                conn.setAutoCommit(true);
             } catch (SQLException e) {
                 logger.error("can't create from record", e);
             }
@@ -153,9 +157,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("insert failed", e);
                 conn.rollback();
+            } finally {
                 conn.setAutoCommit(true);
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("can't insert into tag_record", e);
         }
@@ -177,9 +181,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
+            } finally {
                 conn.setAutoCommit(true);
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("delete failed", e);
         }
@@ -198,9 +202,9 @@ public class TagDAOImpl implements TagDAO {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
+            } finally {
                 conn.setAutoCommit(true);
             }
-            conn.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("delete from tag_record failed", e);
         }
@@ -215,7 +219,7 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Tag(rs.getString(1)));
+                list.add(new Tag(rs.getString(Tagg.TAGMESSAGE)));
             }
         } catch (SQLException e) {
             logger.error("select failed", e);
@@ -232,7 +236,7 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Tag(rs.getString(1)));
+                list.add(new Tag(rs.getString(Tagg.TAGMESSAGE)));
             }
         } catch (SQLException e) {
             logger.error("select by suffix failed", e);
@@ -251,13 +255,15 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String rec_id = rs.getString(1);
-                String user_id_rec = rs.getString(2);
-                Timestamp created_time = rs.getTimestamp(3);
-                String title = rs.getString(4);
-                String text = rs.getString(5);
-                String supplement = rs.getString(6);
-                Status visability = Status.valueOf(rs.getString(7));
+                String rec_id = rs.getString(RecordList.IDREC);
+                String user_id_rec = rs.getString(RecordList.USERIDREC);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
+                String title = rs.getString(RecordList.TITLE);
+                String text = rs.getString(RecordList.TEXT);
+                String supplement = rs.getString(RecordList.SUPPLEMENT);
+                Status visability =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 Record rec = new Record(rec_id, user_id_rec, created_time,
                         title, text, supplement, visability);
                 listRecordsWithTag.add(rec);
@@ -302,7 +308,8 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Tag(rs.getString(1), rs.getString(2)));
+                list.add(new Tag(rs.getString(Tagg.UUID),
+                        rs.getString(Tagg.TAGMESSAGE)));
             }
         } catch (SQLException e) {
             logger.error("select all failed", e);
@@ -318,7 +325,8 @@ public class TagDAOImpl implements TagDAO {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                tag = new Tag(rs.getString(1), rs.getString(2));
+                tag = new Tag(rs.getString(Tagg.UUID),
+                        rs.getString(Tagg.TAGMESSAGE));
             }
         } catch (SQLException e) {
             logger.error("read by key failed", e);
@@ -344,23 +352,24 @@ public class TagDAOImpl implements TagDAO {
         
     }
     
-    public Tag getMostPopularTag (){
+    public Tag getMostPopularTag() {
         Tag tag = null;
         
         try (Connection conn = connection.getConnection()) {
-            String query = "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
+            String query =
+                    "SELECT COUNT(*),tag_uuid FROM tag_record GROUP BY tag_uuid HAVING COUNT(*)>1";
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            String uuid="" ;
-            int i=0;
+            String uuid = "";
+            int i = 0;
             while (rs.next()) {
                 i++;
-                uuid = rs.getString(2);
-                if(i==1){
+                uuid = rs.getString(TagRecord.TAGUUID);
+                if (i == 1) {
                     break;
                 }
             }
-            TagDAOImpl tagDAOImpl=new TagDAOImpl();
+            TagDAOImpl tagDAOImpl = new TagDAOImpl();
             tag = tagDAOImpl.readByKey(uuid);
         } catch (SQLException e) {
             logger.error("fail get most popular tag", e);

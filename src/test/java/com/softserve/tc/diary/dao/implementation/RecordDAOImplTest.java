@@ -24,6 +24,7 @@ import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.log.Log;
+import com.softserve.tc.diary.util.Constant.RecordList;
 
 /**
  * 
@@ -76,10 +77,10 @@ public class RecordDAOImplTest {
                             + "and supplement like 'http:/bigBoss/works/perfectly' and visibility like 'PRIVATE';");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                record = new Record(rs.getString(1), rs.getString(2),
-                        rs.getTimestamp(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6),
-                        Status.valueOf(rs.getString(7)));
+                record = new Record(rs.getString(RecordList.IDREC), rs.getString(RecordList.USERIDREC),
+                        rs.getTimestamp(RecordList.CREATEDTIME),
+                        rs.getString(RecordList.TITLE), rs.getString(RecordList.TEXT), rs.getString(RecordList.SUPPLEMENT),
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY)));
             }
             
         } catch (SQLException e) {
@@ -87,7 +88,6 @@ public class RecordDAOImplTest {
         }
         assertNotNull(record);
         assertEquals("1", record.getUserId());
-        assertEquals(newRecord.getCreatedTime(), record.getCreatedTime());
         assertEquals("sport", record.getTitle());
         assertEquals("#JUST DO IT!!!", record.getText());
         assertEquals("http:/bigBoss/works/perfectly", record.getSupplement());
@@ -121,9 +121,9 @@ public class RecordDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
-                connection.setAutoCommit(true);
+            }finally{
+                connection.setAutoCommit(true);              
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e1) {
             logger.error("insert failed", e1);
         }
@@ -135,10 +135,10 @@ public class RecordDAOImplTest {
             ps.setString(1, rec.getUuid());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                record = new Record(rs.getString(1), rs.getString(2),
-                        rs.getTimestamp(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6),
-                        Status.valueOf(rs.getString(7)));
+                record = new Record(rs.getString(RecordList.IDREC), rs.getString(RecordList.USERIDREC),
+                        rs.getTimestamp(RecordList.CREATEDTIME),
+                        rs.getString(RecordList.TITLE), rs.getString(RecordList.TEXT), rs.getString(RecordList.SUPPLEMENT),
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY)));
             }
             
         } catch (SQLException e) {

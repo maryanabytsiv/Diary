@@ -1,14 +1,12 @@
 package com.softserve.tc.diary.entity;
 
-import com.softserve.tc.diary.util.PasswordHelper;
-
 public class User {
     
     private String uuid;
     private String nickName;
     private String firstName;
     private String secondName;
-    private String address;
+    private Address address;
     private String eMail;
     private String password;
     private Sex sex;
@@ -16,14 +14,13 @@ public class User {
     private String avatar;
     private Role role;
     private String session;
-
     
     public User() {
     
     }
     
-	public User(String nickName, String firstName, String secondName,
-            String address, String eMail, String password,
+    public User(String nickName, String firstName, String secondName,
+            Address address, String eMail, String password,
             Sex sex, String dateOfBirth, String avatar, Role role) {
         this.nickName = nickName;
         this.firstName = firstName;
@@ -37,10 +34,11 @@ public class User {
         this.role = role;
     }
     
-    public User(String uuid, String nickName, String firstName, String secondName,
-            String address, String eMail, String password,
+    public User(String uuid, String nickName, String firstName,
+            String secondName,
+            Address address, String eMail, String password,
             Sex sex, String dateOfBirth, String avatar, Role role) {
-    	this.uuid = uuid;
+        this.uuid = uuid;
         this.nickName = nickName;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -85,29 +83,29 @@ public class User {
         this.secondName = secondName;
     }
     
-    public String getAddress() {
+    public Address getAddress() {
         
         return address;
     }
     
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
     
     public String geteMail() {
-		return eMail;
-	}
-
-	public void seteMail(String eMail) {
-		this.eMail = eMail;
-	}
+        return eMail;
+    }
+    
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
+    }
     
     public String getPassword() {
         return password;
     }
     
     public void setPassword(String password) {
-        this.password =password;
+        this.password = password;
     }
     
     public String getSex() {
@@ -145,14 +143,14 @@ public class User {
     }
     
     public String getRole() {
-    	   if (role == Role.ADMIN) {
-               return "ADMIN";
-           } else if (role == Role.USER) {
-               return "USER";
-           } else {
-        	   throw new IllegalArgumentException();
-           }
-       }
+        if (role == Role.ADMIN) {
+            return "ADMIN";
+        } else if (role == Role.USER) {
+            return "USER";
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
     
     public void setRole(String role) {
         if (role.equals("ADMIN")) {
@@ -160,7 +158,7 @@ public class User {
         } else if (role.equals("USER")) {
             this.role = Role.USER;
         } else {
-     	   throw new IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
     }
     

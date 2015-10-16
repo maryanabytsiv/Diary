@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
+import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
@@ -57,7 +59,7 @@ public class UserDAOImplTest {
     public void testCreateUserNullPointerException() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
         userDAO.create(new User(null, "Andriy", "Mural",
-                "Ukraine, Lviv, Pasichna, 52", null, "64561", Sex.FEMALE,
+                null, null, "64561", Sex.FEMALE,
                 "1999-03-02", "folder/folder/image.png", null));
     }
     
@@ -65,8 +67,8 @@ public class UserDAOImplTest {
     public void testCreateUser() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
         userDAO.create(new User("hary12", "Andriy", "Mural",
-                "Ukraine, Lviv, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1995-03-02", "folder/folder/image.png",
+                null, "bg@gmail.com", "64561",
+                Sex.MALE, "1995-03-02", "folder/folder/image.png",
                 Role.USER));
         User userActual = new User();
         try (Connection connection = conn.getConnection()) {
@@ -80,23 +82,22 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
+            } finally {
                 connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
         assertEquals("hary12", userActual.getNickName());
-        assertEquals("Andriy", userActual.getFirstName());
-        assertEquals("Mural", userActual.getSecondName());
         assertEquals("bg@gmail.com", userActual.geteMail());
-        assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
-        assertEquals("Ukraine, Lviv, Pasichna, 52", userActual.getAddress());
-        assertEquals(PasswordHelper.encrypt("64561"), userActual.getPassword());
-        assertEquals("FEMALE", userActual.getSex());
-        assertEquals("1995-03-02", userActual.getDateOfBirth());
-        assertEquals("folder/folder/image.png", userActual.getAvatar());
+        try {
+            assertEquals(PasswordHelper.encrypt("64561"),
+                    userActual.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        assertEquals("MALE", userActual.getSex());
         assertEquals("USER", userActual.getRole());
         logger.info("test create user");
     }
@@ -104,13 +105,17 @@ public class UserDAOImplTest {
     @Test
     public void testUpdateUser() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
-        User user = new User("read", "Natalya", "Bolyk",
-                "Poland, Wrocjlav, Pasichna, 52", "bg@gmail.com", "64561",
-                Sex.FEMALE, "1999-10-10", "some.jpeg", Role.ADMIN);
+        User user = new User();
+        user.setNickName("Test");
+        user.setPassword("Test");
+        user.seteMail("mail@mail.com");
+        user.setSex("FEMALE");
+        user.setRole("USER");
+        user.setDateOfBirth("1999-10-10");
         userDAO.create(user);
         user.setFirstName("IRA");
         user.setSecondName("BLLLLL");
-        user.setAddress("Poland, Gdansk, Naberejna, 52");
+        user.setAddress(new Address("Poland", "Gdansk", "Naberejna", "52"));
         userDAO.update(user);
         User userActual = new User();
         try (Connection connection = conn.getConnection()) {
@@ -125,30 +130,30 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
+            } finally {
                 connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
-        assertEquals("read", userActual.getNickName());
+        assertEquals("Test", userActual.getNickName());
         assertEquals("IRA", userActual.getFirstName());
         assertEquals("BLLLLL", userActual.getSecondName());
-        assertEquals("bg@gmail.com", userActual.geteMail());
-        assertEquals("Poland, Gdansk, Naberejna, 52", userActual.getAddress());
-        assertEquals("64561", userActual.getPassword());;
+        assertEquals("mail@mail.com", userActual.geteMail());
+        assertEquals("Test", userActual.getPassword());
+        ;
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDateOfBirth());
-        assertEquals("some.jpeg", userActual.getAvatar());
-        assertEquals("ADMIN", userActual.getRole());
+        assertEquals("USER", userActual.getRole());
         logger.info("test update user");
     }
     
     @Test
     public void testDeleteUser() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
-        User user = new User("delete", "Natalya", "Bolyk", "Uk, Uk, gh, 5",
+        User user = new User("delete", "Natalya", "Bolyk",
+                new Address("Poland", "Gdansk", "Naberejna", "52"),
                 "bg@gmail.com", "64561", Sex.FEMALE, null,
                 "jfhfff.mvn", Role.ADMIN);
         userDAO.create(user);
@@ -161,7 +166,8 @@ public class UserDAOImplTest {
     public void testGetAll() {
         UserDAOImpl userDAO = new UserDAOImpl(conn);
         User user =
-                new User("Bozo", "Oleg", "Ponkin", "Russia, Moscow, Kreml, 10",
+                new User("Bozo", "Oleg", "Ponkin",
+                        new Address("Poland", "Gdansk", "Naberejna", "52"),
                         "bsss@gmail.com", "64561", Sex.MALE,
                         null, "jsjwe.txt", Role.ADMIN);
         userDAO.create(user);
@@ -176,7 +182,8 @@ public class UserDAOImplTest {
         User userActual = new User();
         UserDAOImpl userDAO = new UserDAOImpl(conn);
         User user = new User("Bobik", "Oleg", "Ponkin",
-                "France, Paris, Ave, 45", "bsss@gmail.com", "kjhgyiuu",
+                new Address("Poland", "Gdansk", "Naberejna", "52"),
+                "bsss@gmail.com", "kjhgyiuu",
                 Sex.MALE, null, "jsjwe.txt", Role.ADMIN);
         userDAO.create(user);
         try (Connection connection = conn.getConnection()) {
@@ -191,23 +198,22 @@ public class UserDAOImplTest {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 connection.rollback();
+            } finally {
                 connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             logger.error("select failed", e);
         }
         assertNotNull(userActual);
         assertEquals(user.getNickName(), userActual.getNickName());
-        assertEquals(user.getFirstName(), userActual.getFirstName());
-        assertEquals(user.getSecondName(), userActual.getSecondName());
         assertEquals(user.geteMail(), userActual.geteMail());
-        assertEquals(user.getAddress(), userActual.getAddress());
-        assertEquals(PasswordHelper.encrypt(user.getPassword()),
-                userActual.getPassword());
+        try {
+            assertEquals(PasswordHelper.encrypt(user.getPassword()),
+                    userActual.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         assertEquals(user.getSex(), userActual.getSex());
-        assertEquals(user.getDateOfBirth(), userActual.getDateOfBirth());
-        assertEquals(user.getAvatar(), userActual.getAvatar());
         assertEquals(user.getRole(), userActual.getRole());
         logger.info("test get by nickname");
     }
@@ -220,10 +226,14 @@ public class UserDAOImplTest {
         assertEquals(user.getNickName(), "BigBunny");
         assertEquals(user.getFirstName(), "Oleg");
         assertEquals(user.getSecondName(), "Pavliv");
-        assertEquals(user.getAddress(), "USA, NC, timesquare, 5");
+        assertEquals(user.getAddress().toString(), "USA NC timesquare 5");
         assertEquals(user.geteMail(), "hgdf@gmail.com");
-        assertEquals(PasswordHelper.encrypt("kdfhgrr"),
-        		PasswordHelper.encrypt(user.getPassword()));
+        try {
+            assertEquals(PasswordHelper.encrypt("kdfhgrr"),
+                    PasswordHelper.encrypt(user.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         assertEquals(user.getSex(), "MALE");
         assertEquals(user.getDateOfBirth(), "1992-02-02");
         assertEquals(user.getAvatar(), null);
@@ -256,22 +266,27 @@ public class UserDAOImplTest {
     
     private User resultSet(ResultSet rs) {
         User user = null;
+        Address address = null;
         try {
             while (rs.next()) {
-            	 user = new User();
-                 user.setNickName(rs.getString("nick_name"));
-                 user.setFirstName(rs.getString("first_name"));
-                 user.setSecondName(rs.getString("second_name"));
-                 user.setAddress(rs.getString("country") + ", "
-                         + rs.getString("city") + ", " + rs.getString("street")
-                         + ", " + rs.getString("build_number"));
-                 user.seteMail(rs.getString("e_mail"));
-                 user.setPassword(rs.getString("password"));
-                 user.setSex(rs.getString("Sex"));
-                 user.setDateOfBirth(rs.getString("date_of_birth"));
-                 user.setAvatar(rs.getString("avatar"));
-                 user.setRole(rs.getString("role"));
-                 user.setSession(rs.getString("session"));
+                address = new Address();
+                address.setUuid(rs.getString("id"));
+                address.setCountry(rs.getString("country"));
+                address.setCity(rs.getString("city"));
+                address.setStreet(rs.getString("street"));
+                address.setBuildNumber(rs.getString("build_number"));
+                user = new User();
+                user.setNickName(rs.getString("nick_name"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setSecondName(rs.getString("second_name"));
+                user.setAddress(address);
+                user.seteMail(rs.getString("e_mail"));
+                user.setPassword(rs.getString("password"));
+                user.setSex(rs.getString("Sex"));
+                user.setDateOfBirth(rs.getString("date_of_birth"));
+                user.setAvatar(rs.getString("avatar"));
+                user.setRole(rs.getString("role"));
+                user.setSession(rs.getString("session"));
             }
         } catch (SQLException e) {
             logger.error("ResultSet failed", e);
