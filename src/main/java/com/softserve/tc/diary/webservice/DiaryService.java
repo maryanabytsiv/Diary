@@ -18,7 +18,7 @@ public interface DiaryService {
 
 	boolean logOut(String nickName);
 
-	Record addRecord(String nickname, String title, String text, String status);
+	Record addRecord(String nickname, String title, String text, String status, String fileName);
 
 	boolean removeRecord(String nickname, String recordId);
 
@@ -55,6 +55,8 @@ public interface DiaryService {
 	List<String> getDatesWithRecordsPerMonth(String nickName, String date);
 
 	List<Tag> getListTagsByPrefix(String prefix);
+	
+	User getUserByKey(String userId);
 
 	// Statistics viewSiteStatistics(String nickNameOfAdmin);
 

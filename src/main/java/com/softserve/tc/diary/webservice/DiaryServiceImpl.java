@@ -92,7 +92,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	@WebMethod
-	public Record addRecord(String nickname, String title, String text, String status) {
+	public Record addRecord(String nickname, String title, String text, String status, String FileName) {
 
 		User user = userDAO.readByNickName(nickname);
 		if (user == null) {
@@ -102,7 +102,7 @@ public class DiaryServiceImpl implements DiaryService {
 		} else {
 			Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
 
-			Record newRecord = new Record(user.getUuid(), createdTime, title, text, null, Status.valueOf(status));
+			Record newRecord = new Record(user.getUuid(), createdTime, title, text, FileName, Status.valueOf(status));
 			recordDAOImpl.create(newRecord);
 
 			return newRecord;
@@ -220,6 +220,8 @@ public class DiaryServiceImpl implements DiaryService {
 	public Record readByKey(String id) {
 		RecordDAOImpl dao = new RecordDAOImpl();
 		Record rec = dao.readByKey(id);
+		System.out.print(rec);
+		System.out.println("   that from webservice");
 		return rec;
 	}
 
@@ -302,6 +304,13 @@ public class DiaryServiceImpl implements DiaryService {
 		TagDAOImpl dao = new TagDAOImpl();
 		List<Tag> list = dao.getListTagsByPrefix(prefix);
 		return list;
+	}
+
+	@Override
+	public User getUserByKey(String userId) {
+		UserDAOImpl dao = new UserDAOImpl();
+		User user = dao.readByKey(userId);
+		return user;
 	}
 
 	// @Override
