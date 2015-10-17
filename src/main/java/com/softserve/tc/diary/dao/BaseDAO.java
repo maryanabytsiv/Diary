@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseDAO<T> {
     
-    void create(T object);
+    String create(T object);
     
     T readByKey(String id);
     

@@ -1,5 +1,8 @@
 package com.softserve.tc.diary.webservice;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -11,8 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
@@ -32,65 +33,65 @@ import com.softserve.tc.diary.util.PasswordHelper;
 @WebService(endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
 
-	private static Logger LOG = Log.init("DiaryServiceImpl");
+    private static Logger LOG = Log.init("DiaryServiceImpl");
 
-	private UserDAO userDAO = new UserDAOImpl();
-	private RecordDAO recordDAOImpl = new RecordDAOImpl();
-	private TagDAOImpl tagDAOImpl = new TagDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl();
+    private RecordDAO recordDAOImpl = new RecordDAOImpl();
+    private TagDAOImpl tagDAOImpl = new TagDAOImpl();
 
-	@Override
-	@WebMethod
-	public String sayHello(String name) {
+    @Override
+    @WebMethod
+    public String sayHello(String name) {
 
-		return "Hello from WebService to " + name + "!";
+        return "Hello from WebService to " + name + "!";
 
-	}
+    }
 
-	@WebMethod
-	public String logIn(String nickName, String password) {
+    @WebMethod
+    public String logIn(String nickName, String password) {
 
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
 
-			return null;
-		} else {
-			String encryptedPassword = "";
-			try {
-				encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
+            return null;
+        } else {
+            String encryptedPassword = "";
+            try {
+                encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
 
-			if (user.getPassword().equals(encryptedPassword)) {
-				String session = UUID.randomUUID().toString();
-				user.setSession(session);
-				userDAO.update(user);
+            if (user.getPassword().equals(encryptedPassword)) {
+                String session = UUID.randomUUID().toString();
+                user.setSession(session);
+                userDAO.update(user);
 
-				return session;
-			}
-			LOG.debug(String.format("Incorrect password of user with nickname %s", nickName));
+                return session;
+            }
+            LOG.debug(String.format("Incorrect password of user with nickname %s", nickName));
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	@WebMethod
-	public boolean logOut(String nickName) {
+    @WebMethod
+    public boolean logOut(String nickName) {
 
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
 
-			return false;
-		}
-		user.setSession(null);
-		userDAO.update(user);
+            return false;
+        }
+        user.setSession(null);
+        userDAO.update(user);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
+    @Override
 	@WebMethod
 	public Record addRecord(String nickname, String title, String text, String status, String FileName) {
 
@@ -109,203 +110,243 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 	}
 
-	@Override
-	public boolean removeRecord(String nickname, String recordId) {
+    @Override
+    public boolean removeRecord(String nickname, String recordId) {
 
-		User user = userDAO.readByNickName(nickname);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickname));
-			return false;
-		}
-		Record record = recordDAOImpl.readByKey(recordId);
-		if (record == null) {
-			LOG.debug(String.format("Record was not found by id %s", recordId));
-			return false;
-		}
-		recordDAOImpl.delete(record);
-		return true;
-	}
+        User user = userDAO.readByNickName(nickname);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickname));
+            return false;
+        }
+        Record record = recordDAOImpl.readByKey(recordId);
+        if (record == null) {
+            LOG.debug(String.format("Record was not found by id %s", recordId));
+            return false;
+        }
+        recordDAOImpl.delete(record);
+        return true;
+    }
 
-	@Override
-	public List<Record> getAllRecordsByDate(String nickName, String date) {
-		List<Record> records = new ArrayList<>();
+    @Override
+    public List<Record> getAllRecordsByDate(String nickName, String date) {
+        List<Record> records = new ArrayList<>();
 
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
-			return null;
-		}
-		Timestamp dateOfRecord = Timestamp.valueOf(date);
-		records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(), dateOfRecord);
-		if (records.isEmpty()) {
-			LOG.debug(String.format("Record was not found by date %s", date));
-			return null;
-		}
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
+            return null;
+        }
+        Timestamp dateOfRecord = Timestamp.valueOf(date);
+        records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(), dateOfRecord);
+        if (records.isEmpty()) {
+            LOG.debug(String.format("Record was not found by date %s", date));
+            return null;
+        }
 
-		return records;
-	}
+        return records;
+    }
 
-	@Override
-	public List<Record> getAllRecordsByHashTag(String nickName, String hashTag) {
-		List<Record> records = new ArrayList<>();
+    @Override
+    public List<Record> getAllRecordsByHashTag(String nickName, String hashTag) {
+        List<Record> records = new ArrayList<>();
 
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
-			return null;
-		}
-		Tag tag = tagDAOImpl.getTagByMessage(hashTag);
-		records = tagDAOImpl.getListRecordsByTag(tag);
-		if (records.isEmpty()) {
-			LOG.debug(String.format("Record was not found by hashtag %s", hashTag));
-			return null;
-		}
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
+            return null;
+        }
+        Tag tag = tagDAOImpl.getTagByMessage(hashTag);
+        records = tagDAOImpl.getListRecordsByTag(tag);
+        if (records.isEmpty()) {
+            LOG.debug(String.format("Record was not found by hashtag %s", hashTag));
+            return null;
+        }
 
-		return records;
-	}
+        return records;
+    }
 
-	@Override
-	@WebMethod
-	public User getUserByNickName(String nickName) {
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
+    @Override
+    @WebMethod
+    public User getUserByNickName(String nickName) {
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
 
-			return null;
-		} else {
-			return user;
-		}
-	}
+            return null;
+        } else {
+            return user;
+        }
+    }
 
-	@Override
-	@WebMethod
-	public List<User> getAllUsers() {
-		List<User> usersList = userDAO.getAll();
-		if (usersList == null) {
-			LOG.debug(String.format("Table is empty"));
-			return null;
-		} else {
-			return usersList;
-		}
-	}
+    @Override
+    @WebMethod
+    public List<User> getAllUsers() {
+        List<User> usersList = userDAO.getAll();
+        if (usersList == null) {
+            LOG.debug(String.format("Table is empty"));
+            return null;
+        } else {
+            return usersList;
+        }
+    }
 
-	@Override
-	public String getRoleByNickName(String nickName) {
+    @Override
+    public String getRoleByNickName(String nickName) {
 
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
-			return null;
-		}
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
+            return null;
+        }
 
-		return user.getRole();
-	}
+        return user.getRole();
+    }
 
-	@Override
-	@WebMethod
-	public List<Record> getAllPublicRecords() {
-		RecordDAOImpl dao = new RecordDAOImpl();
-		List<Record> list = dao.getAllPublicRecords();
-		Collections.sort(list, new Comparator<Record>() {
-			@Override
-			public int compare(Record o1, Record o2) {
-				return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
-			}
-		});
-		return list;
-	}
+    @Override
+    @WebMethod
+    public List<Record> getAllPublicRecords() {
+        RecordDAOImpl dao = new RecordDAOImpl();
+        List<Record> list = dao.getAllPublicRecords();
+        Collections.sort(list, new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
+            }
+        });
+        return list;
+    }
 
-	@Override
-	@WebMethod
-	public Record readByKey(String id) {
-		RecordDAOImpl dao = new RecordDAOImpl();
-		Record rec = dao.readByKey(id);
-		System.out.print(rec);
-		System.out.println("   that from webservice");
-		return rec;
-	}
+    @Override
+    @WebMethod
+    public Record readByKey(String id) {
+        RecordDAOImpl dao = new RecordDAOImpl();
+        Record rec = dao.readByKey(id);
+        return rec;
+    }
 
-	public int getUserAmountOfRecords(String nickName) {
-		User user = userDAO.readByNickName(nickName);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickName));
-			return 0;
-		}
-		int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
-		return numOfRecords;
-	}
+    public int getUserAmountOfRecords(String nickName) {
+        User user = userDAO.readByNickName(nickName);
+        if (user == null) {
+            LOG.debug(String.format("User was not found by nickname %s", nickName));
+            return 0;
+        }
+        int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
+        return numOfRecords;
+    }
+    
+    @Override
+    public void updateUserWithoutImage(User user) {
+        LOG.info("Udate user");
+        userDAO.update(user);
+        LOG.info("Udate user successfull");
+    }
+    
+    @Override
+    public void updateUser(User user, byte[] file, String fileName) {
+        LOG.info("Udate user");
+        File serverFile = null;
+        if (file!=null) {
+            try {
+                // Creating the directory to store file
+                String rootPath = System.getProperty("catalina.home");
+                File dir = new File(rootPath + File.separator + "tmpFiles");
+                if (!dir.exists())
+                    dir.mkdirs();
+                // Create the file on server
+                serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + fileName);
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(file);
+                stream.close();
+                LOG.info("You successfully uploaded file=" + fileName);
+                
+            } catch (Exception e) {
+                LOG.error("You failed to upload " + fileName + " => "
+                        + e.getMessage());
+            }
+        } else {
+            LOG.error("You failed to upload " + fileName
+                    + " because the file was empty.");
+        }
+        user.setAvatar(fileName);
+        userDAO.update(user);
+        LOG.info("Udate user successfull");
+    }
 
-	@Override
-	public void updateUser(User user) {
-		userDAO.update(user);
-	}
+    @Override
+    public void deleteUser(User user) {
+        userDAO.delete(user);
+    }
 
-	@Override
-	public void deleteUser(User user) {
-		userDAO.delete(user);
-	}
+    public void createUser(User user) {
+        userDAO.create(user);
+    }
 
-	public void createUser(User user) {
-		userDAO.create(user);
-	}
+    public Tag getMostPopularTag() {
+        TagDAOImpl tagDAOImpl = new TagDAOImpl();
+        Tag tag = tagDAOImpl.getMostPopularTag();
+        return tag;
+    }
 
-	public Tag getMostPopularTag() {
-		TagDAOImpl tagDAOImpl = new TagDAOImpl();
-		Tag tag = tagDAOImpl.getMostPopularTag();
-		return tag;
-	}
+    public User getMostActiveUser() {
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        User user = userDAOImpl.getMostActiveUser();
+        return user;
+    }
 
-	public User getMostActiveUser() {
-		UserDAOImpl userDAOImpl = new UserDAOImpl();
-		User user = userDAOImpl.getMostActiveUser();
-		return user;
-	}
+    @Override
+    public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
+        TagDAOImpl dao = new TagDAOImpl();
+        boolean existTag = dao.checkIfTagExist(hashTag);
+        if (existTag == false) {
+            List<Record> list2 = new ArrayList<Record>();
+            return list2;
+        }
+        Tag tag = dao.getTagByMessage(hashTag);
+        List<Record> list = dao.getListRecordsByTag(tag);
+        Iterator<Record> it = list.iterator();
+        while (it.hasNext()) {
+            Record r = it.next();
+            if (r.getVisibility().equals(Status.PRIVATE)) {
+                it.remove();
+            }
+        }
+        return list;
+    }
 
-	@Override
-	public List<Record> getAllPublicRecordsByHashTag(String hashTag) {
-		TagDAOImpl dao = new TagDAOImpl();
-		boolean existTag = dao.checkIfTagExist(hashTag);
-		if (existTag == false) {
-			List<Record> list2 = new ArrayList<Record>();
-			return list2;
-		}
-		Tag tag = dao.getTagByMessage(hashTag);
-		List<Record> list = dao.getListRecordsByTag(tag);
-		Iterator<Record> it = list.iterator();
-		while (it.hasNext()) {
-			Record r = it.next();
-			if (r.getVisibility().equals(Status.PRIVATE)) {
-				it.remove();
-			}
-		}
-		return list;
-	}
+    public int[] getSexStatistic() {
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        int[] sexStatistic = userDAOImpl.getSexStatistic();
+        return sexStatistic;
+    }
+    
+    public String updateSession(String nickName){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        String session = userDAOImpl.updateSession(nickName);
+        return session;
+    }
+    
 
-	public int[] getSexStatistic() {
-		UserDAOImpl userDAOImpl = new UserDAOImpl();
-		int[] sexStatistic = userDAOImpl.getSexStatistic();
-		return sexStatistic;
-	}
-
-	@Override
-	@WebMethod
-	public List<String> getDatesWithRecordsPerMonth(String nickName, String date) {
-		RecordDAOImpl recordDAOImpl = new RecordDAOImpl();
-		User user = userDAO.readByNickName(nickName);
-		LocalDateTime dateLocal = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
-				Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
-		List<String> listOfDates = recordDAOImpl.getDatesWichHaveRecordsPerMonth(user.getUuid(), dateLocal);
-		return listOfDates;
-	}
+    @Override
+    @WebMethod
+    public List<String> getDatesWithRecordsPerMonth(String nickName, String date) {
+        RecordDAOImpl recordDAOImpl = new RecordDAOImpl();
+        User user = userDAO.readByNickName(nickName);
+        LocalDateTime dateLocal = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
+                Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
+        List<String> listOfDates = recordDAOImpl.getDatesWichHaveRecordsPerMonth(user.getUuid(), dateLocal);
+        return listOfDates;
+    }
 
 
 
-	public List<Tag> getListTagsByPrefix(String prefix) {
-		TagDAOImpl dao = new TagDAOImpl();
-		List<Tag> list = dao.getListTagsByPrefix(prefix);
-		return list;
-	}
-
+    public List<Tag> getListTagsByPrefix(String prefix) {
+        TagDAOImpl dao = new TagDAOImpl();
+        List<Tag> list = dao.getListTagsByPrefix(prefix);
+        return list;
+    }
+    
 	@Override
 	public User getUserByKey(String userId) {
 		UserDAOImpl dao = new UserDAOImpl();
@@ -313,10 +354,10 @@ public class DiaryServiceImpl implements DiaryService {
 		return user;
 	}
 
-	// @Override
-	// public Statistics viewSiteStatistics(String nickNameOfAdmin) {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
+    // @Override
+    // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
+    // // TODO Auto-generated method stub
+    // return null;
+    // }
 
 }

@@ -62,9 +62,7 @@ public class Address {
     
     @Override
     public String toString() {
-        return "Address [id=" + uuid + ", country=" + country + ", city=" + city
-                + ", street=" + street
-                + ", build number=" + buildNumber + "]";
+        return country + " " + city + " " + street + " " + buildNumber;
     }
     
 }
