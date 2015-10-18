@@ -26,18 +26,18 @@ public class Record {
     
     }
 
-    public Record(String userName, String title,
+    public Record(String user_id_rec, String title,
             String text, String supplement, Status visibility) {
-        this.userId = userName;
+        this.userId = user_id_rec;
         this.title = title;
         this.text = text;
         this.supplement = supplement;
         this.visibility = visibility;
     }
     
-    public Record(String userName, Timestamp createdTime, String title,
+    public Record(String user_id_rec, Timestamp createdTime, String title,
     		String text, String supplement, Status visibility) {
-        this.userId = userName;
+        this.userId = user_id_rec;
         this.createdTime = createdTime;
         this.title = title;
         this.text = text;
@@ -45,10 +45,10 @@ public class Record {
         this.visibility = visibility;
     }
     
-    public Record(String uuid, String userName, Timestamp createdTime,
+    public Record(String uuid, String user_id_rec, Timestamp createdTime,
     		 String title,  String text, String supplement, Status visibility) {
         this.uuid = uuid;
-        this.userId = userName;
+        this.userId = user_id_rec;
         this.createdTime = createdTime;
         this.title = title;
         this.text = text;
@@ -68,7 +68,11 @@ public class Record {
         return userId;
     }
     
-    @XmlJavaTypeAdapter(TimestampAdapter.class)
+    public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
     public Timestamp getCreatedTime() {
         return createdTime;
     }

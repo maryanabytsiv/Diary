@@ -92,23 +92,23 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    @WebMethod
-    public Record addRecord(String nickname, String title, String text, String status) {
+	@WebMethod
+	public Record addRecord(String nickname, String title, String text, String status, String FileName) {
 
-        User user = userDAO.readByNickName(nickname);
-        if (user == null) {
-            LOG.debug(String.format("User was not found by nickname %s", nickname));
+		User user = userDAO.readByNickName(nickname);
+		if (user == null) {
+			LOG.debug(String.format("User was not found by nickname %s", nickname));
 
-            return null;
-        } else {
-            Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
+			return null;
+		} else {
+			Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
 
-            Record newRecord = new Record(user.getUuid(), createdTime, title, text, null, Status.valueOf(status));
-            recordDAOImpl.create(newRecord);
+			Record newRecord = new Record(user.getUuid(), createdTime, title, text, FileName, Status.valueOf(status));
+			recordDAOImpl.create(newRecord);
 
-            return newRecord;
-        }
-    }
+			return newRecord;
+		}
+	}
 
     @Override
     public boolean removeRecord(String nickname, String recordId) {
@@ -320,6 +320,13 @@ public class DiaryServiceImpl implements DiaryService {
         int[] sexStatistic = userDAOImpl.getSexStatistic();
         return sexStatistic;
     }
+    
+    public String updateSession(String nickName){
+        UserDAOImpl userDAOImpl = new UserDAOImpl();
+        String session = userDAOImpl.updateSession(nickName);
+        return session;
+    }
+    
 
     @Override
     @WebMethod
@@ -339,6 +346,13 @@ public class DiaryServiceImpl implements DiaryService {
         List<Tag> list = dao.getListTagsByPrefix(prefix);
         return list;
     }
+    
+	@Override
+	public User getUserByKey(String userId) {
+		UserDAOImpl dao = new UserDAOImpl();
+		User user = dao.readByKey(userId);
+		return user;
+	}
 
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {

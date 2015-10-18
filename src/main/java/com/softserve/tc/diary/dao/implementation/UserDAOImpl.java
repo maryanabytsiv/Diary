@@ -417,4 +417,20 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         
         return sexStatistic;
     }
+
+    public String updateSession(String nickName) {
+        // TODO Auto-generated method stub
+        String session = UUID.randomUUID().toString();
+        try (Connection conn = connection.getConnection()) {
+            String query = "update user_card set session = ? where nick_name = ?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, session);
+            ps.setString(2, nickName);
+            ResultSet rs = ps.executeQuery();
+        } catch (SQLException e) {
+            logger.error("cant update session", e);
+        }
+      
+        return session;
+    }
 }
