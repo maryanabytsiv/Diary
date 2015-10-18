@@ -12,5 +12,6 @@ public interface UserDAO extends BaseDAO<User> {
     
     User readByNickName(String nickName);
     
+    List<User> getActiveUsers();
     
 }
