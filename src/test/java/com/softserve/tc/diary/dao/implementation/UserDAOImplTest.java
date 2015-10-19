@@ -116,6 +116,7 @@ public class UserDAOImplTest {
         user.setFirstName("IRA");
         user.setSecondName("BLLLLL");
         user.setAddress(new Address("Poland", "Gdansk", "Naberejna", "52"));
+        user.setAvatar("image.png");
         userDAO.update(user);
         User userActual = new User();
         try (Connection connection = conn.getConnection()) {

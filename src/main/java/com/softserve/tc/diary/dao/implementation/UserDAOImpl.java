@@ -85,7 +85,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         
         String addressUuid = "";
-        if (newAddress.getUuid().isEmpty()) {
+        if (newAddress.getUuid()==null||newAddress.getUuid().isEmpty()) {
             addressUuid = addressDAO.create(newAddress);
         } else {
             addressUuid = newAddress.getUuid();
@@ -93,7 +93,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         
         String avatar = "";
-        if (object.getAvatar().isEmpty()) {
+        if (object.getAvatar()==null||object.getAvatar().isEmpty()) {
             User userFromDB = readByKey(object.getUuid());
             avatar = userFromDB.getAvatar();
         } else {
