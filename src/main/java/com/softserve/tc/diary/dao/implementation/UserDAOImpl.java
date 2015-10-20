@@ -85,7 +85,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         
         String addressUuid = "";
-        if (newAddress.getUuid().isEmpty()) {
+        if (newAddress.getUuid()==null||newAddress.getUuid().isEmpty()) {
             addressUuid = addressDAO.create(newAddress);
         } else {
             addressUuid = newAddress.getUuid();
@@ -93,7 +93,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         
         String avatar = "";
-        if (object.getAvatar().isEmpty()) {
+        if (object.getAvatar()==null||object.getAvatar().isEmpty()) {
             User userFromDB = readByKey(object.getUuid());
             avatar = userFromDB.getAvatar();
         } else {
@@ -417,12 +417,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         
         return sexStatistic;
     }
-
+    
     public String updateSession(String nickName) {
         // TODO Auto-generated method stub
         String session = UUID.randomUUID().toString();
         try (Connection conn = connection.getConnection()) {
-            String query = "update user_card set session = ? where nick_name = ?";
+            String query =
+                    "update user_card set session = ? where nick_name = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, session);
             ps.setString(2, nickName);
@@ -430,7 +431,23 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         } catch (SQLException e) {
             logger.error("cant update session", e);
         }
-      
+        
         return session;
+    }
+    
+    public List<User> getActiveUsers() {
+        List<User> activeUsers = new ArrayList<User>();
+        try (Connection conn = connection.getConnection()) {
+            ps = conn.prepareStatement(
+                    "SELECT nick_name FROM user_card WHERE session IS NOT NULL;");
+                    
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                activeUsers.add(resultSet(rs));
+            }
+        } catch (SQLException e) {
+            logger.error("get active users failed", e);
+        }
+        return activeUsers;
     }
 }
