@@ -1,0 +1,453 @@
+01:18:53 18.10.2015 INFO  DBConnectionManager  getInstance:41 - Creating TestDB DBConnectionManagerNew
+01:18:53 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:15 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:17 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:17 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+01:19:18 18.10.2015 INFO  AddressDAOImplTest  testCreateAddress:81 - Test create address
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  getAll:132 - Get all address records
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 INFO  AddressDAOImplTest  TestGetAll:171 - Test getAll
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  update:75 - Updating address
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:18 18.10.2015 DEBUG AddressDAOImpl  update:89 - Address updated
+01:19:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 INFO  AddressDAOImplTest  testUpdateAddress:132 - Test update address
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+01:19:19 18.10.2015 DEBUG AddressDAOImpl  delete:108 - Deleting address
+01:19:19 18.10.2015 DEBUG AddressDAOImpl  delete:116 - Address deleted
+01:19:19 18.10.2015 INFO  AddressDAOImplTest  TestDeleteAddress:160 - Test delete address
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  UserDAOImplTest  testGetByNickName:218 - test get by nickname
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  UserDAOImplTest  testCreateUser:102 - test create user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  delete:144 - Deleting user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  UserDAOImplTest  testDeleteUser:162 - test delete user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  UserDAOImplTest  testGetAll:177 - test get all
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  UserDAOImplTest  testreadByKey:241 - test get by id
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:20 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testCreateFromRecord:128 - test create from record
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testReadByKey:153 - test read by key
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testDeleteFromtagRecord:174 - test delete from tag_record
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testGetListTagsByPrefix:208 - test get list tags by prefix
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testGetListTagsBySuffix:217 - test get list tags by suffix
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testCheckIfTagAlreadyExist:140 - test check if tag already exist
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  TagDAOImplTest  testDeleteTag:184 - test delete tag
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:21 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  TagDAOImplTest  testCreateTag:90 - test create tag
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  TagDAOImplTest  testGetAll:225 - test get all
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  TagDAOImplTest  testGetListRecordByTag:234 - test get list record by tag
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  TagDAOImplTest  testCheckIfRecordHasTag:199 - test check if record has tag
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  TagDAOImplTest  testGetTagByMessage:67 - test get tag by message
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 DEBUG RecordDAOImpl  create:48 - creating record
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+01:19:22 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 2
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  create:76 - record created
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  RecordDAOImplTest  testCreateRecord:95 - Test create record
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  readByKey:110 - reading by key
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  delete:161 - deleting record
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  delete:171 - record deleted
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  RecordDAOImplTest  TestDeleteRecord:173 - test delete record
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  update:130 - updating record
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  RecordDAOImplTest  testUpdateRecord:153 - test update record
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  RecordDAOImplTest  testGetAll:161 - test get all
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+01:19:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:08:07 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:08:07 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:08:07 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:08:07 18.10.2015 DEBUG RecordDAOImpl  update:147 - record updated
+16:31:31 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:31:32 18.10.2015 DEBUG RecordDAOImpl  create:49 - creating record
+16:31:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:31:32 18.10.2015 DEBUG RecordDAOImpl  create:77 - record created
+16:32:31 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:32:32 18.10.2015 DEBUG RecordDAOImpl  create:49 - creating record
+16:32:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:32:32 18.10.2015 DEBUG RecordDAOImpl  create:77 - record created
+16:33:27 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:33:27 18.10.2015 DEBUG RecordDAOImpl  create:49 - creating record
+16:33:27 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:33:27 18.10.2015 DEBUG RecordDAOImpl  create:77 - record created
+16:42:49 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:42:49 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:42:49 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:42:49 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+16:43:46 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:43:46 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:43:46 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:43:46 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+16:44:23 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:44:23 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:44:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:44:23 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+16:44:48 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:44:48 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:44:48 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:44:48 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+16:45:53 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:45:53 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:45:53 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:45:54 18.10.2015 DEBUG RecordDAOImpl  update:146 - record updated
+16:49:42 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+16:49:42 18.10.2015 DEBUG RecordDAOImpl  update:131 - updating record
+16:49:42 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+16:49:42 18.10.2015 DEBUG RecordDAOImpl  update:147 - record updated
+17:04:25 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+17:04:25 18.10.2015 DEBUG RecordDAOImpl  create:50 - creating record
+17:04:25 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:04:26 18.10.2015 DEBUG RecordDAOImpl  create:78 - record created
+17:05:23 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+17:05:23 18.10.2015 DEBUG RecordDAOImpl  create:50 - creating record
+17:05:23 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:05:24 18.10.2015 DEBUG RecordDAOImpl  create:78 - record created
+17:07:03 18.10.2015 INFO  DBConnectionManager  getInstance:36 - Creating RealDB DBConnectionManagerNew
+17:07:03 18.10.2015 DEBUG RecordDAOImpl  create:50 - creating record
+17:07:03 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:07:04 18.10.2015 DEBUG RecordDAOImpl  create:78 - record created
+17:51:16 18.10.2015 INFO  DBConnectionManager  getInstance:41 - Creating TestDB DBConnectionManagerNew
+17:51:16 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:18 18.10.2015 DEBUG RecordDAOImpl  create:50 - creating record
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 2
+17:51:18 18.10.2015 DEBUG RecordDAOImpl  create:78 - record created
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:18 18.10.2015 INFO  RecordDAOImplTest  testCreateRecord:95 - Test create record
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:18 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  readByKey:112 - reading by key
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  delete:163 - deleting record
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  delete:173 - record deleted
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  RecordDAOImplTest  TestDeleteRecord:151 - test delete record
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  readByKey:112 - reading by key
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  update:132 - updating record
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 DEBUG RecordDAOImpl  update:148 - record updated
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  RecordDAOImplTest  testUpdateRecord:131 - test update record
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  RecordDAOImplTest  testGetAll:139 - test get all
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:19 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:29 18.10.2015 INFO  DBConnectionManager  getInstance:41 - Creating TestDB DBConnectionManagerNew
+17:51:29 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:30 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:30 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:30 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+17:51:31 18.10.2015 INFO  AddressDAOImplTest  testCreateAddress:81 - Test create address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  getAll:132 - Get all address records
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  AddressDAOImplTest  TestGetAll:171 - Test getAll
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  update:75 - Updating address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  update:89 - Address updated
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  AddressDAOImplTest  testUpdateAddress:132 - Test update address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  create:34 - Creating address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  create:47 - Address created
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  delete:108 - Deleting address
+17:51:31 18.10.2015 DEBUG AddressDAOImpl  delete:116 - Address deleted
+17:51:31 18.10.2015 INFO  AddressDAOImplTest  TestDeleteAddress:160 - Test delete address
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:31 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  UserDAOImplTest  testGetByNickName:218 - test get by nickname
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  UserDAOImplTest  testCreateUser:102 - test create user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  delete:144 - Deleting user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  UserDAOImplTest  testDeleteUser:162 - test delete user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 DEBUG UserDAOImpl  create:52 - Creating user
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  UserDAOImplTest  testGetAll:177 - test get all
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  UserDAOImplTest  testreadByKey:241 - test get by id
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:32 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testCreateFromRecord:128 - test create from record
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testReadByKey:153 - test read by key
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testDeleteFromtagRecord:174 - test delete from tag_record
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testGetListTagsByPrefix:208 - test get list tags by prefix
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testGetListTagsBySuffix:217 - test get list tags by suffix
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  TagDAOImplTest  testCheckIfTagAlreadyExist:140 - test check if tag already exist
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:34 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testDeleteTag:184 - test delete tag
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testCreateTag:90 - test create tag
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testGetAll:225 - test get all
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testGetListRecordByTag:234 - test get list record by tag
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testCheckIfRecordHasTag:199 - test check if record has tag
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  TagDAOImplTest  testGetTagByMessage:67 - test get tag by message
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:35 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  create:50 - creating record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 1
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 2
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  create:78 - record created
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  RecordDAOImplTest  testCreateRecord:95 - Test create record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  readByKey:112 - reading by key
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  delete:163 - deleting record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  delete:173 - record deleted
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  RecordDAOImplTest  TestDeleteRecord:151 - test delete record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  readByKey:112 - reading by key
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  update:132 - updating record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 DEBUG RecordDAOImpl  update:148 - record updated
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  RecordDAOImplTest  testUpdateRecord:131 - test update record
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  RecordDAOImplTest  testGetAll:139 - test get all
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0
+17:51:36 18.10.2015 INFO  DBConnectionManager  getConnection:59 - Number of active connections: 0

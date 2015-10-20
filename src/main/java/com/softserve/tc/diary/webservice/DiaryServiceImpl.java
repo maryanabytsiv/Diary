@@ -354,6 +354,15 @@ public class DiaryServiceImpl implements DiaryService {
 		return user;
 	}
 
+	@Override
+	public Record updateRecord(Record record) {
+		String recordId = record.getUuid();
+		RecordDAOImpl dao = new RecordDAOImpl();
+		dao.update(record);
+		record = dao.readByKey(recordId);
+		return record;
+	}
+
     // @Override
     // public Statistics viewSiteStatistics(String nickNameOfAdmin) {
     // // TODO Auto-generated method stub
