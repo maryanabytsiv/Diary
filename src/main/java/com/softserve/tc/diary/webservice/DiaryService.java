@@ -61,4 +61,6 @@ public interface DiaryService {
     
     User getUserByKey(String userId);
     
+    List<String> getAllHashes();
+    
 }
