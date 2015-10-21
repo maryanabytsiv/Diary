@@ -97,36 +97,14 @@ public class RecordDAOImplTest {
     
     @Test
     public void testUpdateRecord() {
-        Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
+        //Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
         
         RecordDAOImpl recordDAO = new RecordDAOImpl(conn);
-        Record rec = new Record("1", createdTime, "work", "#Work HARD!!!",
-                "https://motivation/inUkraine/improveMySelf",
-                Status.PRIVATE);
-        rec.setUuid(UUID.randomUUID().toString());
-        try (Connection connection = conn.getConnection()) {
-            try {
-                connection.setAutoCommit(false);
-                ps = connection.prepareStatement(
-                        "insert into record_list values(?,?,CAST(? AS DATE),?,?,?,?)");
-                ps.setString(1, rec.getUuid());
-                ps.setString(2, rec.getUserId());
-                ps.setTimestamp(3, rec.getCreatedTime());
-                ps.setString(4, rec.getTitle());
-                ps.setString(5, rec.getText());
-                ps.setString(6, rec.getSupplement());
-                ps.setString(7, rec.getVisibility());
-                ps.execute();
-                connection.commit();
-            } catch (SQLException e) {
-                logger.error("Error. Rollback changes", e);
-                connection.rollback();
-            }finally{
-                connection.setAutoCommit(true);              
-            }
-        } catch (SQLException e1) {
-            logger.error("insert failed", e1);
-        }
+        Record rec =recordDAO.readByKey("1");
+        rec.setText("NewText");
+        rec.setTitle("NewTitle");
+        rec.setSupplement("NewSupplement");
+        rec.setVisibility("PRIVATE");
         recordDAO.update(rec);
         Record record = null;
         try (Connection connection = conn.getConnection()) {

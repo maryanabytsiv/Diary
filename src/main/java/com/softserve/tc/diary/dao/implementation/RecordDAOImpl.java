@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.dao.implementation;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -132,15 +134,15 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             try {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
-                        "update record_list set user_id_rec = ?, created_time = CAST(? AS TIMESTAMP), title = ?,"
-                                + " text = ?, supplement = ?, visibility = ? where user_id_rec = ?;");
-                ps.setString(1, object.getUserId());
-                ps.setTimestamp(2, object.getCreatedTime());
-                ps.setString(3, object.getTitle());
-                ps.setString(4, object.getText());
-                ps.setString(5, object.getSupplement());
-                ps.setString(6, object.getVisibility());
-                ps.setString(7, object.getUserId());
+                        "update record_list SET created_time = ?, title = ?, text = ?, supplement = ?, "
+                        + "visibility = ? where user_id_rec = ? AND id_rec = ?;");
+                ps.setTimestamp(1, new Timestamp(new java.util.Date().getTime()));
+                ps.setString(2, object.getTitle());
+                ps.setString(3, object.getText());
+                ps.setString(4, object.getSupplement());
+                ps.setString(5, object.getVisibility());
+                ps.setString(6, object.getUserId());
+                ps.setString(7, object.getUuid());
                 ps.execute();
                 ps.close();
                 logger.debug("record updated");
