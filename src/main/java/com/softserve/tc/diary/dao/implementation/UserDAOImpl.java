@@ -85,7 +85,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         AddressDAOImpl addressDAO = new AddressDAOImpl();
         
         String addressUuid = "";
-        if (newAddress.getUuid()==null||newAddress.getUuid().isEmpty()) {
+        if (newAddress.getUuid() == null || newAddress.getUuid().isEmpty()) {
             addressUuid = addressDAO.create(newAddress);
         } else {
             addressUuid = newAddress.getUuid();
@@ -93,7 +93,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         
         String avatar = "";
-        if (object.getAvatar()==null||object.getAvatar().isEmpty()) {
+        if (object.getAvatar() == null || object.getAvatar().isEmpty()) {
             User userFromDB = readByKey(object.getUuid());
             avatar = userFromDB.getAvatar();
         } else {
@@ -439,11 +439,24 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         List<User> activeUsers = new ArrayList<User>();
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
-                    "SELECT nick_name FROM user_card WHERE session IS NOT NULL;");
+                    "SELECT * FROM user_card WHERE session IS NOT NULL;");
                     
             rs = ps.executeQuery();
             while (rs.next()) {
-                activeUsers.add(resultSet(rs));
+                
+                User user = new User();
+                user.setUuid(rs.getString(UserCard.UID));
+                user.setNickName(rs.getString(UserCard.NICKNAME));
+                user.setFirstName(rs.getString(UserCard.FIRSTNAME));
+                user.setSecondName(rs.getString(UserCard.SECONDNAME));
+                user.seteMail(rs.getString(UserCard.EMAIL));
+                user.setSex(rs.getString(UserCard.SEX));
+                user.setDateOfBirth(rs.getString(UserCard.DATEOFBIRTH));
+                user.setAvatar(rs.getString(UserCard.AVATAR));
+                user.setRole(rs.getString(UserCard.ROLE));
+                user.setSession(rs.getString(UserCard.SESSION));
+                
+                activeUsers.add(user);
             }
         } catch (SQLException e) {
             logger.error("get active users failed", e);
