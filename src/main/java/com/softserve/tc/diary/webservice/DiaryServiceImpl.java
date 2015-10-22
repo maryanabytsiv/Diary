@@ -3,6 +3,7 @@ package com.softserve.tc.diary.webservice;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -29,9 +30,9 @@ import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 import com.softserve.tc.diary.util.PasswordHelper;
+import com.softserve.tc.diary.util.UserFolderForPersonalData;
 
-@WebService(
-		endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
+@WebService(endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
 
 	private static Logger LOG = Log.init("DiaryServiceImpl");
@@ -53,15 +54,13 @@ public class DiaryServiceImpl implements DiaryService {
 
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 
 			return null;
 		} else {
 			String encryptedPassword = "";
 			try {
-				encryptedPassword = password != null
-						? PasswordHelper.encrypt(password) : null;
+				encryptedPassword = password != null ? PasswordHelper.encrypt(password) : null;
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
@@ -73,8 +72,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 				return session;
 			}
-			LOG.debug(String.format(
-					"Incorrect password of user with nickname %s", nickName));
+			LOG.debug(String.format("Incorrect password of user with nickname %s", nickName));
 
 			return null;
 		}
@@ -85,8 +83,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 
 			return false;
 		}
@@ -98,24 +95,32 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	@WebMethod
-	public Record addRecord(String nickname, String title, String text,
-			String status, String FileName) {
-
-		User user = userDAO.readByNickName(nickname);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickname));
-
-			return null;
+	public Record addRecord(Record record, byte[] file) {
+		RecordDAOImpl daoRec = new RecordDAOImpl();
+		Record rec = null;
+		UserDAOImpl daoUser = new UserDAOImpl();
+		if (file == null) {
+			String idRec = daoRec.create(record);
+			rec = daoRec.readByKey(idRec);
+			return record;
 		} else {
-			Timestamp createdTime =
-					new Timestamp(new java.util.Date().getTime());
-
-			Record newRecord = new Record(user.getUuid(), createdTime, title,
-					text, FileName, Status.valueOf(status));
-			recordDAOImpl.create(newRecord);
-
-			return newRecord;
+			File serverFile = null;
+			try {
+				User user = daoUser.readByKey(record.getUserId());
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + record.getSupplement());
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(file);
+				stream.close();
+				record.setSupplement(record.getSupplement());
+				String idRec = daoRec.create(record);
+				rec = daoRec.readByKey(idRec);
+				LOG.info("You successfully uploaded file=" + record.getSupplement());
+			} catch (IOException e) {
+				LOG.error("You failed to upload " + record.getSupplement() + " => " + e.getMessage());
+			}
+			
+			return rec;
 		}
 	}
 
@@ -124,8 +129,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 		User user = userDAO.readByNickName(nickname);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickname));
+			LOG.debug(String.format("User was not found by nickname %s", nickname));
 			return false;
 		}
 		Record record = recordDAOImpl.readByKey(recordId);
@@ -143,13 +147,11 @@ public class DiaryServiceImpl implements DiaryService {
 
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 			return null;
 		}
 		Timestamp dateOfRecord = Timestamp.valueOf(date);
-		records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(),
-				dateOfRecord);
+		records = recordDAOImpl.getRecordByNickNameAndDate(user.getUuid(), dateOfRecord);
 		if (records.isEmpty()) {
 			LOG.debug(String.format("Record was not found by date %s", date));
 			return null;
@@ -159,21 +161,18 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public List<Record> getAllRecordsByHashTag(String nickName,
-			String hashTag) {
+	public List<Record> getAllRecordsByHashTag(String nickName, String hashTag) {
 		List<Record> records = new ArrayList<>();
 
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 			return null;
 		}
 		Tag tag = tagDAOImpl.getTagByMessage(hashTag);
 		records = tagDAOImpl.getListRecordsByTag(tag);
 		if (records.isEmpty()) {
-			LOG.debug(String.format("Record was not found by hashtag %s",
-					hashTag));
+			LOG.debug(String.format("Record was not found by hashtag %s", hashTag));
 			return null;
 		}
 
@@ -185,8 +184,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public User getUserByNickName(String nickName) {
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 
 			return null;
 		} else {
@@ -211,8 +209,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 			return null;
 		}
 
@@ -227,8 +224,7 @@ public class DiaryServiceImpl implements DiaryService {
 		Collections.sort(list, new Comparator<Record>() {
 			@Override
 			public int compare(Record o1, Record o2) {
-				return o2.getCreatedTime().getTime() > o1.getCreatedTime()
-						.getTime() ? 1 : -1;
+				return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
 			}
 		});
 		return list;
@@ -245,8 +241,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public int getUserAmountOfRecords(String nickName) {
 		User user = userDAO.readByNickName(nickName);
 		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s",
-					nickName));
+			LOG.debug(String.format("User was not found by nickname %s", nickName));
 			return 0;
 		}
 		int numOfRecords = recordDAOImpl.getUserAmountOfRecord(user.getUuid());
@@ -267,26 +262,18 @@ public class DiaryServiceImpl implements DiaryService {
 		if (file != null) {
 			try {
 				// Creating the directory to store file
-				String rootPath = System.getProperty("catalina.home");
-				File dir = new File(rootPath + File.separator + "tmpFiles");
-				if (!dir.exists())
-					dir.mkdirs();
-				// Create the file on server
-				serverFile = new File(dir.getAbsolutePath()
-						+ File.separator + fileName);
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(serverFile));
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + fileName);
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(file);
 				stream.close();
 				LOG.info("You successfully uploaded file=" + fileName);
 
 			} catch (Exception e) {
-				LOG.error("You failed to upload " + fileName + " => "
-						+ e.getMessage());
+				LOG.error("You failed to upload " + fileName + " => " + e.getMessage());
 			}
 		} else {
-			LOG.error("You failed to upload " + fileName
-					+ " because the file was empty.");
+			LOG.error("You failed to upload " + fileName + " because the file was empty.");
 		}
 		user.setAvatar(fileName);
 		userDAO.update(user);
@@ -348,16 +335,12 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	@WebMethod
-	public List<String> getDatesWithRecordsPerMonth(String nickName,
-			String date) {
+	public List<String> getDatesWithRecordsPerMonth(String nickName, String date) {
 		RecordDAOImpl recordDAOImpl = new RecordDAOImpl();
 		User user = userDAO.readByNickName(nickName);
-		LocalDateTime dateLocal =
-				LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
-						Integer.parseInt(date.substring(5, 7)),
-						Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
-		List<String> listOfDates = recordDAOImpl
-				.getDatesWichHaveRecordsPerMonth(user.getUuid(), dateLocal);
+		LocalDateTime dateLocal = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
+				Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
+		List<String> listOfDates = recordDAOImpl.getDatesWichHaveRecordsPerMonth(user.getUuid(), dateLocal);
 		return listOfDates;
 	}
 
@@ -387,12 +370,32 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public Record updateRecord(Record record) {
-		String recordId = record.getUuid();
-		RecordDAOImpl dao = new RecordDAOImpl();
-		dao.update(record);
-		record = dao.readByKey(recordId);
-		return record;
+	public Record updateRecord(Record record, byte[] file) {
+		RecordDAOImpl daoRec = new RecordDAOImpl();
+		UserDAOImpl daoUser = new UserDAOImpl();
+		File serverFile = null;
+		if (file == null) {
+			String recordId = record.getUuid();
+			daoRec.update(record);
+			record = daoRec.readByKey(recordId);
+			return record;
+		} else {
+			try {
+				User user = daoUser.readByKey(record.getUserId());
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + record.getSupplement());
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(file);
+				stream.close();
+				record.setSupplement(record.getSupplement());
+				daoRec.update(record);
+				LOG.info("You successfully uploaded file=" + record.getSupplement());
+			} catch (IOException e) {
+				LOG.error("You failed to upload " + record.getSupplement() + " => " + e.getMessage());
+			}
+			record = daoRec.readByKey(record.getUuid());
+			return record;
+		}
 	}
 
 	@Override

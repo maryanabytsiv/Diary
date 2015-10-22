@@ -17,10 +17,10 @@ public interface DiaryService {
     
     boolean logOut(String nickName);
     
-	Record addRecord(String nickname, String title, String text, String status, String fileName);
+	Record addRecord(Record record, byte[] file);
 	
-	Record updateRecord (Record record);
-    
+	Record updateRecord (Record record, byte[] file);
+	  
     boolean removeRecord(String nickname, String recordId);
     
     List<Record> getAllRecordsByDate(String nickName, String date);
