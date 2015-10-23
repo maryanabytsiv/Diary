@@ -411,5 +411,12 @@ public class DiaryServiceImpl implements DiaryService {
 		user = daoUser.getUserByEmail(email);
 		return user;
 	}
+	
+    @Override
+    @WebMethod
+    public int[][] getRecDate() {
+        
+        return recordDAOImpl.getRecordDate();
+    }
 
 }

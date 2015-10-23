@@ -69,4 +69,6 @@ public interface DiaryService {
     
     User getUserByEmail(String email);
     
+    public int[][] getRecDate();
+    
 }
