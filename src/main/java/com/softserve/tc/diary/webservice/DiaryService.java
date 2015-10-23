@@ -67,4 +67,6 @@ public interface DiaryService {
     
     List<User> getActiveUsers();
     
+    User getUserByEmail(String email);
+    
 }

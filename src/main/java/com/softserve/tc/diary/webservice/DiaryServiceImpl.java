@@ -404,4 +404,12 @@ public class DiaryServiceImpl implements DiaryService {
 		return userDAO.getActiveUsers();
 	}
 
+	@Override
+	public User getUserByEmail(String email) {
+		UserDAOImpl daoUser = new UserDAOImpl();
+		User user = null;
+		user =daoUser.getUserByEmail(email);
+		return user;
+	}
+
 }
