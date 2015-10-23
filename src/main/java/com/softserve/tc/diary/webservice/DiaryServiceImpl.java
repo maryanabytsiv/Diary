@@ -332,6 +332,11 @@ public class DiaryServiceImpl implements DiaryService {
 		String session = userDAOImpl.updateSession(nickName);
 		return session;
 	}
+	
+	public void invalidateSession(String nickName, String session){
+	       UserDAOImpl userDAOImpl = new UserDAOImpl();
+	       userDAOImpl.invalidateSession(nickName, session);
+	}
 
 	@Override
 	@WebMethod

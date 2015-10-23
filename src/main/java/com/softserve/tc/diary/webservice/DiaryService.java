@@ -57,6 +57,8 @@ public interface DiaryService {
     
     String updateSession(String nickName);
     
+    void invalidateSession(String nickName, String session);
+    
     List<String> getDatesWithRecordsPerMonth(String nickName, String date);
     
     List<Tag> getListTagsByPrefix(String prefix);
