@@ -27,6 +27,7 @@ import com.softserve.tc.diary.entity.Sex;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 import com.softserve.tc.diary.util.PasswordHelper;
+import com.sun.xml.stream.xerces.util.ParserConfigurationSettings;
 
 public class UserDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
@@ -142,7 +143,7 @@ public class UserDAOImplTest {
         assertEquals("IRA", userActual.getFirstName());
         assertEquals("BLLLLL", userActual.getSecondName());
         assertEquals("mail@mail.com", userActual.geteMail());
-        assertEquals("Test", userActual.getPassword());
+        assertEquals("0cbc6611f5540bd0809a388dc95a615b", userActual.getPassword());
         ;
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDateOfBirth());
