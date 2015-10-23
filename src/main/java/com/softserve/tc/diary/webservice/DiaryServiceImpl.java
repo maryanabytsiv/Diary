@@ -119,7 +119,7 @@ public class DiaryServiceImpl implements DiaryService {
 			} catch (IOException e) {
 				LOG.error("You failed to upload " + record.getSupplement() + " => " + e.getMessage());
 			}
-			
+
 			return rec;
 		}
 	}
@@ -408,7 +408,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public User getUserByEmail(String email) {
 		UserDAOImpl daoUser = new UserDAOImpl();
 		User user = null;
-		user =daoUser.getUserByEmail(email);
+		user = daoUser.getUserByEmail(email);
 		return user;
 	}
 
