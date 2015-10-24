@@ -19,8 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.entity.Role;
 import com.softserve.tc.diary.entity.Sex;
@@ -31,33 +29,33 @@ import com.softserve.tc.diary.util.PasswordHelper;
 public class UserDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private final ConnectionManager conn =
-            DBConnectionManager.getInstance(false);
-            
+
+    private static ConnectionManager conn = ConnectionManager.getInstance(DataBaseTest.TESTDB);
+	
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-        DBCreationManagerTest.setUpBeforeClass();
+    	DBCreationManagerHelper.setUpBeforeClass();
     }
     
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-        DBCreationManagerTest.DropTableIfExists();
+    	DBCreationManagerHelper.DropTableIfExists();
     }
     
     @Before
     public void beforeTest() throws SQLException {
-        DBCreationManagerTest.insertValue();
+    	DBCreationManagerHelper.insertValue();
     }
     
     @After
     public void afterTest() throws SQLException {
-        DBCreationManagerTest.deleteAllFromTable();
+    	DBCreationManagerHelper.deleteAllFromTable();
         
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testCreateUserNullPointerException() {
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         userDAO.create(new User(null, "Andriy", "Mural",
                 null, null, "64561", Sex.FEMALE,
                 "1999-03-02", "folder/folder/image.png", null));
@@ -65,7 +63,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testCreateUser() {
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         userDAO.create(new User("hary12", "Andriy", "Mural",
                 null, "bg@gmail.com", "64561",
                 Sex.MALE, "1995-03-02", "folder/folder/image.png",
@@ -104,7 +102,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testUpdateUser() {
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         User user = new User();
         user.setNickName("Test");
         user.setPassword("Test");
@@ -152,7 +150,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testDeleteUser() {
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         User user = new User("delete", "Natalya", "Bolyk",
                 new Address("Poland", "Gdansk", "Naberejna", "52"),
                 "bg@gmail.com", "64561", Sex.FEMALE, null,
@@ -165,7 +163,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testGetAll() {
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         User user =
                 new User("Bozo", "Oleg", "Ponkin",
                         new Address("Poland", "Gdansk", "Naberejna", "52"),
@@ -181,7 +179,7 @@ public class UserDAOImplTest {
     @Test
     public void testGetByNickName() {
         User userActual = new User();
-        UserDAOImpl userDAO = new UserDAOImpl(conn);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance(conn);
         User user = new User("Bobik", "Oleg", "Ponkin",
                 new Address("Poland", "Gdansk", "Naberejna", "52"),
                 "bsss@gmail.com", "kjhgyiuu",
@@ -221,7 +219,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testreadByKey() {
-        UserDAOImpl dao = new UserDAOImpl(conn);
+        UserDAOImpl dao = UserDAOImpl.getInstance(conn);
         User user = dao.readByKey("1");
         assertNotNull(user);
         assertEquals(user.getNickName(), "BigBunny");
@@ -244,21 +242,21 @@ public class UserDAOImplTest {
     
     @Test
     public void testCountAllBySex() {
-        UserDAOImpl user = new UserDAOImpl(conn);
+        UserDAOImpl user = UserDAOImpl.getInstance(conn);
         int count = user.countAllBySex("MALE");
         assertEquals(2, count);
     }
     
     @Test
     public void testGetUsersByRole() {
-        UserDAOImpl dao = new UserDAOImpl(conn);
+        UserDAOImpl dao = UserDAOImpl.getInstance(conn);
         List<User> list = dao.getUsersByRole(Role.USER);
         assertEquals(2, list.size());
     }
     
     @Test
     public void testGetByDateOfBirth() {
-        UserDAOImpl user = new UserDAOImpl(conn);
+        UserDAOImpl user = UserDAOImpl.getInstance(conn);
         List<User> list = user.getByYearOfBirth("1989");
         int actual = list.size();
         int expected = 1;

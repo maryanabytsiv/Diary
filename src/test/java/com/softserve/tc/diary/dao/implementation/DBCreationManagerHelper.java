@@ -1,4 +1,4 @@
-package com.softserve.tc.diary.connectionmanager;
+package com.softserve.tc.diary.dao.implementation;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.log.Log;
 
 /**
@@ -16,16 +17,15 @@ import com.softserve.tc.diary.log.Log;
  * @author Mykola-
  *         
  */
-public class DBCreationManagerTest {
+public class DBCreationManagerHelper {
     
     private static PreparedStatement ps = null;
-    private static Logger logger = Log.init("SQL_Statement");
-    private static final ConnectionManager conn =
-            DBConnectionManager.getInstance(false);
-            
+    private static Logger logger = Log.init("DBCreationManagerHelper");
+	private static ConnectionManager conn = ConnectionManager.getInstance(DataBaseTest.TESTDB);
+    
     public static void setUpBeforeClass() throws SQLException {
         
-        String scriptSQL;
+    	String scriptSQL;
         String result = "";
         
         try (BufferedReader br = new BufferedReader(
@@ -58,7 +58,7 @@ public class DBCreationManagerTest {
     }
     
     public static void insertValue() throws SQLException {
-        
+    	
         String insertData =
                 "insert into address values('1','Ukraine', 'Lviv', 'centre', 3) ;"
                         + "insert into address values('2','USA', 'NC', 'timesquare', 5) ;"

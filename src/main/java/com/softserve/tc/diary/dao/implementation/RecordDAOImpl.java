@@ -1,6 +1,5 @@
 package com.softserve.tc.diary.dao.implementation;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,13 +8,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
@@ -34,16 +31,21 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
     private Logger logger = Log.init(this.getClass().getName());
-    private ConnectionManager connection = null;
+    private static ConnectionManager connection = null;
+    private static RecordDAOImpl recordDAO = null;
     
-    public RecordDAOImpl() {
-        this.connection =
-                DBConnectionManager.getInstance(true);
+    private RecordDAOImpl() {
     }
     
-    public RecordDAOImpl(ConnectionManager conn) {
-        this.connection = conn;
-    }
+	public static RecordDAOImpl getInstance(ConnectionManager connect){
+
+		if (recordDAO==null){
+			recordDAO = new RecordDAOImpl();
+			connection = connect;
+		}
+		return recordDAO;
+
+	}
     
     public String create(Record object) {
         String uuid=UUID.randomUUID().toString();
@@ -84,7 +86,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
     public void checkIfRecordHasTag(Record record) {
         String textRecord = record.getText();
-        TagDAOImpl dao = new TagDAOImpl();
+        TagDAOImpl dao = TagDAOImpl.getInstance(connection);
         for (int i = 0; i < textRecord.length(); i++) {
             if ((textRecord.charAt(i) == '#' && i == 0)
                     || (textRecord.charAt(i) == '#'

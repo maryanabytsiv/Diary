@@ -18,8 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.entity.Address;
 import com.softserve.tc.diary.log.Log;
 import com.softserve.tc.diary.util.Constant.Addresss;
@@ -27,32 +25,32 @@ import com.softserve.tc.diary.util.Constant.Addresss;
 public class AddressDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private final ConnectionManager conn =
-            DBConnectionManager.getInstance(false);
+    
+    private static ConnectionManager conn = ConnectionManager.getInstance(DataBaseTest.TESTDB);
             
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-        DBCreationManagerTest.setUpBeforeClass();
+    	DBCreationManagerHelper.setUpBeforeClass();
     }
     
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-        DBCreationManagerTest.DropTableIfExists();
+    	DBCreationManagerHelper.DropTableIfExists();
     }
     
     @Before
     public void beforeTest() throws SQLException {
-        DBCreationManagerTest.insertValue();
+    	DBCreationManagerHelper.insertValue();
     }
     
     @After
     public void afterTest() throws SQLException {
-        DBCreationManagerTest.deleteAllFromTable();
+    	DBCreationManagerHelper.deleteAllFromTable();
     }
     
     @Test
     public void testCreateAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(conn);
         Address newAddress = new Address("Ukraine", "IF", "street", "12");
         Address address = null;
         try (Connection connection = conn.getConnection()) {
@@ -83,7 +81,7 @@ public class AddressDAOImplTest {
     
     @Test
     public void testUpdateAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(conn);
         Address add = new Address("jhbkjhbkj", "fdfsfy", "Nsfsfft", "16");
         add.setUuid(UUID.randomUUID().toString());
         try (Connection connection = conn.getConnection()) {
@@ -133,8 +131,8 @@ public class AddressDAOImplTest {
     }
     
     @Test
-    public void TestDeleteAddress() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
+    public void testDeleteAddress() {
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(conn);
         Address address = new Address("11111111", "Kiev", "Pasternaka", "15");
         addressDAO.create(address);
         
@@ -162,7 +160,7 @@ public class AddressDAOImplTest {
     
     @Test
     public void TestGetAll() {
-        AddressDAOImpl addressDAO = new AddressDAOImpl(conn);
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(conn);
         Address address = new Address("Ukraine", "Odessa", "Pasternaka", "5");
         addressDAO.create(address);
         int actual = addressDAO.getAll().size();

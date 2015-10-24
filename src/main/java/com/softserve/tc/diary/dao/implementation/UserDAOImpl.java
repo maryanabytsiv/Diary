@@ -12,7 +12,6 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.entity.Address;
@@ -26,18 +25,23 @@ import com.softserve.tc.diary.util.Constant.UserCard;
 import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
+	
     private PreparedStatement ps = null;
     private ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
-    private ConnectionManager connection = null;
+    private static ConnectionManager connection = null;
+    private static UserDAOImpl userDAO = null;
     
-    public UserDAOImpl() {
-        this.connection = DBConnectionManager.getInstance(true);
+    private UserDAOImpl() {
     }
     
-    public UserDAOImpl(ConnectionManager conn) {
-        this.connection = conn;
-    }
+	public static UserDAOImpl getInstance(ConnectionManager connect){
+		if (userDAO==null){
+			userDAO = new UserDAOImpl();
+			connection = connect;
+		}
+		return userDAO;
+	}
     
     public String create(User object) {
         String uuid = UUID.randomUUID().toString();
@@ -82,7 +86,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     
     public void update(User object) {
         Address newAddress = object.getAddress();
-        AddressDAOImpl addressDAO = new AddressDAOImpl();
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
         
         String addressUuid = "";
         if (newAddress.getUuid()==null||newAddress.getUuid().isEmpty()) {
@@ -427,7 +431,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             ps = conn.prepareStatement(query);
             ps.setString(1, session);
             ps.setString(2, nickName);
-            ResultSet rs = ps.executeQuery();
+//            ResultSet rs = ps.executeQuery();
         } catch (SQLException e) {
             logger.error("cant update session", e);
         }

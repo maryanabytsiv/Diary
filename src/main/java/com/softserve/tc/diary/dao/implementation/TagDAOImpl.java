@@ -12,7 +12,6 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
 import com.softserve.tc.diary.dao.TagDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
@@ -26,17 +25,22 @@ public class TagDAOImpl implements TagDAO {
     
     private PreparedStatement ps;
     private Logger logger = Log.init(this.getClass().getName());
-    private ConnectionManager connection = null;
+    private static TagDAOImpl tagDAO = null;
     
-    public TagDAOImpl() {
-        
-        this.connection =
-                DBConnectionManager.getInstance(true);
-    }
+    private static ConnectionManager connection = null;
     
-    public TagDAOImpl(ConnectionManager conn) {
-        this.connection = conn;
-    }
+	private TagDAOImpl() {
+	}
+	
+	public static TagDAOImpl getInstance(ConnectionManager connect){
+
+		if (tagDAO==null){
+			tagDAO = new TagDAOImpl();
+			connection = connect;
+		}
+		return tagDAO;
+
+	}
     
     public Tag getTagByMessage(String tagMessage) {
         

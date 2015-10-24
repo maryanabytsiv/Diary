@@ -21,8 +21,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBConnectionManager;
-import com.softserve.tc.diary.connectionmanager.DBCreationManagerTest;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
@@ -31,32 +29,32 @@ import com.softserve.tc.diary.log.Log;
 public class TagDAOImplTest {
     private Logger logger = Log.init(this.getClass().getName());
     private PreparedStatement ps = null;
-    private final ConnectionManager conn =
-            DBConnectionManager.getInstance(false);
+
+    private static ConnectionManager conn = ConnectionManager.getInstance(DataBaseTest.TESTDB);
             
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-        DBCreationManagerTest.setUpBeforeClass();
+    	DBCreationManagerHelper.setUpBeforeClass();
     }
     
     @Before
     public void beforeTest() throws SQLException {
-        DBCreationManagerTest.insertValue();
+		DBCreationManagerHelper.insertValue();
     }
     
     @After
     public void afterTest() throws SQLException {
-        DBCreationManagerTest.deleteAllFromTable();
+    	DBCreationManagerHelper.deleteAllFromTable();
     }
     
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-        DBCreationManagerTest.DropTableIfExists();
+    	DBCreationManagerHelper.DropTableIfExists();
     }
     
     @Test
     public void testGetTagByMessage() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         String message = "#HellGuy";
         String messageForNull = "#notInBase";
         Tag tag1 = tagDAO.getTagByMessage(message);
@@ -69,7 +67,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testCreateTag() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         Tag workingTag = new Tag("#HelloWorldWide");
         tagDAO.create(workingTag);
         try (Connection connection = conn.getConnection()) {
@@ -92,7 +90,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testCreateFromRecord() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         
         String rec_id = "3";
         String tagMessage = "#Bimbo";
@@ -130,7 +128,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testCheckIfTagAlreadyExist() {
-        TagDAOImpl dao = new TagDAOImpl(conn);
+        TagDAOImpl dao = TagDAOImpl.getInstance(conn);
         Tag existTag = new Tag("#HellGuy");
         boolean result = dao.checkIfTagExist(existTag.getTagMessage());
         assertTrue(result);
@@ -142,7 +140,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testReadByKey() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         String uuid = "testkey7";
         Tag tag = tagDAO.readByKey(uuid);
         assertEquals(tag.getTagMessage(), "#HelloTeam");
@@ -156,7 +154,7 @@ public class TagDAOImplTest {
     @Test
     public void testDeleteFromtagRecord() {
         String uuid = "testkey8";
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         tagDAO.deleteFromTagRecord(uuid);
         String query =
                 "Select * from tag_record where tag_uuid like '" + uuid + "';";
@@ -176,7 +174,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testDeleteTag() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         List<Tag> listBeforeDel = tagDAO.getAll();
         tagDAO.delete(listBeforeDel.get(2));
         List<Tag> listAfterDel = tagDAO.getAll();
@@ -191,7 +189,7 @@ public class TagDAOImplTest {
                 "#Hello my name is #Bob. I am from #NewYork",
                 "https://motivation/",
                 Status.PRIVATE);
-        TagDAOImpl dao = new TagDAOImpl(conn);
+        TagDAOImpl dao = TagDAOImpl.getInstance(conn);
         List<Tag> list = dao.checkIfRecordHasTag(rec);
         assertEquals("#Hello", list.get(0).getTagMessage());
         assertEquals("#Bob.", list.get(1).getTagMessage());
@@ -201,7 +199,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testGetListTagsByPrefix() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         String prefix = "#Hello";
         List<Tag> list = tagDAO.getListTagsByPrefix(prefix);
         assertEquals(3, list.size());
@@ -210,7 +208,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testGetListTagsBySuffix() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         String suffix = "ell";
         List<Tag> list = tagDAO.getListTagsBySuffix(suffix);
         assertEquals(5, list.size());
@@ -219,7 +217,7 @@ public class TagDAOImplTest {
     
     @Test
     public void testGetAll() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         List<Tag> list = tagDAO.getAll();
         assertEquals(9, list.size());
         logger.info("test get all");
@@ -227,18 +225,18 @@ public class TagDAOImplTest {
     
     @Test
     public void testGetListRecordByTag() {
-        TagDAOImpl tagDAO = new TagDAOImpl(conn);
+        TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
         Tag tag = new Tag("testkey5", "#nice");
         List<Record> list = tagDAO.getListRecordsByTag(tag);
         assertEquals(list.size(), 2);
         logger.info("test get list record by tag");
     }
     
-    // @Test
-    // public void testGetListRecordByListTag() {
-    // TagDAOImpl tagDAO = new TagDAOImpl();
-    // List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
-    // List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
-    // assertEquals(listRecord.size(), 1);
-    // }
+//     @Test
+//     public void testGetListRecordByListTag() {
+//     TagDAOImpl tagDAO = TagDAOImpl.getInstance(conn);
+//     List<Tag> listTag = tagDAO.getListTagsByPrefix("#Hell");
+//     List<Record> listRecord = tagDAO.getListRecordsByListOfTags(listTag);
+//     assertEquals(listRecord.size(), 1);
+//     }
 }
