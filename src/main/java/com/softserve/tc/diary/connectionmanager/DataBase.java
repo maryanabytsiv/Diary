@@ -1,18 +1,18 @@
 package com.softserve.tc.diary.connectionmanager;
 
-public enum DataBase implements ConnectionPath{
+public enum DataBase implements PropertyFileNameProvider{
 	
 	REALDB("realDB.properties");
 	
-	private String pathToDB;
+	private String propertyFileName;
 	
-	DataBase(String path) {
-        this.pathToDB = path;
+	DataBase(String propertyFileName) {
+        this.propertyFileName = propertyFileName;
     }
     
 	@Override
-    public String getPath() {
-        return this.pathToDB;
+    public String getName() {
+        return this.propertyFileName;
     }
 
 }

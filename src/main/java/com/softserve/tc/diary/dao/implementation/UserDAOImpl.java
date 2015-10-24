@@ -25,7 +25,7 @@ import com.softserve.tc.diary.util.Constant.UserCard;
 import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
-	
+
     private PreparedStatement ps = null;
     private ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
@@ -84,62 +84,66 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return uuid;
     }
     
-    public void update(User object) {
-        Address newAddress = object.getAddress();
-        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
-        
-        String addressUuid = "";
-        if (newAddress.getUuid()==null||newAddress.getUuid().isEmpty()) {
-            addressUuid = addressDAO.create(newAddress);
-        } else {
-            addressUuid = newAddress.getUuid();
-            addressDAO.update(newAddress);
-        }
-        
-        String avatar = "";
-        if (object.getAvatar()==null||object.getAvatar().isEmpty()) {
-            User userFromDB = readByKey(object.getUuid());
-            avatar = userFromDB.getAvatar();
-        } else {
-            avatar = object.getAvatar();
-        }
-        
-        try (Connection conn = connection.getConnection()) {
-            try {
-                conn.setAutoCommit(false);
-                ps = conn.prepareStatement(
-                        "update user_card set first_name=?,"
-                                + " second_name=?, address_id=?, e_mail=?, password=?, sex=?,"
-                                + " date_of_birth=CAST(? AS DATE), avatar=?,role=?, session = ? where nick_name=?;");
-                ps.setString(1, object.getFirstName());
-                ps.setString(2, object.getSecondName());
-                ps.setString(3, addressUuid);
-                ps.setString(4, object.geteMail());
-                ps.setString(5, object.getPassword());
-                ps.setString(6, object.getSex().toUpperCase());
-                if (object.getDateOfBirth().isEmpty()) {
-                    ps.setString(7, null);
-                } else {
-                    ps.setString(7, object.getDateOfBirth());
-                }
-                ps.setString(8, avatar);
-                ps.setString(9, object.getRole().toUpperCase());
-                ps.setString(10, object.getSession());
-                ps.setString(11, object.getNickName());
-                ps.execute();
-                conn.commit();
-                logger.debug("User updated");
-            } catch (SQLException e) {
-                logger.error("Error. Rollback changes", e);
-                conn.rollback();
-            } finally {
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            logger.error("Update user failed", e);
-        }
-        
-    }
+	public void update(User object) {
+		Address newAddress = object.getAddress();
+		AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
+
+		String addressUuid = "";
+		if (newAddress.getUuid() == null || newAddress.getUuid().isEmpty()) {
+			addressUuid = addressDAO.create(newAddress);
+		} else {
+			addressUuid = newAddress.getUuid();
+			addressDAO.update(newAddress);
+		}
+
+		String avatar = "";
+		if (object.getAvatar() == null || object.getAvatar().isEmpty()) {
+			User userFromDB = readByKey(object.getUuid());
+			avatar = userFromDB.getAvatar();
+		} else {
+			avatar = object.getAvatar();
+		}
+
+		try (Connection conn = connection.getConnection()) {
+			try {
+				conn.setAutoCommit(false);
+				ps = conn.prepareStatement("update user_card set first_name=?,"
+						+ " second_name=?, address_id=?, e_mail=?, password=?, sex=?,"
+						+ " date_of_birth=CAST(? AS DATE), avatar=?,role=?, session = ? where nick_name=?;");
+				ps.setString(1, object.getFirstName());
+				ps.setString(2, object.getSecondName());
+				ps.setString(3, addressUuid);
+				ps.setString(4, object.geteMail());
+				try {
+				ps.setString(5, PasswordHelper.encrypt(object.getPassword()));
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+				logger.error("No such algorithm exception!", e);
+			}
+				ps.setString(6, object.getSex().toUpperCase());
+				if (object.getDateOfBirth() == null) {
+					ps.setString(7, null);
+				} else {
+					ps.setString(7, object.getDateOfBirth());
+				}
+				ps.setString(8, avatar);
+				ps.setString(9, object.getRole().toUpperCase());
+				ps.setString(10, object.getSession());
+				ps.setString(11, object.getNickName());
+				ps.execute();
+				conn.commit();
+				logger.debug("User updated");
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				conn.rollback();
+			} finally {
+				conn.setAutoCommit(true);
+			}
+		} catch (SQLException e) {
+			logger.error("Update user failed", e);
+		}
+
+	}
     
     public void delete(User object) {
         try (Connection conn = connection.getConnection()) {
@@ -422,16 +426,15 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return sexStatistic;
     }
     
-    public String updateSession(String nickName) {
-        // TODO Auto-generated method stub
-        String session = UUID.randomUUID().toString();
+    public String updateSession(String nickName, String session) {
+
         try (Connection conn = connection.getConnection()) {
             String query =
                     "update user_card set session = ? where nick_name = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, session);
             ps.setString(2, nickName);
-//            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
         } catch (SQLException e) {
             logger.error("cant update session", e);
         }
@@ -439,15 +442,55 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return session;
     }
     
+    public void invalidateSession(String nickName, String session){
+        updateSession(nickName, null);
+    }
+    
+    public User getUserByEmail(String email) {
+		User user = null;
+		try (Connection conn = connection.getConnection()) {
+			try {
+				conn.setAutoCommit(false);
+				ps = conn.prepareStatement(
+						"select  * from user_card left join address on (address.id=user_card.address_id)"
+								+ "where e_mail like '" + email + "';");
+				rs = ps.executeQuery();
+				user = resultSet(rs);
+				conn.commit();
+			} catch (SQLException e) {
+				logger.error("Error. Rollback changes", e);
+				conn.rollback();
+			} finally {
+				conn.setAutoCommit(true);
+			}
+		} catch (SQLException e) {
+			logger.error("get user by email failed", e);
+		}
+		return user;
+	}
+    
     public List<User> getActiveUsers() {
         List<User> activeUsers = new ArrayList<User>();
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
-                    "SELECT nick_name FROM user_card WHERE session IS NOT NULL;");
+                    "SELECT * FROM user_card WHERE session IS NOT NULL;");
                     
             rs = ps.executeQuery();
             while (rs.next()) {
-                activeUsers.add(resultSet(rs));
+                
+                User user = new User();
+                user.setUuid(rs.getString(UserCard.UID));
+                user.setNickName(rs.getString(UserCard.NICKNAME));
+                user.setFirstName(rs.getString(UserCard.FIRSTNAME));
+                user.setSecondName(rs.getString(UserCard.SECONDNAME));
+                user.seteMail(rs.getString(UserCard.EMAIL));
+                user.setSex(rs.getString(UserCard.SEX));
+                user.setDateOfBirth(rs.getString(UserCard.DATEOFBIRTH));
+                user.setAvatar(rs.getString(UserCard.AVATAR));
+                user.setRole(rs.getString(UserCard.ROLE));
+                user.setSession(rs.getString(UserCard.SESSION));
+                
+                activeUsers.add(user);
             }
         } catch (SQLException e) {
             logger.error("get active users failed", e);

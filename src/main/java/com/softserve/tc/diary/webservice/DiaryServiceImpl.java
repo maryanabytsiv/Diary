@@ -3,6 +3,7 @@ package com.softserve.tc.diary.webservice;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 import com.softserve.tc.diary.util.PasswordHelper;
+import com.softserve.tc.diary.util.UserFolderForPersonalData;
 
 @WebService(endpointInterface = "com.softserve.tc.diary.webservice.DiaryService")
 public class DiaryServiceImpl implements DiaryService {
@@ -98,20 +100,32 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	@WebMethod
-	public Record addRecord(String nickname, String title, String text, String status, String FileName) {
+	public Record addRecord(Record record, byte[] file) {
 
-		User user = userDAO.readByNickName(nickname);
-		if (user == null) {
-			LOG.debug(String.format("User was not found by nickname %s", nickname));
+		Record rec = null;
 
-			return null;
+		if (file == null) {
+			String idRec = recordDAO.create(record);
+			rec = recordDAO.readByKey(idRec);
+			return record;
 		} else {
-			Timestamp createdTime = new Timestamp(new java.util.Date().getTime());
+			File serverFile = null;
+			try {
+				User user = userDAO.readByKey(record.getUserId());
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + record.getSupplement());
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(file);
+				stream.close();
+				record.setSupplement(record.getSupplement());
+				String idRec = recordDAO.create(record);
+				rec = recordDAO.readByKey(idRec);
+				LOG.info("You successfully uploaded file=" + record.getSupplement());
+			} catch (IOException e) {
+				LOG.error("You failed to upload " + record.getSupplement() + " => " + e.getMessage());
+			}
 
-			Record newRecord = new Record(user.getUuid(), createdTime, title, text, FileName, Status.valueOf(status));
-			recordDAO.create(newRecord);
-
-			return newRecord;
+			return rec;
 		}
 	}
 
@@ -251,12 +265,8 @@ public class DiaryServiceImpl implements DiaryService {
 		if (file != null) {
 			try {
 				// Creating the directory to store file
-				String rootPath = System.getProperty("catalina.home");
-				File dir = new File(rootPath + File.separator + "tmpFiles");
-				if (!dir.exists())
-					dir.mkdirs();
-				// Create the file on server
-				serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + fileName);
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(file);
 				stream.close();
@@ -316,14 +326,21 @@ public class DiaryServiceImpl implements DiaryService {
 		return sexStatistic;
 	}
 
-	public String updateSession(String nickName) {
-		String session = userDAO.updateSession(nickName);
-		return session;
+    public String updateSession(String nickName, String session) {
+      
+      session = userDAO.updateSession(nickName,session);
+      return session;
+    }
+	
+	public void invalidateSession(String nickName, String session){
+	       
+	       userDAO.invalidateSession(nickName, session);
 	}
 
 	@Override
 	@WebMethod
 	public List<String> getDatesWithRecordsPerMonth(String nickName, String date) {
+		
 		User user = userDAO.readByNickName(nickName);
 		LocalDateTime dateLocal = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
 				Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
@@ -354,16 +371,52 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public Record updateRecord(Record record) {
-		String recordId = record.getUuid();
-		recordDAO.update(record);
-		record = recordDAO.readByKey(recordId);
-		return record;
+	public Record updateRecord(Record record, byte[] file) {
+		
+		File serverFile = null;
+		if (file == null) {
+			String recordId = record.getUuid();
+			recordDAO.update(record);
+			record = recordDAO.readByKey(recordId);
+			return record;
+		} else {
+			try {
+				User user = userDAO.readByKey(record.getUserId());
+				String url = UserFolderForPersonalData.getFolderForUser(user.getNickName());
+				serverFile = new File(url + File.separator + record.getSupplement());
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+				stream.write(file);
+				stream.close();
+				record.setSupplement(record.getSupplement());
+				recordDAO.update(record);
+				LOG.info("You successfully uploaded file=" + record.getSupplement());
+			} catch (IOException e) {
+				LOG.error("You failed to upload " + record.getSupplement() + " => " + e.getMessage());
+			}
+			record = recordDAO.readByKey(record.getUuid());
+			return record;
+		}
 	}
 
 	@Override
 	public List<User> getActiveUsers() {
+
 		return userDAO.getActiveUsers();
 	}
+
+	@Override
+	public User getUserByEmail(String email) {
+		
+		User user = null;
+		user = userDAO.getUserByEmail(email);
+		return user;
+	}
+	
+    @Override
+    @WebMethod
+    public int[][] getRecDate() {
+        
+        return recordDAO.getRecordDate();
+    }
 
 }

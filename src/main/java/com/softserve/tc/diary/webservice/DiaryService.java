@@ -17,10 +17,10 @@ public interface DiaryService {
     
     boolean logOut(String nickName);
     
-	Record addRecord(String nickname, String title, String text, String status, String fileName);
+	Record addRecord(Record record, byte[] file);
 	
-	Record updateRecord (Record record);
-    
+	Record updateRecord (Record record, byte[] file);
+	  
     boolean removeRecord(String nickname, String recordId);
     
     List<Record> getAllRecordsByDate(String nickName, String date);
@@ -55,7 +55,9 @@ public interface DiaryService {
     
     void createUser(User user);
     
-    String updateSession(String nickName);
+    String updateSession(String nickName, String session);
+    
+    void invalidateSession(String nickName, String session);
     
     List<String> getDatesWithRecordsPerMonth(String nickName, String date);
     
@@ -66,5 +68,9 @@ public interface DiaryService {
     List<String> getAllHashes();
     
     List<User> getActiveUsers();
+    
+    User getUserByEmail(String email);
+    
+    public int[][] getRecDate();
     
 }

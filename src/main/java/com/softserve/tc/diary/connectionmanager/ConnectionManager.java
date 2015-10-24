@@ -20,7 +20,7 @@ public class ConnectionManager implements AutoCloseable {
 	private ConnectionManager() {
 	}
 	
-	public static ConnectionManager getInstance(ConnectionPath dataBase) {
+	public static ConnectionManager getInstance(PropertyFileNameProvider dataBase) {
 
 		if (dbConnectionManager == null) {
 			InputStream inputStream = null;
@@ -28,7 +28,7 @@ public class ConnectionManager implements AutoCloseable {
 			dbConnectionManager = new ConnectionManager();
 			try {
 				
-				String pathToDB = dataBase.getPath();
+				String pathToDB = dataBase.getName();
 				ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 				inputStream = classloader.getResourceAsStream(pathToDB);
 

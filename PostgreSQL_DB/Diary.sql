@@ -10,7 +10,7 @@ CREATE TABLE  address (
 
 CREATE TABLE user_card (
     uid varchar(40) PRIMARY KEY,
-    nick_name varchar(20) NOT NULL,
+    nick_name varchar(20) NOT NULL UNIQUE,
     first_name varchar(20),
     second_name varchar(20),
     address_id varchar(40) references address(id),

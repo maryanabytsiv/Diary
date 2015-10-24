@@ -1,20 +1,20 @@
 package com.softserve.tc.diary.dao.implementation;
 
-import com.softserve.tc.diary.connectionmanager.ConnectionPath;
+import com.softserve.tc.diary.connectionmanager.PropertyFileNameProvider;
 
-enum DataBaseTest implements ConnectionPath{
+enum DataBaseTest implements PropertyFileNameProvider{
 	
 	TESTDB("testDB.properties");
 
-private String pathToDB;
+private String propertyFileName;
 	
-	DataBaseTest(String path) {
-        this.pathToDB = path;
+	DataBaseTest(String propertyFileName) {
+        this.propertyFileName = propertyFileName;
     }
     
 	@Override
-    public String getPath() {
-        return this.pathToDB;
+    public String getName() {
+        return this.propertyFileName;
     }
 
 

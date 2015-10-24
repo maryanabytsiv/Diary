@@ -383,5 +383,24 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
 		}
 		return list;
 	}
+	
+    public int[][] getRecordDate() {
+        
+        int[][] mass = new int[30][2];
+        try (Connection conn = connection.getConnection()) {
+            ps = conn.prepareStatement(
+                    "Select EXTRACT(DAY FROM created_time), COUNT(*) FROM record_list GROUP BY created_time ORDER BY created_time;");
+            ResultSet rs = ps.executeQuery();
+            int i = 0;
+            int j = 0;
+            while (rs.next()) {
+                mass[i++][0] = rs.getInt(1);
+                mass[j++][1] = rs.getInt(2);
+            }
+        } catch (SQLException e) {
+            logger.error("can't get all records date", e);
+        }
+        return mass;
+    }	
     
 }
