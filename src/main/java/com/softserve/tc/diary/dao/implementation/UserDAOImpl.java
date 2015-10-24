@@ -424,9 +424,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     }
     
     public String updateSession(String nickName, String session) {
-        // TODO Auto-generated method stub
-//        String session = UUID.randomUUID().toString();
-        
+
         try (Connection conn = connection.getConnection()) {
             String query =
                     "update user_card set session = ? where nick_name = ?";
@@ -439,13 +437,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         
         return session;
-    }
-    
-    public String updateSession(String nickName) {
-        // TODO implement API for control of sessions
-        String session = UUID.randomUUID().toString();
-        
-        return updateSession(nickName, session);
     }
     
     public void invalidateSession(String nickName, String session){

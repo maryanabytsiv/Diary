@@ -327,11 +327,11 @@ public class DiaryServiceImpl implements DiaryService {
 		return sexStatistic;
 	}
 
-	public String updateSession(String nickName) {
-		UserDAOImpl userDAOImpl = new UserDAOImpl();
-		String session = userDAOImpl.updateSession(nickName);
-		return session;
-	}
+    public String updateSession(String nickName, String session) {
+      UserDAOImpl userDAOImpl = new UserDAOImpl();
+      session = userDAOImpl.updateSession(nickName,session);
+      return session;
+    }
 	
 	public void invalidateSession(String nickName, String session){
 	       UserDAOImpl userDAOImpl = new UserDAOImpl();
