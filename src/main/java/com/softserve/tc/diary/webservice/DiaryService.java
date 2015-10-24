@@ -55,7 +55,9 @@ public interface DiaryService {
     
     void createUser(User user);
     
-    String updateSession(String nickName);
+    String updateSession(String nickName, String session);
+    
+    void invalidateSession(String nickName, String session);
     
     List<String> getDatesWithRecordsPerMonth(String nickName, String date);
     

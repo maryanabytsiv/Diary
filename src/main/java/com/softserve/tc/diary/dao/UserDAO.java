@@ -14,4 +14,6 @@ public interface UserDAO extends BaseDAO<User> {
     
     List<User> getActiveUsers();
     
+    void invalidateSession(String nickName, String session);
+    
 }

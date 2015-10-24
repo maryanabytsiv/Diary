@@ -423,9 +423,8 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return sexStatistic;
     }
     
-    public String updateSession(String nickName) {
-        // TODO Auto-generated method stub
-        String session = UUID.randomUUID().toString();
+    public String updateSession(String nickName, String session) {
+
         try (Connection conn = connection.getConnection()) {
             String query =
                     "update user_card set session = ? where nick_name = ?";
@@ -438,6 +437,10 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         
         return session;
+    }
+    
+    public void invalidateSession(String nickName, String session){
+        updateSession(nickName, null);
     }
     
     public User getUserByEmail(String email) {
