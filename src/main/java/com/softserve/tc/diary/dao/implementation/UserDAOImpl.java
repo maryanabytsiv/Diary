@@ -118,7 +118,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 				logger.error("No such algorithm exception!", e);
 			}
 				ps.setString(6, object.getSex().toUpperCase());
-				if (object.getDateOfBirth().isEmpty()) {
+				if (object.getDateOfBirth() == null) {
 					ps.setString(7, null);
 				} else {
 					ps.setString(7, object.getDateOfBirth());
