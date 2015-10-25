@@ -20,6 +20,5 @@ public interface RecordDAO extends BaseDAO<Record> {
     
     List<Record> getRecordTypeOfSupplement(String typeOfSupplement);
     
-    int[][] getRecordDate();
-    
+    String[][] getRecordDate();
 }

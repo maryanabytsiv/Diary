@@ -414,7 +414,7 @@ public class DiaryServiceImpl implements DiaryService {
 	
     @Override
     @WebMethod
-    public int[][] getRecDate() {
+    public String[][] getRecDate() {
         
         return recordDAO.getRecordDate();
     }

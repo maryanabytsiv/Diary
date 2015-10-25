@@ -37,18 +37,18 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     private RecordDAOImpl() {
     }
     
-	public static RecordDAOImpl getInstance(ConnectionManager connect){
-
-		if (recordDAO==null){
-			recordDAO = new RecordDAOImpl();
-			connection = connect;
-		}
-		return recordDAO;
-
-	}
+    public static RecordDAOImpl getInstance(ConnectionManager connect) {
+        
+        if (recordDAO == null) {
+            recordDAO = new RecordDAOImpl();
+            connection = connect;
+        }
+        return recordDAO;
+        
+    }
     
     public String create(Record object) {
-        String uuid=UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
         logger.debug("creating record");
         try (Connection conn = connection.getConnection()) {
             try {
@@ -60,7 +60,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                 } else {
                     object.setUuid(uuid);
                     ps = conn.prepareStatement(
-       "insert into record_list(id_rec, user_id_rec, title, text, supplement, visibility) values(?,?,?,?,?,?);");
+                            "insert into record_list(id_rec, user_id_rec, title, text, supplement, visibility) values(?,?,?,?,?,?);");
                     ps.setString(1, uuid);
                     ps.setString(2, object.getUserId());
                     ps.setString(3, object.getTitle());
@@ -73,8 +73,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-            }finally{
-                conn.setAutoCommit(true);              
+            } finally {
+                conn.setAutoCommit(true);
             }
             checkIfRecordHasTag(object);
             logger.debug("record created");
@@ -118,9 +118,12 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             ps.setString(1, id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                record = new Record(rs.getString(RecordList.IDREC), rs.getString(RecordList.USERIDREC),
+                record = new Record(rs.getString(RecordList.IDREC),
+                        rs.getString(RecordList.USERIDREC),
                         rs.getTimestamp(RecordList.CREATEDTIME),
-                        rs.getString(RecordList.TITLE), rs.getString(RecordList.TEXT), rs.getString(RecordList.SUPPLEMENT),
+                        rs.getString(RecordList.TITLE),
+                        rs.getString(RecordList.TEXT),
+                        rs.getString(RecordList.SUPPLEMENT),
                         Status.valueOf(rs.getString(RecordList.VISIBILITY)));
             }
         } catch (SQLException e) {
@@ -137,8 +140,9 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
                 conn.setAutoCommit(false);
                 ps = conn.prepareStatement(
                         "update record_list SET created_time = ?, title = ?, text = ?, supplement = ?, "
-                        + "visibility = ? where user_id_rec = ? AND id_rec = ?;");
-                ps.setTimestamp(1, new Timestamp(new java.util.Date().getTime()));
+                                + "visibility = ? where user_id_rec = ? AND id_rec = ?;");
+                ps.setTimestamp(1,
+                        new Timestamp(new java.util.Date().getTime()));
                 ps.setString(2, object.getTitle());
                 ps.setString(3, object.getText());
                 ps.setString(4, object.getSupplement());
@@ -152,8 +156,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-            }finally{
-                conn.setAutoCommit(true);              
+            } finally {
+                conn.setAutoCommit(true);
             }
         } catch (SQLException e) {
             logger.error("can't update record", e);
@@ -177,8 +181,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             } catch (SQLException e) {
                 logger.error("Error. Rollback changes", e);
                 conn.rollback();
-            }finally{
-                conn.setAutoCommit(true);              
+            } finally {
+                conn.setAutoCommit(true);
             }
         } catch (SQLException e) {
             logger.error("can't delete record", e);
@@ -197,11 +201,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -238,11 +244,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -257,26 +265,28 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         List<Record> list = new ArrayList<Record>();
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement("SELECT * FROM record_list "
-            		+ "where user_id_rec=? and created_time BETWEEN ? AND ?;");
+                    + "where user_id_rec=? and created_time BETWEEN ? AND ?;");
             ps.setString(1, userId);
             // Notes per day from 00:00:00 to 23:59:59
-    		date.setHours(0);
-    		date.setMinutes(0);
-    		date.setSeconds(0);
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setSeconds(0);
             ps.setTimestamp(2, date);
-    		date.setHours(23);
-    		date.setMinutes(59);
-    		date.setSeconds(59);
+            date.setHours(23);
+            date.setMinutes(59);
+            date.setSeconds(59);
             ps.setTimestamp(3, date);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -298,11 +308,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -321,11 +333,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -348,11 +362,13 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             while (rs.next()) {
                 String id_rec = rs.getString(RecordList.IDREC);
                 String user_id_rec = rs.getString(RecordList.USERIDREC);
-                Timestamp created_time = rs.getTimestamp(RecordList.CREATEDTIME);
+                Timestamp created_time =
+                        rs.getTimestamp(RecordList.CREATEDTIME);
                 String title = rs.getString(RecordList.TITLE);
                 String text = rs.getString(RecordList.TEXT);
                 String supplement = rs.getString(RecordList.SUPPLEMENT);
-                Status status = Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                Status status =
+                        Status.valueOf(rs.getString(RecordList.VISIBILITY));
                 list.add(new Record(id_rec, user_id_rec, created_time, title,
                         text, supplement, status));
             }
@@ -362,45 +378,47 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
         return list;
     }
     
-	public List<String> getDatesWichHaveRecordsPerMonth(String userId, LocalDateTime date) {
-		List<String> list = new ArrayList<String>();
-
-		try (Connection conn = connection.getConnection()) {
-			ps = conn.prepareStatement("SELECT distinct CAST(created_time as date)"
-					+ "  FROM record_list where user_id_rec=? and created_time"
-					+ " BETWEEN ? AND ?;");
-			ps.setString(1, userId);
-			// Notes per month from 00:00:00 to 23:59:59
-			ps.setTimestamp(2, Timestamp.valueOf(date));
-			ps.setTimestamp(3, Timestamp.valueOf(date.plusMonths(1).minusSeconds(1)));
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				LocalDateTime created_time = rs.getTimestamp(1).toLocalDateTime();
-				list.add(created_time.toString());
-			}
-		} catch (SQLException e) {
-			logger.error("can't get all records", e);
-		}
-		return list;
-	}
-	
-    public int[][] getRecordDate() {
+    public List<String> getDatesWichHaveRecordsPerMonth(String userId,
+            LocalDateTime date) {
+        List<String> list = new ArrayList<String>();
         
-        int[][] mass = new int[30][2];
         try (Connection conn = connection.getConnection()) {
             ps = conn.prepareStatement(
-                    "Select EXTRACT(DAY FROM created_time), COUNT(*) FROM record_list GROUP BY created_time ORDER BY created_time;");
+                    "SELECT distinct CAST(created_time as date)"
+                            + "  FROM record_list where user_id_rec=? and created_time"
+                            + " BETWEEN ? AND ?;");
+            ps.setString(1, userId);
+            // Notes per month from 00:00:00 to 23:59:59
+            ps.setTimestamp(2, Timestamp.valueOf(date));
+            ps.setTimestamp(3,
+                    Timestamp.valueOf(date.plusMonths(1).minusSeconds(1)));
             ResultSet rs = ps.executeQuery();
-            int i = 0;
-            int j = 0;
             while (rs.next()) {
-                mass[i++][0] = rs.getInt(1);
-                mass[j++][1] = rs.getInt(2);
+                LocalDateTime created_time =
+                        rs.getTimestamp(1).toLocalDateTime();
+                list.add(created_time.toString());
             }
         } catch (SQLException e) {
-            logger.error("can't get all records date", e);
+            logger.error("can't get all records", e);
         }
-        return mass;
-    }	
+        return list;
+    }
     
+     public String[][] getRecordDate() {
+    
+         String[][] mass = new String[30][2];
+     try (Connection conn = connection.getConnection()) {
+     ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list GROUP BY DATE1 ORDER BY DATE1;");
+     ResultSet rs = ps.executeQuery();
+     int i = 0;
+     int j = 0;
+     while (rs.next()) {
+     mass[i++][0] = rs.getString(1);
+     mass[j++][1] = rs.getString(2);
+     }
+     } catch (SQLException e) {
+     logger.error("can't get all records date", e);
+     }
+     return mass;
+     }
 }
