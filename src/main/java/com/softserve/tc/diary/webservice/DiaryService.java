@@ -76,4 +76,6 @@ public interface DiaryService {
     
     String getDataForGeoChactGraphic(String country);
     
+    void updateUserPassword(User user, String password);
+    
 }

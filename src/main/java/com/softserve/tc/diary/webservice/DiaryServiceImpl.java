@@ -429,4 +429,16 @@ public class DiaryServiceImpl implements DiaryService {
 		return new Gson().toJson(list);
 	}
 
+	@Override
+	public void updateUserPassword(User user, String password)  {
+		try {
+			password = PasswordHelper.encrypt(password);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		user.setPassword(password);
+		userDAO.update(user);
+	
+	}
+
 }
