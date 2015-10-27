@@ -497,4 +497,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return activeUsers;
     }
+    
+    
 }

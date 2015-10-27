@@ -1,6 +1,7 @@
 package com.softserve.tc.diary.webservice;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
 
@@ -72,5 +73,7 @@ public interface DiaryService {
     User getUserByEmail(String email);
     
     String[][] getRecDate();
+    
+    String getDataForGeoChactGraphic(String country);
     
 }
