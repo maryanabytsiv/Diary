@@ -37,7 +37,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private static Logger LOG = Log.init("DiaryServiceImpl");
 	
-	private ConnectionManager connection = ConnectionManager.getInstance(DataBase.REALDB);
+	private ConnectionManager connection = ConnectionManager.getInstance(DataBase.CLOUDDB);
 	private UserDAOImpl userDAO = UserDAOImpl.getInstance(connection);
 	private RecordDAOImpl recordDAO = RecordDAOImpl.getInstance(connection);
 	private TagDAOImpl tagDAO = TagDAOImpl.getInstance(connection);
