@@ -13,10 +13,12 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DataBase;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.RecordDAO;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
+import com.softserve.tc.diary.entity.User;
 import com.softserve.tc.diary.log.Log;
 import com.softserve.tc.diary.util.Constant.RecordList;
 
@@ -33,6 +35,8 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     private Logger logger = Log.init(this.getClass().getName());
     private static ConnectionManager connection = null;
     private static RecordDAOImpl recordDAO = null;
+    private UserDAOImpl userDAO = UserDAOImpl
+            .getInstance(ConnectionManager.getInstance(DataBase.REALDB));
     
     private RecordDAOImpl() {
     }
@@ -420,5 +424,32 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
      logger.error("can't get all records date", e);
      }
      return mass;
+     }
+     
+     public List<Record> getAllPublicRecordsByNickName(String nickName) {
+         User user = userDAO.readByNickName(nickName);
+         List<Record> list = new ArrayList<Record>();
+         try (Connection conn = connection.getConnection()) {
+             ps = conn.prepareStatement(
+                     "SELECT * FROM record_list where visibility = 'PUBLIC' and user_id_rec=?;");
+             ps.setString(1, user.getUuid());
+             ResultSet rs = ps.executeQuery();
+             while (rs.next()) {
+                 String id_rec = rs.getString(RecordList.IDREC);
+                 String user_id_rec = rs.getString(RecordList.USERIDREC);
+                 Timestamp created_time =
+                         rs.getTimestamp(RecordList.CREATEDTIME);
+                 String title = rs.getString(RecordList.TITLE);
+                 String text = rs.getString(RecordList.TEXT);
+                 String supplement = rs.getString(RecordList.SUPPLEMENT);
+                 Status status =
+                         Status.valueOf(rs.getString(RecordList.VISIBILITY));
+                 list.add(new Record(id_rec, user_id_rec, created_time, title,
+                         text, supplement, status));
+             }
+         } catch (SQLException e) {
+             logger.error("can't get all records", e);
+         }
+         return list;
      }
 }

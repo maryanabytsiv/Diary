@@ -9,7 +9,7 @@ CREATE TABLE followers
 (
   uuid varchar(40) PRIMARY KEY,
   follower_uuid varchar(40) NOT NULL references user_card(uid),
-  subject_uuid varchar(40) NOT NULL references user_card(uid),
+  user_uuid varchar(40) NOT NULL references user_card(uid),
   user_has_new_record text NOT NULL DEFAULT false
  )
 

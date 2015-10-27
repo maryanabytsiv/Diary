@@ -21,4 +21,6 @@ public interface RecordDAO extends BaseDAO<Record> {
     List<Record> getRecordTypeOfSupplement(String typeOfSupplement);
     
     String[][] getRecordDate();
+    
+    List<Record> getAllPublicRecordsByNickName(String nickName);
 }

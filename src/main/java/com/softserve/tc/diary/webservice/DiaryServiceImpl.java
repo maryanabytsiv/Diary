@@ -496,8 +496,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @WebMethod
     public List<Record> getAllPublicRecordsByNickName(String nickName) {
-        User user = userDAO.readByNickName(nickName);
-        List<Record> list = recordDAO.getRecordByUserId(user.getUuid());
+        List<Record> list = recordDAO.getAllPublicRecordsByNickName(nickName);
         Collections.sort(list, new Comparator<Record>() {
             @Override
             public int compare(Record o1, Record o2) {
