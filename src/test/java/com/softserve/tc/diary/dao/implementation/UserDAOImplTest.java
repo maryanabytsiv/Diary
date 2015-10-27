@@ -141,7 +141,7 @@ public class UserDAOImplTest {
         assertEquals("IRA", userActual.getFirstName());
         assertEquals("BLLLLL", userActual.getSecondName());
         assertEquals("mail@mail.com", userActual.geteMail());
-        assertEquals("0cbc6611f5540bd0809a388dc95a615b", userActual.getPassword());
+        assertEquals("Test", userActual.getPassword());
         ;
         assertEquals("FEMALE", userActual.getSex());
         assertEquals("1999-10-10", userActual.getDateOfBirth());

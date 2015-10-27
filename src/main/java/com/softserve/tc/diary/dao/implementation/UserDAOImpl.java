@@ -114,12 +114,7 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 				ps.setString(2, object.getSecondName());
 				ps.setString(3, addressUuid);
 				ps.setString(4, object.geteMail());
-				try {
-				ps.setString(5, PasswordHelper.encrypt(object.getPassword()));
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-				logger.error("No such algorithm exception!", e);
-			}
+				ps.setString(5, (object.getPassword()));
 				ps.setString(6, object.getSex().toUpperCase());
 				if (object.getDateOfBirth() == null) {
 					ps.setString(7, null);
@@ -497,4 +492,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return activeUsers;
     }
+    
+    
 }

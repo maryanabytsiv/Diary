@@ -2,7 +2,7 @@ package com.softserve.tc.diary.connectionmanager;
 
 public enum DataBase implements PropertyFileNameProvider{
 	
-	REALDB("realDB.properties");
+	REALDB("realDB.properties"), CLOUDDB("cloudDB.properties");
 	
 	private String propertyFileName;
 	

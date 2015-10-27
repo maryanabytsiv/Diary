@@ -1,6 +1,7 @@
 package com.softserve.tc.diary.webservice;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
 
@@ -93,5 +94,9 @@ public interface DiaryService {
     boolean isThereAvalableNewRecords (String followerUuid);
     
     List<Record> getAllPublicRecordsByNickName(String nickName);
+    
+    String getDataForGeoChactGraphic(String country);
+    
+    void updateUserPassword(User user, String password);
     
 }

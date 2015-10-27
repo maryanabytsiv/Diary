@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.jws.WebMethod;
@@ -19,9 +20,11 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.Gson;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DataBase;
 import com.softserve.tc.diary.dao.implementation.FollowerDAOImpl;
+import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
@@ -39,11 +42,12 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private static Logger LOG = Log.init("DiaryServiceImpl");
 	
-	private ConnectionManager connection = ConnectionManager.getInstance(DataBase.REALDB);
+	private ConnectionManager connection = ConnectionManager.getInstance(DataBase.CLOUDDB);
 	private UserDAOImpl userDAO = UserDAOImpl.getInstance(connection);
 	private RecordDAOImpl recordDAO = RecordDAOImpl.getInstance(connection);
 	private TagDAOImpl tagDAO = TagDAOImpl.getInstance(connection);
 	private FollowerDAOImpl followerDAO=FollowerDAOImpl.getInstance(connection);
+	private AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
 
 	public DiaryServiceImpl() {
 		
@@ -503,4 +507,22 @@ public class DiaryServiceImpl implements DiaryService {
         return list;
     }
     
+	@Override
+	public String getDataForGeoChactGraphic(String country) {
+		List<Object> list = addressDAO.getDataForGeoChartGraphic(country);
+		return new Gson().toJson(list);
+	}
+
+	@Override
+	public void updateUserPassword(User user, String password)  {
+		try {
+			password = PasswordHelper.encrypt(password);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		user.setPassword(password);
+		userDAO.update(user);
+	
+	}
+
 }
