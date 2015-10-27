@@ -1,9 +1,17 @@
 DROP TABLE IF EXISTS tag_record;
 DROP TABLE IF EXISTS record_list;
+DROP TABLE IF EXISTS followers;
 DROP TABLE IF EXISTS user_card;
 DROP TABLE IF EXISTS address;
 DROP TABLE IF EXISTS tag;
 
+CREATE TABLE followers
+(
+  uuid varchar(40) PRIMARY KEY,
+  follower_uuid varchar(40) NOT NULL references user_card(uid),
+  subject_uuid varchar(40) NOT NULL references user_card(uid),
+  user_has_new_record text NOT NULL DEFAULT false
+ )
 
 CREATE TABLE  address (
     id varchar(40) PRIMARY KEY,

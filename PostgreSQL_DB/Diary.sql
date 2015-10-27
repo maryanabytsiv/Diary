@@ -1,4 +1,11 @@
-
+CREATE TABLE followers
+(
+  uuid varchar(40) PRIMARY KEY,
+  follower_uuid varchar(40) NOT NULL references user_card(uid),
+  subject_uuid varchar(40) NOT NULL references user_card(uid),
+  user_has_new_record text NOT NULL DEFAULT false
+ )
+ 
 CREATE TABLE  address (
     id varchar(40) PRIMARY KEY,
     country varchar(20),

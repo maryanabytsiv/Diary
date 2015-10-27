@@ -21,9 +21,11 @@ import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DataBase;
+import com.softserve.tc.diary.dao.implementation.FollowerDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
+import com.softserve.tc.diary.entity.Follower;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Status;
 import com.softserve.tc.diary.entity.Tag;
@@ -41,6 +43,7 @@ public class DiaryServiceImpl implements DiaryService {
 	private UserDAOImpl userDAO = UserDAOImpl.getInstance(connection);
 	private RecordDAOImpl recordDAO = RecordDAOImpl.getInstance(connection);
 	private TagDAOImpl tagDAO = TagDAOImpl.getInstance(connection);
+	private FollowerDAOImpl followerDAO=FollowerDAOImpl.getInstance(connection);
 
 	public DiaryServiceImpl() {
 		
@@ -418,5 +421,86 @@ public class DiaryServiceImpl implements DiaryService {
         
         return recordDAO.getRecordDate();
     }
+	
+	@Override
+    @WebMethod
+    public String attachFollower(Follower follower) {
+        
+        return followerDAO.create(follower);
+    }
 
+    @Override
+    @WebMethod
+    public void detachFollower(Follower follower) {
+        followerDAO.delete(follower);
+        
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllUserFollowers(String userUuid) {
+        
+        return followerDAO.getAllUserFollowers(userUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllFollowedUsers(String followerUuid) {
+        
+        return followerDAO.getAllFollowedUsers(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public void markUserWithNewRecord(String userUuid) {
+        
+        followerDAO.markUserWithNewRecord(userUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public void markAsViwed(String followerUuid) {
+        
+        followerDAO.markAsViwed(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllReviewedUsers(String followerUuid) {
+        
+        return followerDAO.getAllReviewedUsers(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllNotReviewedUsers(String followerUuid) {
+        
+        return followerDAO.getAllNotReviewedUsers(followerUuid);
+    }
+
+    @Override
+    @WebMethod
+    public boolean isThereAvalableNewRecords(String followerUuid) {
+        List<User> users = followerDAO.getAllNotReviewedUsers(followerUuid);
+        if (users.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    @WebMethod
+    public List<Record> getAllPublicRecordsByNickName(String nickName) {
+        User user = userDAO.readByNickName(nickName);
+        List<Record> list = recordDAO.getRecordByUserId(user.getUuid());
+        Collections.sort(list, new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
+            }
+        });
+        return list;
+    }
+    
 }

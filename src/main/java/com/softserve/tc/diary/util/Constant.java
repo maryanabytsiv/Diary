@@ -2,6 +2,12 @@ package com.softserve.tc.diary.util;
 
 public class Constant {
 
+    public static class Follower {
+        public static final String UUID = "uuid";
+        public static final String FOLLOWER = "follower_uuid";
+        public static final String USER = "user_uuid";
+        public static final String NEW_USER_RECORD = "user_has_new_record";
+    }
     public static class Addresss{
         public static final String ID = "id";
         public static final String COUNTRY = "country";

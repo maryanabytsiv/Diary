@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import com.softserve.tc.diary.entity.Follower;
 import com.softserve.tc.diary.entity.Record;
 import com.softserve.tc.diary.entity.Tag;
 import com.softserve.tc.diary.entity.User;
@@ -72,5 +73,25 @@ public interface DiaryService {
     User getUserByEmail(String email);
     
     String[][] getRecDate();
+	
+	String attachFollower(Follower follower);
+    
+    void detachFollower (Follower follower);
+    
+    List<User> getAllUserFollowers(String userUuid);
+    
+    List<User> getAllFollowedUsers(String followerUuid);
+    
+    void markUserWithNewRecord(String userUuid);
+    
+    void markAsViwed(String followerUuid);
+    
+    List<User> getAllReviewedUsers (String followerUuid);
+    
+    List<User> getAllNotReviewedUsers (String followerUuid);
+    
+    boolean isThereAvalableNewRecords (String followerUuid);
+    
+    List<Record> getAllPublicRecordsByNickName(String nickName);
     
 }
