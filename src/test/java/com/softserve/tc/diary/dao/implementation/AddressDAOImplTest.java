@@ -30,22 +30,22 @@ public class AddressDAOImplTest {
             
     @BeforeClass
     public static void setUpBeforeClass() throws SQLException {
-    	DBCreationManagerHelper.setUpBeforeClass();
+        DBCreationManagerHelper.setUpBeforeClass();
     }
     
     @AfterClass
     public static void tearDownAfterClass() throws SQLException {
-    	DBCreationManagerHelper.DropTableIfExists();
+        DBCreationManagerHelper.DropTableIfExists();
     }
     
     @Before
     public void beforeTest() throws SQLException {
-    	DBCreationManagerHelper.insertValue();
+        DBCreationManagerHelper.insertValue();
     }
     
     @After
     public void afterTest() throws SQLException {
-    	DBCreationManagerHelper.deleteAllFromTable();
+        DBCreationManagerHelper.deleteAllFromTable();
     }
     
     @Test
