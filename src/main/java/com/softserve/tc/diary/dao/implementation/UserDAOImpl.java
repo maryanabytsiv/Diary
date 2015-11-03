@@ -109,23 +109,26 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement("update user_card set first_name=?,"
 						+ " second_name=?, address_id=?, e_mail=?, password=?, sex=?,"
-						+ " date_of_birth=CAST(? AS DATE), avatar=?,role=?, session = ? where nick_name=?;");
+						+ " date_of_birth=?, avatar=?,role=?, session = ? where nick_name=?;");
 				ps.setString(1, object.getFirstName());
 				ps.setString(2, object.getSecondName());
 				ps.setString(3, addressUuid);
 				ps.setString(4, object.geteMail());
 				ps.setString(5, (object.getPassword()));
 				ps.setString(6, object.getSex().toUpperCase());
-				if (object.getDateOfBirth() == null) {
-					ps.setString(7, null);
-				} else {
-					ps.setString(7, object.getDateOfBirth());
+				if(object.getDateOfBirth() != null && !object.getDateOfBirth().isEmpty()){
+				    ps.setDate(7, java.sql.Date.valueOf(object.getDateOfBirth()));
+				}
+				else{
+				    ps.setDate(7, java.sql.Date.valueOf("1990-10-10"));
 				}
 				ps.setString(8, avatar);
 				ps.setString(9, object.getRole().toUpperCase());
 				ps.setString(10, object.getSession());
 				ps.setString(11, object.getNickName());
+				
 				ps.execute();
+			
 				conn.commit();
 				logger.debug("User updated");
 			} catch (SQLException e) {

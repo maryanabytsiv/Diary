@@ -410,7 +410,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     
      public String[][] getRecordDate() {
     
-         String[][] mass = new String[30][2];
+         String[][] mass = new String[31][2];
      try (Connection conn = connection.getConnection()) {
      ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list GROUP BY DATE1 ORDER BY DATE1;");
      ResultSet rs = ps.executeQuery();
