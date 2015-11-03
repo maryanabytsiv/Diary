@@ -10,9 +10,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.jws.WebMethod;
@@ -23,8 +24,8 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
 import com.softserve.tc.diary.connectionmanager.DataBase;
-import com.softserve.tc.diary.dao.implementation.FollowerDAOImpl;
 import com.softserve.tc.diary.dao.implementation.AddressDAOImpl;
+import com.softserve.tc.diary.dao.implementation.FollowerDAOImpl;
 import com.softserve.tc.diary.dao.implementation.RecordDAOImpl;
 import com.softserve.tc.diary.dao.implementation.TagDAOImpl;
 import com.softserve.tc.diary.dao.implementation.UserDAOImpl;
@@ -367,13 +368,12 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public List<String> getAllHashes() {
+	public Set<String> getAllHashes() {
 		List<Tag> listOfTags = tagDAO.getAll();
-		List<String> listOfHashTags = new ArrayList<String>();
+		Set<String> listOfHashTags = new HashSet<String>();
 		for (Tag tag : listOfTags) {
 			listOfHashTags.add(tag.getTagMessage());
 		}
-
 		return listOfHashTags;
 	}
 

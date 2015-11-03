@@ -1,7 +1,7 @@
 package com.softserve.tc.diary.webservice;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.jws.WebService;
 
@@ -67,7 +67,7 @@ public interface DiaryService {
     
     User getUserByKey(String userId);
     
-    List<String> getAllHashes();
+    Set<String> getAllHashes();
     
     List<User> getActiveUsers();
     

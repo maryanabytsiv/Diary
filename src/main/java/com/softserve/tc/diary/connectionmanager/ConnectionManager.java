@@ -22,21 +22,18 @@ public class ConnectionManager implements AutoCloseable {
 	
 	public static ConnectionManager getInstance(PropertyFileNameProvider dataBase) {
 
+		String pathToDB = dataBase.getName();
 		if (dbConnectionManager == null) {
 			InputStream inputStream = null;
 			Properties property = new Properties();
 			dbConnectionManager = new ConnectionManager();
 			try {
-				
-				String pathToDB = dataBase.getName();
 				ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 				inputStream = classloader.getResourceAsStream(pathToDB);
-
-				logger.info("Creating connection to PostgreSQL from file: " + pathToDB);
 				property.load(inputStream);
 
 			} catch (IOException err) {
-				logger.error("connection failed", err);
+				logger.error("Creating of connection to PostgreSQL from file: " + pathToDB, err);
 			}
 			dataSource.setDriverClassName(property.getProperty("driver"));
 			dataSource.setUrl(property.getProperty("Url"));
@@ -47,8 +44,6 @@ public class ConnectionManager implements AutoCloseable {
 	}
 
 	public Connection getConnection() {
-		logger.info(
-				"Number of active connections: " + dataSource.getNumActive());
 		try {
 			return  dataSource.getConnection();
 		} catch (SQLException e) {
