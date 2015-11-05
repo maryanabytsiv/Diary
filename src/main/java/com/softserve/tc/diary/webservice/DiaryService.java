@@ -73,7 +73,7 @@ public interface DiaryService {
     
     User getUserByEmail(String email);
     
-    String[][] getRecDate();
+    String[][] getRecDate(int month);
 	
 	String attachFollower(Follower follower);
     
