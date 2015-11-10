@@ -1,5 +1,6 @@
 package com.softserve.tc.diary.webservice;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
@@ -98,5 +99,7 @@ public interface DiaryService {
     String getDataForGeoChactGraphic(String country);
     
     void updateUserPassword(User user, String password);
+    
+    String getHashOfPassword(String password);
     
 }
