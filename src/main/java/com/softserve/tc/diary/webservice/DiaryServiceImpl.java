@@ -42,16 +42,16 @@ import com.softserve.tc.diary.util.UserFolderForPersonalData;
 public class DiaryServiceImpl implements DiaryService {
 
 	private static Logger LOG = Log.init("DiaryServiceImpl");
-
+	
 	private ConnectionManager connection = ConnectionManager.getInstance(DataBase.CLOUDDB);
 	private UserDAOImpl userDAO = UserDAOImpl.getInstance(connection);
 	private RecordDAOImpl recordDAO = RecordDAOImpl.getInstance(connection);
 	private TagDAOImpl tagDAO = TagDAOImpl.getInstance(connection);
-	private FollowerDAOImpl followerDAO = FollowerDAOImpl.getInstance(connection);
+	private FollowerDAOImpl followerDAO=FollowerDAOImpl.getInstance(connection);
 	private AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
 
 	public DiaryServiceImpl() {
-
+		
 	}
 
 	@Override
@@ -334,21 +334,21 @@ public class DiaryServiceImpl implements DiaryService {
 		return sexStatistic;
 	}
 
-	public String updateSession(String nickName, String session) {
-
-		session = userDAO.updateSession(nickName, session);
-		return session;
-	}
-
-	public void invalidateSession(String nickName, String session) {
-
-		userDAO.invalidateSession(nickName, session);
+    public String updateSession(String nickName, String session) {
+      
+      session = userDAO.updateSession(nickName,session);
+      return session;
+    }
+	
+	public void invalidateSession(String nickName, String session){
+	       
+	       userDAO.invalidateSession(nickName, session);
 	}
 
 	@Override
 	@WebMethod
 	public List<String> getDatesWithRecordsPerMonth(String nickName, String date) {
-
+		
 		User user = userDAO.readByNickName(nickName);
 		LocalDateTime dateLocal = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)),
 				Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0, 0);
@@ -379,7 +379,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public Record updateRecord(Record record, byte[] file) {
-
+		
 		File serverFile = null;
 		if (file == null) {
 			String recordId = record.getUuid();
@@ -413,99 +413,99 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public User getUserByEmail(String email) {
-
+		
 		User user = null;
 		user = userDAO.getUserByEmail(email);
 		return user;
 	}
-
+	
+    @Override
+    @WebMethod
+    public String[][] getRecDate(int month) {
+        
+        return recordDAO.getRecordDate(month);
+    }
+	
 	@Override
-	@WebMethod
-	public String[][] getRecDate() {
+    @WebMethod
+    public String attachFollower(Follower follower) {
+        
+        return followerDAO.create(follower);
+    }
 
-		return recordDAO.getRecordDate();
-	}
+    @Override
+    @WebMethod
+    public void detachFollower(Follower follower) {
+        followerDAO.delete(follower);
+        
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllUserFollowers(String userUuid) {
+        
+        return followerDAO.getAllUserFollowers(userUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllFollowedUsers(String followerUuid) {
+        
+        return followerDAO.getAllFollowedUsers(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public void markUserWithNewRecord(String userUuid) {
+        
+        followerDAO.markUserWithNewRecord(userUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public void markAsViwed(String followerUuid) {
+        
+        followerDAO.markAsViwed(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllReviewedUsers(String followerUuid) {
+        
+        return followerDAO.getAllReviewedUsers(followerUuid);
+    }
+    
+    @Override
+    @WebMethod
+    public List<User> getAllNotReviewedUsers(String followerUuid) {
+        
+        return followerDAO.getAllNotReviewedUsers(followerUuid);
+    }
 
-	@Override
-	@WebMethod
-	public String attachFollower(Follower follower) {
+    @Override
+    @WebMethod
+    public boolean isThereAvalableNewRecords(String followerUuid) {
+        List<User> users = followerDAO.getAllNotReviewedUsers(followerUuid);
+        if (users.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-		return followerDAO.create(follower);
-	}
-
-	@Override
-	@WebMethod
-	public void detachFollower(Follower follower) {
-		followerDAO.delete(follower);
-
-	}
-
-	@Override
-	@WebMethod
-	public List<User> getAllUserFollowers(String userUuid) {
-
-		return followerDAO.getAllUserFollowers(userUuid);
-	}
-
-	@Override
-	@WebMethod
-	public List<User> getAllFollowedUsers(String followerUuid) {
-
-		return followerDAO.getAllFollowedUsers(followerUuid);
-	}
-
-	@Override
-	@WebMethod
-	public void markUserWithNewRecord(String userUuid) {
-
-		followerDAO.markUserWithNewRecord(userUuid);
-	}
-
-	@Override
-	@WebMethod
-	public void markAsViwed(String followerUuid) {
-
-		followerDAO.markAsViwed(followerUuid);
-	}
-
-	@Override
-	@WebMethod
-	public List<User> getAllReviewedUsers(String followerUuid) {
-
-		return followerDAO.getAllReviewedUsers(followerUuid);
-	}
-
-	@Override
-	@WebMethod
-	public List<User> getAllNotReviewedUsers(String followerUuid) {
-
-		return followerDAO.getAllNotReviewedUsers(followerUuid);
-	}
-
-	@Override
-	@WebMethod
-	public boolean isThereAvalableNewRecords(String followerUuid) {
-		List<User> users = followerDAO.getAllNotReviewedUsers(followerUuid);
-		if (users.isEmpty()) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	@Override
-	@WebMethod
-	public List<Record> getAllPublicRecordsByNickName(String nickName) {
-		List<Record> list = recordDAO.getAllPublicRecordsByNickName(nickName);
-		Collections.sort(list, new Comparator<Record>() {
-			@Override
-			public int compare(Record o1, Record o2) {
-				return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
-			}
-		});
-		return list;
-	}
-
+    @Override
+    @WebMethod
+    public List<Record> getAllPublicRecordsByNickName(String nickName) {
+        List<Record> list = recordDAO.getAllPublicRecordsByNickName(nickName);
+        Collections.sort(list, new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getCreatedTime().getTime() > o1.getCreatedTime().getTime() ? 1 : -1;
+            }
+        });
+        return list;
+    }
+    
 	@Override
 	public String getDataForGeoChactGraphic(String country) {
 		List<Object> list = addressDAO.getDataForGeoChartGraphic(country);
@@ -513,7 +513,7 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public void updateUserPassword(User user, String password) {
+	public void updateUserPassword(User user, String password)  {
 		try {
 			password = PasswordHelper.encrypt(password);
 		} catch (NoSuchAlgorithmException e) {
@@ -521,7 +521,7 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 		user.setPassword(password);
 		userDAO.update(user);
-
+	
 	}
 
 	@Override
@@ -534,6 +534,5 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 		return password;
 	}
-
 
 }
