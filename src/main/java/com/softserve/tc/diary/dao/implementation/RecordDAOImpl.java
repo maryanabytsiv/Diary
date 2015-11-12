@@ -415,7 +415,7 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
      OrderedMap<String, String> coolMap = new LinkedMap<>();
      String[][] mass = null;
      try (Connection conn = connection.getConnection()) {
-     ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list WHERE DATE(created_time) BETWEEN '2015-"+ month +"-01 00:00:00.000000' AND '2015-"+ month +"-31 23:59:59.999999' GROUP BY DATE1 ORDER BY DATE1;");
+     ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list WHERE EXTRACT(MONTH FROM created_time) = " + month + "GROUP BY DATE1 ORDER BY DATE1;");
      ResultSet rs = ps.executeQuery();
   
      while (rs.next()) {
