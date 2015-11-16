@@ -397,11 +397,6 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return user;
     }
     
-    public static void main(String[] args) {
-    	UserDAOImpl dao = UserDAOImpl.getInstance(ConnectionManager.getInstance(DataBase.CLOUDDB));
-    	System.out.println(dao.getMostActiveUser(new Date()));
-    }
-    
     public int getCountAllUsers() {
     	int countAllUsers = 0;
     	 try (Connection conn = connection.getConnection()) {
