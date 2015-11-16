@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -406,6 +407,25 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
             logger.error("can't get all records", e);
         }
         return list;
+    }
+    
+    public int getCountRecordsByDate(Date date) {
+    	int countRecords = 0;
+    	System.out.println(date);
+    	try (Connection conn = connection.getConnection()) {
+    		String stringOfDate = new Timestamp(date.getTime()).toString();
+            ps = conn.prepareStatement("SELECT COUNT(*) FROM record_list "
+            		+ "WHERE date_trunc('day', created_time) = date_trunc('day', timestamp '" + stringOfDate + "');");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+            countRecords =  rs.getInt(1);
+            }
+            logger.info("successfully got count of record for day=" + date + ", count= " + countRecords);
+        } catch (SQLException e) {
+            logger.error("can't get count of records by date", e);
+        }
+    	return countRecords; 
     }
     
      public String[][] getRecordDate() {

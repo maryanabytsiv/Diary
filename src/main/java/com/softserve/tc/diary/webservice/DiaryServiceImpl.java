@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -305,8 +306,8 @@ public class DiaryServiceImpl implements DiaryService {
 		return tag;
 	}
 
-	public User getMostActiveUser() {
-		User user = userDAO.getMostActiveUser();
+	public User getMostActiveUser(Date date) {
+		User user = userDAO.getMostActiveUser(date);
 		return user;
 	}
 
@@ -522,6 +523,22 @@ public class DiaryServiceImpl implements DiaryService {
 		user.setPassword(password);
 		userDAO.update(user);
 	
+	}
+
+	@Override
+	public int getCountRecordsByDate(Date date) {
+		return recordDAO.getCountRecordsByDate(date);
+	}
+
+	@Override
+	public int getCountOfUsers() {
+		return userDAO.getCountAllUsers();
+	}
+
+	@Override
+	public User getMostActiveUserByDate(Date date) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

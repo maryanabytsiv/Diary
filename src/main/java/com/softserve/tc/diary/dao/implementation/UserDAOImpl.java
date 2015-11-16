@@ -5,13 +5,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
+import com.softserve.tc.diary.connectionmanager.DataBase;
 import com.softserve.tc.diary.dao.BaseDAO;
 import com.softserve.tc.diary.dao.UserDAO;
 import com.softserve.tc.diary.entity.Address;
@@ -358,12 +361,22 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return user;
     }
     
-    public User getMostActiveUser() {
+    public User getMostActiveUser(Date date) {
         User user = null;
         
+        String query = "";
+        
         try (Connection conn = connection.getConnection()) {
-            String query =
+        	if (date == null) {
+            query =
                     "select count(*),user_id_rec from record_list group by user_id_rec having count(*)>1";
+        	} else {
+        	String stringOfDate = new Timestamp(date.getTime()).toString();
+        	System.out.println(stringOfDate);
+        	query = "select count(*) as count, user_id_rec from record_list "
+        			+ "where date_trunc('day', created_time) = date_trunc('day', timestamp '" + stringOfDate + "') "
+        					+ "group by user_id_rec having count(*)>1 order by count DESC";
+        	}
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             String uuid = "";
@@ -381,6 +394,29 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
             logger.error("fail get most popular tag", e);
         }
         return user;
+    }
+    
+    public static void main(String[] args) {
+    	UserDAOImpl dao = UserDAOImpl.getInstance(ConnectionManager.getInstance(DataBase.CLOUDDB));
+    	System.out.println(dao.getMostActiveUser(new Date()));
+    }
+    
+    public int getCountAllUsers() {
+    	int countAllUsers = 0;
+    	 try (Connection conn = connection.getConnection()) {
+             String query =
+                     "select count(*) AS all from user_card";
+             ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery();
+      
+             while (rs.next()) {   
+            	 countAllUsers = rs.getInt("all");
+             } 
+         } catch (SQLException e) {
+             logger.error("fail to get all users", e);
+         }
+    	 return countAllUsers;
+    	
     }
     
     public int[] getSexStatistic() {

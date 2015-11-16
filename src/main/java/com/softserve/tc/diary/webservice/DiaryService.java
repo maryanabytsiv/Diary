@@ -1,5 +1,7 @@
 package com.softserve.tc.diary.webservice;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +53,7 @@ public interface DiaryService {
     
     Tag getMostPopularTag();
     
-    User getMostActiveUser();
+    User getMostActiveUser(Date date);
     
     int[] getSexStatistic();
     
@@ -98,5 +100,11 @@ public interface DiaryService {
     String getDataForGeoChactGraphic(String country);
     
     void updateUserPassword(User user, String password);
+    
+    int getCountRecordsByDate(Date date);
+    
+    int getCountOfUsers();
+    
+    User getMostActiveUserByDate(Date date);
     
 }
