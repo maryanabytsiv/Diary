@@ -1,7 +1,10 @@
 package com.softserve.tc.diary.webservice;
 
-import java.time.LocalDateTime;
+
+
 import java.util.Date;
+
+
 import java.util.List;
 import java.util.Set;
 
@@ -75,7 +78,7 @@ public interface DiaryService {
     
     User getUserByEmail(String email);
     
-    String[][] getRecDate();
+    String[][] getRecDate(int month);
 	
 	String attachFollower(Follower follower);
     
@@ -106,5 +109,8 @@ public interface DiaryService {
     int getCountOfUsers();
     
     User getMostActiveUserByDate(Date date);
+
+    String getHashOfPassword(String password);
+
     
 }

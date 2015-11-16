@@ -422,9 +422,9 @@ public class DiaryServiceImpl implements DiaryService {
 	
     @Override
     @WebMethod
-    public String[][] getRecDate() {
+    public String[][] getRecDate(int month) {
         
-        return recordDAO.getRecordDate();
+        return recordDAO.getRecordDate(month);
     }
 	
 	@Override
@@ -539,6 +539,16 @@ public class DiaryServiceImpl implements DiaryService {
 	public User getMostActiveUserByDate(Date date) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String getHashOfPassword(String password) {
+		try {
+			return PasswordHelper.encrypt(password);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			LOG.error("Bad encrypt of password", e);
+		}
+		return password;
 	}
 
 }

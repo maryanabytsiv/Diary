@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections4.OrderedMap;
+import org.apache.commons.collections4.OrderedMapIterator;
+import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.log4j.Logger;
 
 import com.softserve.tc.diary.connectionmanager.ConnectionManager;
@@ -428,18 +431,26 @@ public class RecordDAOImpl implements RecordDAO, BaseDAO<Record> {
     	return countRecords; 
     }
     
-     public String[][] getRecordDate() {
-    
-         String[][] mass = new String[31][2];
+     public String[][] getRecordDate(int month) {
+     OrderedMap<String, String> coolMap = new LinkedMap<>();
+     String[][] mass = null;
+
      try (Connection conn = connection.getConnection()) {
-     ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list GROUP BY DATE1 ORDER BY DATE1;");
+     ps = conn.prepareStatement("SELECT date(created_time) as DATE1, COUNT(*) FROM record_list WHERE EXTRACT(MONTH FROM created_time) = " + month + "GROUP BY DATE1 ORDER BY DATE1;");
      ResultSet rs = ps.executeQuery();
-     int i = 0;
-     int j = 0;
+  
      while (rs.next()) {
-     mass[i++][0] = rs.getString(1);
-     mass[j++][1] = rs.getString(2);
+         coolMap.put(rs.getString(1), rs.getString(2));
      }
+     
+     OrderedMapIterator<String, String> it = coolMap.mapIterator();
+     mass = new String[coolMap.size()][2];
+
+     for(int i = 0; it.hasNext(); i++) {
+         mass[i][0] = it.next();
+         mass[i][1] = it.getValue();
+       }
+     
      } catch (SQLException e) {
      logger.error("can't get all records date", e);
      }

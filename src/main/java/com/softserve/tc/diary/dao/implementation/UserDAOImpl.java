@@ -28,7 +28,7 @@ import com.softserve.tc.diary.util.Constant.UserCard;
 import com.softserve.tc.diary.util.PasswordHelper;
 
 public class UserDAOImpl implements UserDAO, BaseDAO<User> {
-
+    
     private PreparedStatement ps = null;
     private ResultSet rs;
     private static Logger logger = Log.init("UserDAOImpl");
@@ -38,13 +38,13 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     private UserDAOImpl() {
     }
     
-	public static UserDAOImpl getInstance(ConnectionManager connect){
-		if (userDAO==null){
-			userDAO = new UserDAOImpl();
-			connection = connect;
-		}
-		return userDAO;
-	}
+    public static UserDAOImpl getInstance(ConnectionManager connect) {
+        if (userDAO == null) {
+            userDAO = new UserDAOImpl();
+            connection = connect;
+        }
+        return userDAO;
+    }
     
     public String create(User object) {
         String uuid = UUID.randomUUID().toString();
@@ -87,64 +87,65 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return uuid;
     }
     
-	public void update(User object) {
-		Address newAddress = object.getAddress();
-		AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
-
-		String addressUuid = "";
-		if (newAddress.getUuid() == null || newAddress.getUuid().isEmpty()) {
-			addressUuid = addressDAO.create(newAddress);
-		} else {
-			addressUuid = newAddress.getUuid();
-			addressDAO.update(newAddress);
-		}
-
-		String avatar = "";
-		if (object.getAvatar() == null || object.getAvatar().isEmpty()) {
-			User userFromDB = readByKey(object.getUuid());
-			avatar = userFromDB.getAvatar();
-		} else {
-			avatar = object.getAvatar();
-		}
-
-		try (Connection conn = connection.getConnection()) {
-			try {
-				conn.setAutoCommit(false);
-				ps = conn.prepareStatement("update user_card set first_name=?,"
-						+ " second_name=?, address_id=?, e_mail=?, password=?, sex=?,"
-						+ " date_of_birth=?, avatar=?,role=?, session = ? where nick_name=?;");
-				ps.setString(1, object.getFirstName());
-				ps.setString(2, object.getSecondName());
-				ps.setString(3, addressUuid);
-				ps.setString(4, object.geteMail());
-				ps.setString(5, (object.getPassword()));
-				ps.setString(6, object.getSex().toUpperCase());
-				if(object.getDateOfBirth() != null && !object.getDateOfBirth().isEmpty()){
-				    ps.setDate(7, java.sql.Date.valueOf(object.getDateOfBirth()));
-				}
-				else{
-				    ps.setDate(7, java.sql.Date.valueOf("1990-10-10"));
-				}
-				ps.setString(8, avatar);
-				ps.setString(9, object.getRole().toUpperCase());
-				ps.setString(10, object.getSession());
-				ps.setString(11, object.getNickName());
-				
-				ps.execute();
-			
-				conn.commit();
-				logger.debug("User updated");
-			} catch (SQLException e) {
-				logger.error("Error. Rollback changes", e);
-				conn.rollback();
-			} finally {
-				conn.setAutoCommit(true);
-			}
-		} catch (SQLException e) {
-			logger.error("Update user failed", e);
-		}
-
-	}
+    public void update(User object) {
+        Address newAddress = object.getAddress();
+        AddressDAOImpl addressDAO = AddressDAOImpl.getInstance(connection);
+        
+        String addressUuid = "";
+        if (newAddress.getUuid() == null || newAddress.getUuid().isEmpty()) {
+            addressUuid = addressDAO.create(newAddress);
+        } else {
+            addressUuid = newAddress.getUuid();
+            addressDAO.update(newAddress);
+        }
+        
+        String avatar = "";
+        if (object.getAvatar() == null || object.getAvatar().isEmpty()) {
+            User userFromDB = readByKey(object.getUuid());
+            avatar = userFromDB.getAvatar();
+        } else {
+            avatar = object.getAvatar();
+        }
+        
+        try (Connection conn = connection.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                ps = conn.prepareStatement("update user_card set first_name=?,"
+                        + " second_name=?, address_id=?, e_mail=?, password=?, sex=?,"
+                        + " date_of_birth=?, avatar=?,role=?, session = ? where nick_name=?;");
+                ps.setString(1, object.getFirstName());
+                ps.setString(2, object.getSecondName());
+                ps.setString(3, addressUuid);
+                ps.setString(4, object.geteMail());
+                ps.setString(5, (object.getPassword()));
+                ps.setString(6, object.getSex().toUpperCase());
+                if (object.getDateOfBirth() != null
+                        && !object.getDateOfBirth().isEmpty()) {
+                    ps.setDate(7,
+                            java.sql.Date.valueOf(object.getDateOfBirth()));
+                } else {
+                    ps.setDate(7, java.sql.Date.valueOf("1990-10-10"));
+                }
+                ps.setString(8, avatar);
+                ps.setString(9, object.getRole().toUpperCase());
+                ps.setString(10, object.getSession());
+                ps.setString(11, object.getNickName());
+                
+                ps.execute();
+                
+                conn.commit();
+                logger.debug("User updated");
+            } catch (SQLException e) {
+                logger.error("Error. Rollback changes", e);
+                conn.rollback();
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            logger.error("Update user failed", e);
+        }
+        
+    }
     
     public void delete(User object) {
         try (Connection conn = connection.getConnection()) {
@@ -461,14 +462,14 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
     }
     
     public String updateSession(String nickName, String session) {
-
+        
         try (Connection conn = connection.getConnection()) {
             String query =
                     "update user_card set session = ? where nick_name = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, session);
             ps.setString(2, nickName);
-            ResultSet rs = ps.executeQuery();
+            ps.execute();
         } catch (SQLException e) {
             logger.error("cant update session", e);
         }
@@ -476,32 +477,32 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         return session;
     }
     
-    public void invalidateSession(String nickName, String session){
+    public void invalidateSession(String nickName, String session) {
         updateSession(nickName, null);
     }
     
     public User getUserByEmail(String email) {
-		User user = null;
-		try (Connection conn = connection.getConnection()) {
-			try {
-				conn.setAutoCommit(false);
-				ps = conn.prepareStatement(
-						"select  * from user_card left join address on (address.id=user_card.address_id)"
-								+ "where e_mail like '" + email + "';");
-				rs = ps.executeQuery();
-				user = resultSet(rs);
-				conn.commit();
-			} catch (SQLException e) {
-				logger.error("Error. Rollback changes", e);
-				conn.rollback();
-			} finally {
-				conn.setAutoCommit(true);
-			}
-		} catch (SQLException e) {
-			logger.error("get user by email failed", e);
-		}
-		return user;
-	}
+        User user = null;
+        try (Connection conn = connection.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                ps = conn.prepareStatement(
+                        "select  * from user_card left join address on (address.id=user_card.address_id)"
+                                + "where e_mail like '" + email + "';");
+                rs = ps.executeQuery();
+                user = resultSet(rs);
+                conn.commit();
+            } catch (SQLException e) {
+                logger.error("Error. Rollback changes", e);
+                conn.rollback();
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            logger.error("get user by email failed", e);
+        }
+        return user;
+    }
     
     public List<User> getActiveUsers() {
         List<User> activeUsers = new ArrayList<User>();
@@ -531,6 +532,5 @@ public class UserDAOImpl implements UserDAO, BaseDAO<User> {
         }
         return activeUsers;
     }
-    
     
 }
